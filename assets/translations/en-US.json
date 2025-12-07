@@ -1,0 +1,31 @@
+{
+  "app": {
+    "name": "Monefy Note"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "loading": "Loading..."
+  },
+  "home": {
+    "title": "Home"
+  },
+  "auth": {
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "signout": "Sign Out"
+  },
+  "wallet": {
+    "title": "Wallet"
+  },
+  "setting": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme"
+  }
+}

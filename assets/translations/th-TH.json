@@ -1,0 +1,31 @@
+{
+    "app":{
+        "name": "Monefy Note"
+    },
+    "common":{
+        "ok": "ตกลง",
+        "cancel": "ยกเลิก",
+        "save": "บันทึก",
+        "delete": "ลบ",
+        "edit":  "แก้ไข",
+        "add":"เพิ่ม",
+        "search": "ค้นหา",
+        "loading": "กำลังโหลด..."
+    },
+    "home":{
+        "title": "หน้าหลัก"
+    },
+    "auth": {
+    "signin": "เข้าสู่ระบบ",
+    "signup": "สมัครสมาชิก",
+    "signout": "ออกจากระบบ"
+  },
+  "wallet": {
+    "title": "กระเป๋าเงิน"
+  },
+  "setting": {
+    "title": "ตั้งค่า",
+    "language": "ภาษา",
+    "theme": "ธีม"
+  }
+}
