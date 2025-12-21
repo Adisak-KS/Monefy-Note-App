@@ -121,8 +121,8 @@ class _SplashPageState extends State<SplashPage>
         final taglineSize = isDesktop ? 16.0 : 14.0;
         final loadingSize = isDesktop ? 14.0 : 12.0;
 
-        // Get progress from state
-        final progress = state is SplashLoading ? state.progress : 0.0;
+        // Get progress from state (keep at 100% when loaded to avoid flicker)
+        final progress = state is SplashLoading ? state.progress : 1.0;
 
         if (isLandscape && !isDesktop) {
           return _buildLandscapeLayout(

@@ -3,7 +3,12 @@
     "allow": [
       "Bash(mkdir:*)",
       "Bash(tree:*)",
-      "Bash(flutter pub get:*)"
+      "Bash(flutter pub get:*)",
+      "Bash(where:*)",
+      "Bash(cmd /c \"where inkscape 2>nul || echo Inkscape not found\")",
+      "Bash(pip install:*)",
+      "Bash(python scripts/generate_icons.py:*)",
+      "Bash(dart run:*)"
     ],
     "deny": [],
     "ask": []
