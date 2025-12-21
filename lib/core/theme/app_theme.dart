@@ -8,12 +8,12 @@ class AppTheme {
   static ThemeData get light => FlexThemeData.light(
     scheme: FlexScheme.blue,
     useMaterial3: true,
-    fontFamily: GoogleFonts.notoSansThai().fontFamily,
+    fontFamily: GoogleFonts.prompt().fontFamily,
   );
 
   static ThemeData get dark => FlexThemeData.dark(
     scheme: FlexScheme.blue,
     useMaterial3: true,
-    fontFamily: GoogleFonts.notoSansThai().fontFamily,
+    fontFamily: GoogleFonts.prompt().fontFamily,
   );
 }

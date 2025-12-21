@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Monefy Note"
+    "name": "Monefy Note",
+    "tagline": "Simple money tracking"
   },
   "common": {
     "ok": "OK",
@@ -10,7 +11,11 @@
     "edit": "Edit",
     "add": "Add",
     "search": "Search",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "skip": "Skip",
+    "offline": "No internet connection"
   },
   "home": {
     "title": "Home"
