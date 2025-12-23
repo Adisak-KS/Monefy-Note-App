@@ -16,7 +16,7 @@ void main() async {
     EasyLocalization(
       supportedLocales: const [Locale('th', 'TH'), Locale('en', 'US')],
       path: 'assets/translations',
-      fallbackLocale: const Locale('th', 'TH'),
+      fallbackLocale: const Locale('en', 'US'),
       child: const MyApp(),
     ),
   );
@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return ScreenUtilInit(
-            designSize: const Size(375, 812), // iPhone X Size0
+            designSize: const Size(375, 812), // iPhone X Size
             minTextAdapt: true,
-            builder: (context, child) {
+            builder: (_, child) {
               return MaterialApp.router(
                 title: 'Monefy Note',
                 debugShowCheckedModeBanner: false,
@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
                 themeMode: themeMode,
                 routerConfig: appRoutes,
                 localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
                 locale: context.locale,
               );
             },

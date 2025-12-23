@@ -8,7 +8,11 @@
       "Bash(cmd /c \"where inkscape 2>nul || echo Inkscape not found\")",
       "Bash(pip install:*)",
       "Bash(python scripts/generate_icons.py:*)",
-      "Bash(dart run:*)"
+      "Bash(dart run:*)",
+      "Bash(wc:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(dir:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:monefy_note_app/core/services/preferences_service.dart';
 import 'package:monefy_note_app/pages/splash/bloc/splash_state.dart';
 import 'package:vibration/vibration.dart';
 
@@ -12,11 +13,13 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit({this.enableSound = true}) : super(SplashInitial());
 
   final bool enableSound;
+  final PreferencesService _prefsService = PreferencesService();
   AudioPlayer? _audioPlayer;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isSkipped = false;
   bool _canSkip = false;
   bool _isOffline = false;
+  bool _isFirstLaunch = true;
   double _currentProgress = 0.0;
 
   bool get canSkip => _canSkip;
@@ -57,32 +60,37 @@ class SplashCubit extends Cubit<SplashState> {
       await _triggerHapticFeedback();
       await _playStartupSound();
 
-      emit(SplashLoaded());
+      // Navigate based on first launch
+      // First launch: onboarding -> sign-in -> home
+      // Returning user: sign-in -> home (until auth is implemented)
+      final destination = _isFirstLaunch ? '/onboarding' : '/sign-in';
+      emit(SplashLoaded(destination: destination));
     } catch (error) {
       emit(SplashError(error.toString()));
     }
   }
 
   void _startConnectivityMonitoring() {
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen(
-      (result) {
-        final wasOffline = _isOffline;
-        _isOffline = result.contains(ConnectivityResult.none);
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((
+      result,
+    ) {
+      final wasOffline = _isOffline;
+      _isOffline = result.contains(ConnectivityResult.none);
 
-        // Only emit if state changed and still loading
-        if (wasOffline != _isOffline && state is SplashLoading) {
-          emit(SplashLoading(progress: _currentProgress, isOffline: _isOffline));
-        }
-      },
-    );
+      // Only emit if state changed and still loading
+      if (wasOffline != _isOffline && state is SplashLoading) {
+        emit(SplashLoading(progress: _currentProgress, isOffline: _isOffline));
+      }
+    });
   }
 
-  /// Skip splash and go to home immediately
+  /// Skip splash and go to destination immediately
   void skip() {
     if (_canSkip) {
       _isSkipped = true;
       _triggerHapticFeedback();
-      emit(SplashLoaded());
+      final destination = _isFirstLaunch ? '/onboarding' : '/sign-in';
+      emit(SplashLoaded(destination: destination));
     }
   }
 
@@ -116,8 +124,7 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<void> _checkFirstLaunch() async {
-    // TODO: Check if first time launch
-    await Future.delayed(const Duration(milliseconds: 100));
+    _isFirstLaunch = await _prefsService.isFirstLaunch();
   }
 
   Future<void> _triggerHapticFeedback() async {
@@ -125,7 +132,7 @@ class SplashCubit extends Cubit<SplashState> {
       // Use platform-specific haptic feedback
       if (kIsWeb) return;
 
-      final hasVibrator = await Vibration.hasVibrator() ?? false;
+      final hasVibrator = await Vibration.hasVibrator();
       if (hasVibrator) {
         await Vibration.vibrate(duration: 50, amplitude: 128);
       } else {

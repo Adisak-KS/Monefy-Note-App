@@ -7,6 +7,9 @@ class ThemeCubit extends Cubit<ThemeMode> {
   void setLight() => emit(ThemeMode.light);
   void setDark() => emit(ThemeMode.dark);
   void setSystem() => emit(ThemeMode.system);
+
+  void setTheme(ThemeMode mode) => emit(mode);
+
   void toggle() =>
       emit(state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
 }

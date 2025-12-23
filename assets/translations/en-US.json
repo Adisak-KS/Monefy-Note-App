@@ -15,15 +15,53 @@
     "error": "An error occurred",
     "retry": "Retry",
     "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
     "offline": "No internet connection"
+  },
+  "onboarding": {
+    "language": {
+      "title": "Choose Language",
+      "subtitle": "Select your preferred language"
+    },
+    "theme": {
+      "title": "Choose Theme",
+      "subtitle": "Pick a theme that suits you",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Auto"
+    },
+    "ready": {
+      "title": "All Set!",
+      "subtitle": "Start managing your finances"
+    },
+    "features": {
+      "track": "Track income & expenses",
+      "realtime": "Real-time balance overview",
+      "auto": "Auto-categorize transactions"
+    },
+    "start": "Get Started",
+    "swipe_hint": "Swipe to continue"
   },
   "home": {
     "title": "Home"
   },
   "auth": {
-    "signin": "Sign In",
-    "signup": "Sign Up",
-    "signout": "Sign Out"
+    "welcome_back": "Welcome Back",
+    "sign_in_subtitle": "Sign in to continue",
+    "continue_with_google": "Continue with Google",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "email_required": "Email is required",
+    "email_invalid": "Please enter a valid email",
+    "password_required": "Password is required",
+    "password_too_short": "Password must be at least 6 characters",
+    "forgot_password": "Forgot Password?",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "sign_out": "Sign Out",
+    "no_account": "Don't have an account?"
   },
   "wallet": {
     "title": "Wallet"

@@ -65,7 +65,7 @@ class _SplashPageState extends State<SplashPage>
       child: BlocConsumer<SplashCubit, SplashState>(
         listener: (context, state) {
           if (state is SplashLoaded) {
-            context.go('/home');
+            context.go(state.destination);
           }
         },
         builder: (context, state) {

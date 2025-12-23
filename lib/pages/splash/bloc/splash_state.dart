@@ -32,7 +32,14 @@ class SplashLoading extends SplashState {
   }
 }
 
-class SplashLoaded extends SplashState {}
+class SplashLoaded extends SplashState {
+  final String destination;
+
+  const SplashLoaded({this.destination = '/home'});
+
+  @override
+  List<Object?> get props => [destination];
+}
 
 class SplashError extends SplashState {
   final String message;
