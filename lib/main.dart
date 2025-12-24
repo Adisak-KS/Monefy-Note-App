@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:monefy_note_app/core/cubit/network_cubit.dart';
 import 'package:monefy_note_app/core/router/app_router.dart';
+import 'package:monefy_note_app/core/services/network_service.dart';
 import 'package:monefy_note_app/core/theme/app_theme.dart' show AppTheme;
 import 'package:monefy_note_app/core/theme/theme_cubit.dart';
 import 'package:monefy_note_app/injection.dart';
@@ -10,6 +12,7 @@ import 'package:monefy_note_app/injection.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await NetworkService.instance.initialize();
   configureDependencies();
 
   runApp(
@@ -27,8 +30,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ThemeCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => NetworkCubit()),
+      ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return ScreenUtilInit(

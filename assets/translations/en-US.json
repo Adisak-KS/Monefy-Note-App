@@ -1,7 +1,11 @@
 {
   "app": {
     "name": "Monefy Note",
-    "tagline": "Simple money tracking"
+    "tagline": "Simple money tracking",
+    "exit_title": "Exit App?",
+    "exit_message": "Are you sure you want to exit?",
+    "cancel": "Cancel",
+    "exit": "Exit"
   },
   "common": {
     "ok": "OK",
@@ -61,7 +65,16 @@
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
     "sign_out": "Sign Out",
-    "no_account": "Don't have an account?"
+    "no_account": "Don't have an account?",
+    "remember_me": "Remember me",
+    "password_weak": "Weak",
+    "password_fair": "Fair",
+    "password_good": "Good",
+    "password_strong": "Strong",
+    "terms_agree": "By signing in, you agree to our",
+    "terms_of_service": "Terms of Service",
+    "and": "and",
+    "privacy_policy": "Privacy Policy"
   },
   "wallet": {
     "title": "Wallet"
@@ -70,5 +83,10 @@
     "title": "Settings",
     "language": "Language",
     "theme": "Theme"
+  },
+  "network": {
+    "offline": "No internet connection",
+    "online": "Back online",
+    "check_connection": "Please check your connection"
   }
 }

@@ -36,4 +36,5 @@ class _VersionTextState extends State<VersionText> {
           TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
     );
   }
+  
 }

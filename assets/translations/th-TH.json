@@ -1,7 +1,11 @@
 {
   "app": {
     "name": "Monefy Note",
-    "tagline": "จดบันทึกรายรับ รายจ่าย"
+    "tagline": "จดบันทึกรายรับ รายจ่าย",
+    "exit_title": "ออกจากแอป?",
+    "exit_message": "คุณต้องการออกจากแอปหรือไม่?",
+    "cancel": "ยกเลิก",
+    "exit": "ออก"
   },
   "common": {
     "ok": "ตกลง",
@@ -61,7 +65,16 @@
     "sign_in": "เข้าสู่ระบบ",
     "sign_up": "สมัครสมาชิก",
     "sign_out": "ออกจากระบบ",
-    "no_account": "ยังไม่มีบัญชี?"
+    "no_account": "ยังไม่มีบัญชี?",
+    "remember_me": "จดจำฉัน",
+    "password_weak": "อ่อน",
+    "password_fair": "พอใช้",
+    "password_good": "ดี",
+    "password_strong": "แข็งแกร่ง",
+    "terms_agree": "การเข้าสู่ระบบแสดงว่าคุณยอมรับ",
+    "terms_of_service": "ข้อกำหนดการใช้งาน",
+    "and": "และ",
+    "privacy_policy": "นโยบายความเป็นส่วนตัว"
   },
   "wallet": {
     "title": "กระเป๋าเงิน"
@@ -70,5 +83,10 @@
     "title": "ตั้งค่า",
     "language": "ภาษา",
     "theme": "ธีม"
+  },
+  "network": {
+    "offline": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+    "online": "กลับมาออนไลน์แล้ว",
+    "check_connection": "กรุณาตรวจสอบการเชื่อมต่อ"
   }
 }

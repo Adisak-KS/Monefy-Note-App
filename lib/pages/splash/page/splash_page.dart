@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
 import 'package:monefy_note_app/pages/splash/bloc/splash_cubit.dart';
 import 'package:monefy_note_app/pages/splash/bloc/splash_state.dart';
 import 'package:monefy_note_app/pages/splash/widgets/gradient_background.dart';
@@ -69,22 +70,21 @@ class _SplashPageState extends State<SplashPage>
           }
         },
         builder: (context, state) {
-          return Scaffold(
-            body: GradientBackground(
-              child: SafeArea(
-                child: Semantics(
-                  label: 'app.name'.tr(),
-                  hint: 'app.tagline'.tr(),
-                  child: Stack(
-                    children: [
-                      // Main content
-                      _buildMainContent(context, state),
-                      // Skip button (top right)
-                      if (state is SplashLoading) _buildSkipButton(context),
-                      // Offline indicator (top center)
-                      if (state is SplashLoading && state.isOffline)
-                        _buildOfflineIndicator(),
-                    ],
+          return NetworkStatusBanner(
+            child: Scaffold(
+              body: GradientBackground(
+                child: SafeArea(
+                  child: Semantics(
+                    label: 'app.name'.tr(),
+                    hint: 'app.tagline'.tr(),
+                    child: Stack(
+                      children: [
+                        // Main content
+                        _buildMainContent(context, state),
+                        // Skip button (top right)
+                        if (state is SplashLoading) _buildSkipButton(context),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -378,42 +378,6 @@ class _SplashPageState extends State<SplashPage>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           ),
           child: Text('common.skip'.tr(), style: const TextStyle(fontSize: 14)),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOfflineIndicator() {
-    return Positioned(
-      top: 16,
-      left: 0,
-      right: 0,
-      child: Center(
-        child: Semantics(
-          liveRegion: true,
-          label: 'common.offline'.tr(),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.orange.withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.wifi_off, color: Colors.white, size: 16),
-                const SizedBox(width: 8),
-                Text(
-                  'common.offline'.tr(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );

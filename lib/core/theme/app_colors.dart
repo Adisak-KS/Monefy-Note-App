@@ -42,4 +42,62 @@ class AppColors {
     'brown': [Color(0xFFA1887F), Color(0xFF795548), Color(0xFF5D4037)],
     'blueGrey': [Color(0xFF90A4AE), Color(0xFF607D8B), Color(0xFF455A64)],
   };
+
+  // Sign-in page colors
+  static SignInColors signInColors(bool isDark) {
+    return isDark ? SignInColors.dark() : SignInColors.light();
+  }
+}
+
+/// Colors for Sign-in page that adapt to light/dark mode
+class SignInColors {
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color inputBackground;
+  final Color inputBorder;
+  final Color inputBorderFocused;
+  final Color buttonText;
+  final Color error;
+  final Color divider;
+  final List<Color> backgroundGradient;
+
+  const SignInColors({
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.inputBackground,
+    required this.inputBorder,
+    required this.inputBorderFocused,
+    required this.buttonText,
+    required this.error,
+    required this.divider,
+    required this.backgroundGradient,
+  });
+
+  factory SignInColors.light() {
+    return SignInColors(
+      textPrimary: Colors.white,
+      textSecondary: Colors.white.withValues(alpha: 0.7),
+      inputBackground: Colors.white.withValues(alpha: 0.12),
+      inputBorder: Colors.white.withValues(alpha: 0.2),
+      inputBorderFocused: Colors.white.withValues(alpha: 0.6),
+      buttonText: const Color(0xFF1E88E5),
+      error: Colors.red.shade400,
+      divider: Colors.white.withValues(alpha: 0.3),
+      backgroundGradient: AppColors.defaultGradientLight,
+    );
+  }
+
+  factory SignInColors.dark() {
+    return SignInColors(
+      textPrimary: Colors.white,
+      textSecondary: Colors.white.withValues(alpha: 0.7),
+      inputBackground: Colors.white.withValues(alpha: 0.08),
+      inputBorder: Colors.white.withValues(alpha: 0.15),
+      inputBorderFocused: Colors.white.withValues(alpha: 0.5),
+      buttonText: const Color(0xFF0D47A1),
+      error: Colors.red.shade300,
+      divider: Colors.white.withValues(alpha: 0.2),
+      backgroundGradient: AppColors.defaultGradientDark,
+    );
+  }
 }
