@@ -101,5 +101,24 @@
     "offline": "No internet connection",
     "online": "Back online",
     "check_connection": "Please check your connection"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "Please read and accept our privacy policy to continue",
+    "accept": "I Accept",
+    "section_intro_title": "Introduction",
+    "section_intro_content": "Welcome to Monefy Note. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our application.",
+    "section_collection_title": "Information We Collect",
+    "section_collection_content": "We collect information you provide directly, including:\n- Account information (email, name, username)\n- Financial data (income, expenses, categories)\n- Device information for app functionality\n- Usage data to improve our services",
+    "section_usage_title": "How We Use Your Information",
+    "section_usage_content": "Your information is used to:\n- Provide and maintain our services\n- Personalize your experience\n- Sync your data across devices\n- Send important notifications\n- Improve our application",
+    "section_sharing_title": "Information Sharing",
+    "section_sharing_content": "We do not sell your personal information. We may share data only:\n- With your consent\n- To comply with legal obligations\n- To protect our rights and safety\n- With service providers who assist our operations",
+    "section_security_title": "Data Security",
+    "section_security_content": "We implement appropriate security measures to protect your data, including encryption, secure servers, and regular security audits. However, no method of transmission over the internet is 100% secure.",
+    "section_rights_title": "Your Rights",
+    "section_rights_content": "You have the right to:\n- Access your personal data\n- Correct inaccurate data\n- Delete your account and data\n- Export your data\n- Opt-out of marketing communications",
+    "section_contact_title": "Contact Us",
+    "section_contact_content": "If you have questions about this privacy policy or our practices, please contact us at:\n\nEmail: support@monefynote.com"
   }
 }

@@ -20,6 +20,7 @@ class SplashCubit extends Cubit<SplashState> {
   bool _canSkip = false;
   bool _isOffline = false;
   bool _isFirstLaunch = true;
+  bool _isPrivacyAccepted = false;
   double _currentProgress = 0.0;
 
   bool get canSkip => _canSkip;
@@ -60,10 +61,11 @@ class SplashCubit extends Cubit<SplashState> {
       await _triggerHapticFeedback();
       await _playStartupSound();
 
-      // Navigate based on first launch
-      // First launch: onboarding -> sign-in -> home
+      // Navigate based on first launch and privacy policy acceptance
+      // First launch: onboarding -> privacy-policy -> sign-in -> home
+      // Privacy not accepted: privacy-policy -> sign-in -> home
       // Returning user: sign-in -> home (until auth is implemented)
-      final destination = _isFirstLaunch ? '/onboarding' : '/sign-in';
+      final destination = _getDestination();
       emit(SplashLoaded(destination: destination));
     } catch (error) {
       emit(SplashError(error.toString()));
@@ -89,8 +91,19 @@ class SplashCubit extends Cubit<SplashState> {
     if (_canSkip) {
       _isSkipped = true;
       _triggerHapticFeedback();
-      final destination = _isFirstLaunch ? '/onboarding' : '/sign-in';
+      final destination = _getDestination();
       emit(SplashLoaded(destination: destination));
+    }
+  }
+
+  /// Determine destination based on first launch and privacy policy acceptance
+  String _getDestination() {
+    if (_isFirstLaunch) {
+      return '/onboarding';
+    } else if (!_isPrivacyAccepted) {
+      return '/privacy-policy';
+    } else {
+      return '/sign-in';
     }
   }
 
@@ -125,6 +138,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> _checkFirstLaunch() async {
     _isFirstLaunch = await _prefsService.isFirstLaunch();
+    _isPrivacyAccepted = await _prefsService.isPrivacyPolicyAccepted();
   }
 
   Future<void> _triggerHapticFeedback() async {

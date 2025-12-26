@@ -125,7 +125,17 @@ class _OnboardingPageState extends State<OnboardingPage>
 
     await _cubit.complete();
     if (mounted) {
-      context.go('/sign-in');
+      // Check if privacy policy is accepted
+      final prefsService = PreferencesService();
+      final accepted = await prefsService.isPrivacyPolicyAccepted();
+
+      if (mounted) {
+        if (accepted) {
+          context.go('/sign-in');
+        } else {
+          context.go('/privacy-policy');
+        }
+      }
     }
   }
 

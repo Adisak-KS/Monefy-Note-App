@@ -5,6 +5,7 @@ class PreferencesService {
   static const _keyFirstLaunch = 'first_launch_complete';
   static const _keyThemeMode = 'theme_mode';
   static const _keyLocaleCode = 'locale_code';
+  static const _keyPrivacyPolicyAccepted = 'privacy_policy_accepted';
 
   // Singleton
   static final PreferencesService _instance = PreferencesService._internal();
@@ -64,5 +65,16 @@ class PreferencesService {
       return Locale(parts[0], parts[1]);
     }
     return null;
+  }
+
+  // Privacy Policy
+  Future<bool> isPrivacyPolicyAccepted() async {
+    final p = await prefs;
+    return p.getBool(_keyPrivacyPolicyAccepted) ?? false;
+  }
+
+  Future<void> setPrivacyPolicyAccepted() async {
+    final p = await prefs;
+    await p.setBool(_keyPrivacyPolicyAccepted, true);
   }
 }
