@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monefy_note_app/core/services/preferences_service.dart';
 import 'package:monefy_note_app/core/widgets/loading_overlay.dart';
 import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/animated_gradient_background.dart';
@@ -95,17 +96,28 @@ class _SignUpPageState extends State<SignUpPage>
       await Future.delayed(const Duration(milliseconds: 800));
 
       if (mounted) {
-        context.go('/home');
+        // After sign up, always go to security setup (new user)
+        context.go('/security-setup');
       }
     }
   }
 
   Future<void> _handleGoogleSignUp() async {
     HapticFeedback.lightImpact();
-    // TODO: Implement Google sign up
+    // TODO: Implement Google sign up API call
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
-      context.go('/home');
+      // Check if security is already configured
+      final prefsService = PreferencesService();
+      final securityConfigured = await prefsService.isSecurityConfigured();
+
+      if (mounted) {
+        if (securityConfigured) {
+          context.go('/security-verify');
+        } else {
+          context.go('/security-setup');
+        }
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monefy_note_app/core/services/preferences_service.dart';
 import 'package:monefy_note_app/core/widgets/exit_confirmation_dialog.dart';
 import 'package:monefy_note_app/core/widgets/loading_overlay.dart';
 import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
@@ -79,7 +80,7 @@ class _SignInPageState extends State<SignInPage>
     setState(() => _isLoading = true);
     HapticFeedback.mediumImpact();
 
-    // TODO: Implement actual sign in
+    // TODO: Implement actual sign in API call
     await Future.delayed(const Duration(seconds: 2));
 
     if (mounted) {
@@ -91,17 +92,32 @@ class _SignInPageState extends State<SignInPage>
       await Future.delayed(const Duration(milliseconds: 800));
 
       if (mounted) {
-        context.go('/home');
+        await _navigateAfterSignIn();
       }
     }
   }
 
   Future<void> _handleGoogleSignIn() async {
     HapticFeedback.lightImpact();
-    // TODO: Implement Google sign in
+    // TODO: Implement Google sign in API call
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
-      context.go('/home');
+      await _navigateAfterSignIn();
+    }
+  }
+
+  Future<void> _navigateAfterSignIn() async {
+    final prefsService = PreferencesService();
+    final securityConfigured = await prefsService.isSecurityConfigured();
+
+    if (mounted) {
+      if (securityConfigured) {
+        // Security already configured, verify before going home
+        context.go('/security-verify');
+      } else {
+        // First time, setup security
+        context.go('/security-setup');
+      }
     }
   }
 

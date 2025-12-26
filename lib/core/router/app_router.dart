@@ -5,6 +5,8 @@ import 'package:monefy_note_app/pages/privacy-policy/page/privacy_policy_page.da
 import 'package:monefy_note_app/pages/home/page/home_page.dart';
 import 'package:monefy_note_app/pages/onboarding/page/onboarding_page.dart';
 import 'package:monefy_note_app/pages/splash/page/splash_page.dart';
+import 'package:monefy_note_app/pages/security-setup/page/security_setup_page.dart';
+import 'package:monefy_note_app/pages/security-verify/page/security_verify_page.dart';
 
 final appRoutes = GoRouter(
   initialLocation: '/splash',
@@ -38,6 +40,18 @@ final appRoutes = GoRouter(
       path: '/privacy-policy',
       name: 'privacy-policy',
       builder: (context, state) => const PrivacyPolicyPage(),
+    ),
+
+    GoRoute(
+      path: '/security-setup',
+      name: 'security-setup',
+      builder: (context, state) => const SecuritySetupPage(),
+    ),
+
+    GoRoute(
+      path: '/security-verify',
+      name: 'security-verify',
+      builder: (context, state) => const SecurityVerifyPage(),
     ),
 
     GoRoute(

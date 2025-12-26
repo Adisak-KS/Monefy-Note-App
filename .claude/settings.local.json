@@ -12,7 +12,8 @@
       "Bash(wc:*)",
       "Bash(flutter analyze:*)",
       "Bash(dir:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(flutter pub deps:*)"
     ],
     "deny": [],
     "ask": []
