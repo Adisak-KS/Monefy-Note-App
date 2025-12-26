@@ -74,7 +74,20 @@
     "terms_agree": "การเข้าสู่ระบบแสดงว่าคุณยอมรับ",
     "terms_of_service": "ข้อกำหนดการใช้งาน",
     "and": "และ",
-    "privacy_policy": "นโยบายความเป็นส่วนตัว"
+    "privacy_policy": "นโยบายความเป็นส่วนตัว",
+    "create_account": "สร้างบัญชี",
+    "sign_up_subtitle": "สมัครสมาชิกเพื่อเริ่มต้น",
+    "sign_up_with_google": "สมัครด้วย Google",
+    "name": "ชื่อ-นามสกุล",
+    "name_hint": "กรอกชื่อ-นามสกุลของคุณ",
+    "username": "ชื่อผู้ใช้",
+    "username_hint": "ไม่บังคับ",
+    "name_required": "กรุณากรอกชื่อ",
+    "username_too_short": "ชื่อผู้ใช้ต้องมีอย่างน้อย 3 ตัวอักษร",
+    "confirm_password": "ยืนยันรหัสผ่าน",
+    "password_not_match": "รหัสผ่านไม่ตรงกัน",
+    "password_min_8": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร",
+    "have_account": "มีบัญชีอยู่แล้ว?"
   },
   "wallet": {
     "title": "กระเป๋าเงิน"

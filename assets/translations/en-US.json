@@ -74,7 +74,20 @@
     "terms_agree": "By signing in, you agree to our",
     "terms_of_service": "Terms of Service",
     "and": "and",
-    "privacy_policy": "Privacy Policy"
+    "privacy_policy": "Privacy Policy",
+    "create_account": "Create Account",
+    "sign_up_subtitle": "Sign up to get started",
+    "sign_up_with_google": "Sign up with Google",
+    "name": "Full Name",
+    "name_hint": "Enter your full name",
+    "username": "Username",
+    "username_hint": "Optional",
+    "name_required": "Name is required",
+    "username_too_short": "Username must be at least 3 characters",
+    "confirm_password": "Confirm Password",
+    "password_not_match": "Passwords do not match",
+    "password_min_8": "Password must be at least 8 characters",
+    "have_account": "Already have an account?"
   },
   "wallet": {
     "title": "Wallet"

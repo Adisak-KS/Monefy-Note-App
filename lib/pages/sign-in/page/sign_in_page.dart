@@ -263,7 +263,7 @@ class _SignInPageState extends State<SignInPage>
                                               6,
                                               SignInSignUpLink(
                                                 onTap: () {
-                                                  // TODO: Navigate to sign up
+                                                  context.go('/sign-up');
                                                 },
                                               ),
                                             ),
