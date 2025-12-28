@@ -21,7 +21,9 @@
     "skip": "Skip",
     "next": "Next",
     "back": "Back",
-    "offline": "No internet connection"
+    "offline": "No internet connection",
+    "see_all": "See All",
+    "close": "Close"
   },
   "onboarding": {
     "language": {
@@ -48,7 +50,47 @@
     "swipe_hint": "Swipe to continue"
   },
   "home": {
-    "title": "Home"
+    "title": "Home",
+    "greeting": "Hello",
+    "greeting_morning": "Good Morning",
+    "greeting_afternoon": "Good Afternoon",
+    "greeting_evening": "Good Evening",
+    "today_balance": "Today's Balance",
+    "income": "Income",
+    "expense": "Expense",
+    "no_transactions": "No transactions yet",
+    "add_first": "Tap + to add your first transaction",
+    "add_transaction": "Add Transaction",
+    "note": "Description",
+    "date": "Date",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "wallet": "Wallet",
+    "category": "Category",
+    "error_amount": "Please enter a valid amount",
+    "error_category": "Please select a category",
+    "error_wallet": "Please select a wallet",
+    "delete_confirm_title": "Delete Transaction?",
+    "delete_confirm_message": "Are you sure you want to delete this transaction?",
+    "edit_transaction": "Edit Transaction",
+    "transaction_deleted": "Transaction deleted",
+    "undo": "Undo",
+    "filter_today": "Today",
+    "filter_week": "This Week",
+    "filter_month": "This Month",
+    "filter_custom": "Custom",
+    "filter_year": "This Year",
+    "quick_actions": "Quick Add",
+    "quick_add_subtitle": "Enter amount",
+    "expense_by_category": "Expense by Category",
+    "wallets": "Wallets",
+    "search_placeholder": "Search transactions...",
+    "search_no_results": "No transactions found",
+    "recent_transactions": "Recent Transactions",
+    "transactions": "Transactions",
+    "profit": "Profit",
+    "loss": "Loss",
+    "recent": "Recent"
   },
   "auth": {
     "welcome_back": "Welcome Back",
@@ -89,8 +131,23 @@
     "password_min_8": "Password must be at least 8 characters",
     "have_account": "Already have an account?"
   },
+  "nav": {
+    "home": "Home",
+    "wallet": "Wallet",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
   "wallet": {
-    "title": "Wallet"
+    "title": "Wallet",
+    "coming_soon": "Coming Soon"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "coming_soon": "Coming Soon"
+  },
+  "settings": {
+    "title": "Settings",
+    "coming_soon": "Coming Soon"
   },
   "setting": {
     "title": "Settings",
@@ -165,5 +222,18 @@
     "clear": "Clear",
     "verify_title": "Verify Identity",
     "too_many_attempts": "Too many failed attempts. Please try again."
+  },
+  "drawer": {
+    "menu": "Menu",
+    "preferences": "Preferences",
+    "about": "About",
+    "categories": "Categories",
+    "budgets": "Budgets",
+    "notifications": "Notifications",
+    "security": "Security",
+    "help": "Help & Support",
+    "about_app": "About App",
+    "guest": "Guest User",
+    "free_plan": "Free Plan"
   }
 }

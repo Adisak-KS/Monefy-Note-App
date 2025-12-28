@@ -13,7 +13,8 @@
       "Bash(flutter analyze:*)",
       "Bash(dir:*)",
       "Bash(cat:*)",
-      "Bash(flutter pub deps:*)"
+      "Bash(flutter pub deps:*)",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\pages\\\\add-transaction\\\\widgets\\\\calculator_keyboard.dart\")"
     ],
     "deny": [],
     "ask": []

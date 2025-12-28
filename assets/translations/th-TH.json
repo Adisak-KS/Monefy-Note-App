@@ -21,7 +21,9 @@
     "skip": "ข้าม",
     "next": "ถัดไป",
     "back": "ย้อนกลับ",
-    "offline": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต"
+    "offline": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+    "see_all": "ดูทั้งหมด",
+    "close": "ปิด"
   },
   "onboarding": {
     "language": {
@@ -48,7 +50,47 @@
     "swipe_hint": "ปัดเพื่อไปต่อ"
   },
   "home": {
-    "title": "หน้าหลัก"
+    "title": "หน้าหลัก",
+    "greeting": "สวัสดี",
+    "greeting_morning": "สวัสดีตอนเช้า",
+    "greeting_afternoon": "สวัสดีตอนบ่าย",
+    "greeting_evening": "สวัสดีตอนเย็น",
+    "today_balance": "ยอดคงเหลือวันนี้",
+    "income": "รายรับ",
+    "expense": "รายจ่าย",
+    "no_transactions": "ยังไม่มีรายการ",
+    "add_first": "กดปุ่ม + เพื่อเพิ่มรายการแรก",
+    "add_transaction": "เพิ่มรายการ",
+    "note": "รายละเอียด",
+    "date": "วันที่",
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "wallet": "กระเป๋าเงิน",
+    "category": "หมวดหมู่",
+    "error_amount": "กรุณากรอกจำนวนเงินที่ถูกต้อง",
+    "error_category": "กรุณาเลือกหมวดหมู่",
+    "error_wallet": "กรุณาเลือกกระเป๋าเงิน",
+    "delete_confirm_title": "ลบรายการ?",
+    "delete_confirm_message": "คุณต้องการลบรายการนี้หรือไม่?",
+    "edit_transaction": "แก้ไขรายการ",
+    "transaction_deleted": "ลบรายการแล้ว",
+    "undo": "ย้อนกลับ",
+    "filter_today": "วันนี้",
+    "filter_week": "สัปดาห์นี้",
+    "filter_month": "เดือนนี้",
+    "filter_year": "ปีนี้",
+    "filter_custom": "กำหนดเอง",
+    "quick_actions": "เพิ่มด่วน",
+    "quick_add_subtitle": "กรอกจำนวนเงิน",
+    "expense_by_category": "รายจ่ายตามหมวดหมู่",
+    "wallets": "กระเป๋าเงิน",
+    "search_placeholder": "ค้นหารายการ...",
+    "search_no_results": "ไม่พบรายการที่ค้นหา",
+    "recent_transactions": "รายการล่าสุด",
+    "transactions": "รายการ",
+    "profit": "กำไร",
+    "loss": "ขาดทุน",
+    "recent": "ล่าสุด"
   },
   "auth": {
     "welcome_back": "ยินดีต้อนรับกลับ",
@@ -89,8 +131,23 @@
     "password_min_8": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร",
     "have_account": "มีบัญชีอยู่แล้ว?"
   },
+  "nav": {
+    "home": "หน้าหลัก",
+    "wallet": "กระเป๋า",
+    "statistics": "สถิติ",
+    "settings": "ตั้งค่า"
+  },
   "wallet": {
-    "title": "กระเป๋าเงิน"
+    "title": "กระเป๋าเงิน",
+    "coming_soon": "เร็วๆ นี้"
+  },
+  "statistics": {
+    "title": "สถิติ",
+    "coming_soon": "เร็วๆ นี้"
+  },
+  "settings": {
+    "title": "ตั้งค่า",
+    "coming_soon": "เร็วๆ นี้"
   },
   "setting": {
     "title": "ตั้งค่า",
@@ -165,5 +222,18 @@
     "clear": "ล้าง",
     "verify_title": "ยืนยันตัวตน",
     "too_many_attempts": "ลองผิดหลายครั้งเกินไป กรุณาลองอีกครั้ง"
+  },
+  "drawer": {
+    "menu": "เมนู",
+    "preferences": "การตั้งค่า",
+    "about": "เกี่ยวกับ",
+    "categories": "หมวดหมู่",
+    "budgets": "งบประมาณ",
+    "notifications": "การแจ้งเตือน",
+    "security": "ความปลอดภัย",
+    "help": "ช่วยเหลือ",
+    "about_app": "เกี่ยวกับแอป",
+    "guest": "ผู้ใช้ทั่วไป",
+    "free_plan": "แพลนฟรี"
   }
 }
