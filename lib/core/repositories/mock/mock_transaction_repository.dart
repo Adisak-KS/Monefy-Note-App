@@ -1,9 +1,10 @@
 import '../../models/transaction.dart';
 import '../../models/transaction_type.dart';
+import '../../services/mock_data_service.dart';
 import '../transaction_repository.dart';
 
 class MockTransactionRepository implements TransactionRepository {
-  final List<Transaction> _transactions = [];
+  final List<Transaction> _transactions = List.from(MockDataService.defaultTransactions);
 
   @override
   Future<List<Transaction>> getAll() async {
@@ -28,6 +29,14 @@ class MockTransactionRepository implements TransactionRepository {
   @override
   Future<List<Transaction>> getByType(TransactionType type) async {
     return _transactions.where((t) => t.type == type).toList();
+  }
+
+  @override
+  Future<List<Transaction>> getByWalletId(String walletId) async {
+    final transactions = _transactions.where((t) => t.walletId == walletId).toList();
+    // Sort by date descending (newest first)
+    transactions.sort((a, b) => b.date.compareTo(a.date));
+    return transactions;
   }
 
   @override

@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/home_cubit.dart';
-import '../bloc/home_state.dart';
+import '../bloc/drawer_stats_cubit.dart';
+import '../bloc/drawer_stats_state.dart';
 
 class ProfileDrawer extends StatefulWidget {
   const ProfileDrawer({super.key});
@@ -332,54 +332,58 @@ class _ProfileDrawerState extends State<ProfileDrawer>
   }
 
   Widget _buildStatsRow(BuildContext context, ThemeData theme) {
-    return BlocBuilder<HomeCubit, HomeState>(
+    return BlocBuilder<DrawerStatsCubit, DrawerStatsState>(
       builder: (context, state) {
-        double income = 0;
-        double expense = 0;
-        int transactionCount = 0;
-
-        if (state is HomeLoaded) {
-          income = state.totalIncome;
-          expense = state.totalExpense;
-          transactionCount = state.todayTransactions.length;
-        }
-
-        return Container(
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              _buildStatItem(
-                theme,
-                Icons.arrow_downward_rounded,
-                Colors.green,
-                '฿${_formatNumber(income)}',
-                'home.income'.tr(),
-              ),
-              _buildVerticalDivider(theme),
-              _buildStatItem(
-                theme,
-                Icons.arrow_upward_rounded,
-                Colors.red,
-                '฿${_formatNumber(expense)}',
-                'home.expense'.tr(),
-              ),
-              _buildVerticalDivider(theme),
-              _buildStatItem(
-                theme,
-                Icons.receipt_long_rounded,
-                theme.colorScheme.primary,
-                '$transactionCount',
-                'home.transactions'.tr(),
-              ),
-            ],
-          ),
+        return _buildStatsContent(
+          theme,
+          state.totalIncome,
+          state.totalExpense,
+          state.transactionCount,
         );
       },
+    );
+  }
+
+  Widget _buildStatsContent(
+    ThemeData theme,
+    double income,
+    double expense,
+    int transactionCount,
+  ) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          _buildStatItem(
+            theme,
+            Icons.arrow_downward_rounded,
+            Colors.green,
+            '฿${_formatNumber(income)}',
+            'home.income'.tr(),
+          ),
+          _buildVerticalDivider(theme),
+          _buildStatItem(
+            theme,
+            Icons.arrow_upward_rounded,
+            Colors.red,
+            '฿${_formatNumber(expense)}',
+            'home.expense'.tr(),
+          ),
+          _buildVerticalDivider(theme),
+          _buildStatItem(
+            theme,
+            Icons.receipt_long_rounded,
+            theme.colorScheme.primary,
+            '$transactionCount',
+            'home.transactions'.tr(),
+          ),
+        ],
+      ),
     );
   }
 

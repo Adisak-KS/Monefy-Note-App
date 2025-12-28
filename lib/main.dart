@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:monefy_note_app/core/bloc/drawer_stats_cubit.dart';
 import 'package:monefy_note_app/core/cubit/network_cubit.dart';
 import 'package:monefy_note_app/core/router/app_router.dart';
 import 'package:monefy_note_app/core/services/network_service.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => NetworkCubit()),
+        BlocProvider(create: (_) => getIt<DrawerStatsCubit>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {

@@ -14,7 +14,18 @@
       "Bash(dir:*)",
       "Bash(cat:*)",
       "Bash(flutter pub deps:*)",
-      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\pages\\\\add-transaction\\\\widgets\\\\calculator_keyboard.dart\")"
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\pages\\\\add-transaction\\\\widgets\\\\calculator_keyboard.dart\")",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\core\\\\models\\\\investment_type.dart\")",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\pages\\\\wallet\\\\page\\\\transfer_page.dart\")",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\pages\\\\wallet\\\\widgets\\\\add_wallet_sheet.dart\")",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\pages\\\\wallet\\\\widgets\\\\transfer_sheet.dart\")",
+      "Bash(flutter pub add:*)",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\core\\\\models\\\\exchange_rate.dart\")",
+      "Bash(flutter pub run build_runner build:*)",
+      "Bash(flutter pub run build_runner clean:*)",
+      "Bash(del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\core\\\\bloc\\\\drawer_stats_state.freezed.dart\")",
+      "Bash(cmd /c del \"c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\core\\\\bloc\\\\drawer_stats_state.freezed.dart\")",
+      "Bash(powershell -Command \"Remove-Item ''c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\core\\\\bloc\\\\drawer_stats_state.freezed.dart'' -Force\")"
     ],
     "deny": [],
     "ask": []

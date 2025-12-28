@@ -6,6 +6,7 @@ abstract class TransactionRepository {
   Future<List<Transaction>> getByDate(DateTime date);
   Future<List<Transaction>> getByDateRange(DateTime start, DateTime end);
   Future<List<Transaction>> getByType(TransactionType type);
+  Future<List<Transaction>> getByWalletId(String walletId);
   Future<Transaction?> getById(String id);
   Future<void> add(Transaction transaction);
   Future<void> update(Transaction transaction);

@@ -150,7 +150,7 @@ class _WalletChipState extends State<_WalletChip>
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
-                      _getWalletIcon(),
+                      widget.wallet.type.icon,
                       color: color,
                       size: 16,
                     ),
@@ -184,21 +184,6 @@ class _WalletChipState extends State<_WalletChip>
         ),
       ),
     );
-  }
-
-  IconData _getWalletIcon() {
-    switch (widget.wallet.type) {
-      case WalletType.cash:
-        return Icons.account_balance_wallet_rounded;
-      case WalletType.bank:
-        return Icons.account_balance_rounded;
-      case WalletType.creditCard:
-        return Icons.credit_card_rounded;
-      case WalletType.eWallet:
-        return Icons.phone_android_rounded;
-      case WalletType.debt:
-        return Icons.money_off_rounded;
-    }
   }
 
   String _formatBalance(double balance, String currency) {

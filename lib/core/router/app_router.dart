@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:monefy_note_app/pages/sign-in/page/sign_in_page.dart';
 import 'package:monefy_note_app/pages/sign-up/page/sign_up_page.dart';
 import 'package:monefy_note_app/pages/privacy-policy/page/privacy_policy_page.dart';
-import 'package:monefy_note_app/pages/main/main_shell.dart';
+import 'package:monefy_note_app/pages/main_shell.dart';
 import 'package:monefy_note_app/pages/onboarding/page/onboarding_page.dart';
 import 'package:monefy_note_app/pages/splash/page/splash_page.dart';
 import 'package:monefy_note_app/pages/security-setup/page/security_setup_page.dart';

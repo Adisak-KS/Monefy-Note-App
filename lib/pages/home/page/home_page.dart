@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/models/transaction.dart';
-import '../../../core/repositories/mock/mock_category_repository.dart';
-import '../../../core/repositories/mock/mock_transaction_repository.dart';
-import '../../../core/repositories/mock/mock_wallet_repository.dart';
+import '../../../injection.dart';
 import '../bloc/home_cubit.dart';
 import '../bloc/home_state.dart';
 import '../widgets/add_transaction_fab.dart';
@@ -21,7 +19,7 @@ import '../widgets/search_bar_widget.dart';
 import '../widgets/section_header.dart';
 import '../widgets/wallet_balance_row.dart';
 import '../widgets/animated_transaction_list.dart';
-import '../widgets/profile_drawer.dart';
+import '../../../core/widgets/profile_drawer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -29,11 +27,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeCubit(
-        categoryRepository: MockCategoryRepository(),
-        walletRepository: MockWalletRepository(),
-        transactionRepository: MockTransactionRepository(),
-      )..loadTodayData(),
+      create: (_) => getIt<HomeCubit>()..loadTodayData(),
       child: const _HomePageContent(),
     );
   }

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:monefy_note_app/core/bloc/drawer_stats_cubit.dart';
 import 'package:monefy_note_app/core/models/date_filter_type.dart';
 import 'package:monefy_note_app/core/models/transaction.dart';
 import 'package:monefy_note_app/core/models/transaction_type.dart';
@@ -11,10 +13,12 @@ import 'package:monefy_note_app/core/repositories/wallet_repository.dart';
 import 'package:monefy_note_app/pages/home/bloc/home_state.dart';
 import 'package:uuid/uuid.dart';
 
+@injectable
 class HomeCubit extends Cubit<HomeState> {
   final TransactionRepository _transactionRepository;
   final CategoryRepository _categoryRepository;
   final WalletRepository _walletRepository;
+  final DrawerStatsCubit _drawerStatsCubit;
   static const _uuid = Uuid();
 
   Transaction? _recentlyDeletedTransaction;
@@ -22,14 +26,12 @@ class HomeCubit extends Cubit<HomeState> {
   DateFilterType _currentFilter = DateFilterType.today;
   DateTimeRange? _customDateRange;
 
-  HomeCubit({
-    required TransactionRepository transactionRepository,
-    required CategoryRepository categoryRepository,
-    required WalletRepository walletRepository,
-  }) : _transactionRepository = transactionRepository,
-       _categoryRepository = categoryRepository,
-       _walletRepository = walletRepository,
-       super(HomeInitial());
+  HomeCubit(
+    this._transactionRepository,
+    this._categoryRepository,
+    this._walletRepository,
+    this._drawerStatsCubit,
+  ) : super(HomeInitial());
 
   @override
   Future<void> close() {
@@ -72,6 +74,13 @@ class HomeCubit extends Cubit<HomeState> {
           filterType: _currentFilter,
           customDateRange: _customDateRange,
         ),
+      );
+
+      // Sync stats with DrawerStatsCubit
+      _drawerStatsCubit.updateStats(
+        totalIncome: totalIncome,
+        totalExpense: totalExpense,
+        transactionCount: transactions.length,
       );
     } catch (error) {
       emit(HomeError(error.toString()));
