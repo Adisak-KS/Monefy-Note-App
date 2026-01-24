@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../../core/cubit/currency_cubit.dart';
 import '../../../core/models/category.dart';
+import '../../../core/models/currency.dart';
 import '../../../core/models/transaction.dart';
 import '../../../core/models/transaction_type.dart';
 
@@ -53,7 +56,11 @@ class _TransactionTileState extends State<TransactionTile>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final currencyFormat = NumberFormat.currency(locale: 'th_TH', symbol: '฿');
+    final currency = context.watch<CurrencyCubit>().state;
+    final currencyFormat = NumberFormat.currency(
+      symbol: currency.symbol,
+      decimalDigits: (currency == Currency.jpy || currency == Currency.krw || currency == Currency.vnd) ? 0 : 2,
+    );
     final isIncome = widget.transaction.type == TransactionType.income;
     final categoryColor = _getCategoryColor();
     final timeFormat = DateFormat('HH:mm');

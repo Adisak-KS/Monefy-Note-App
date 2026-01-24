@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
 
 class OverviewCards extends StatefulWidget {
   final double totalIncome;
@@ -176,6 +178,7 @@ class _BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
     final isProfit = balance >= 0;
 
     return Container(
@@ -341,7 +344,7 @@ class _BalanceCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '฿',
+                          currency.symbol,
                           style: theme.textTheme.headlineMedium?.copyWith(
                             color: Colors.white.withValues(alpha: 0.8),
                             fontWeight: FontWeight.w300,
@@ -498,6 +501,7 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
 
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
@@ -605,7 +609,7 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '฿',
+                    currency.symbol,
                     style: theme.textTheme.titleSmall?.copyWith(
                       color: widget.iconColor.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w500,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:monefy_note_app/core/bloc/drawer_stats_cubit.dart';
+import 'package:monefy_note_app/core/cubit/currency_cubit.dart';
 import 'package:monefy_note_app/core/cubit/network_cubit.dart';
 import 'package:monefy_note_app/core/localization/locale_cubit.dart';
 import 'package:monefy_note_app/core/router/app_router.dart';
@@ -27,11 +28,13 @@ void main() async {
   final themeCubit = ThemeCubit(preferencesService: preferencesService);
   final localeCubit = LocalCubit(preferencesService: preferencesService);
   final colorCubit = ColorCubit(preferencesService: preferencesService);
+  final currencyCubit = CurrencyCubit(preferencesService: preferencesService);
 
   // Load saved preferences
   await themeCubit.init();
   await localeCubit.init();
   await colorCubit.init();
+  await currencyCubit.init();
 
   runApp(
     EasyLocalization(
@@ -43,6 +46,7 @@ void main() async {
         themeCubit: themeCubit,
         localeCubit: localeCubit,
         colorCubit: colorCubit,
+        currencyCubit: currencyCubit,
       ),
     ),
   );
@@ -52,12 +56,14 @@ class MyApp extends StatelessWidget {
   final ThemeCubit themeCubit;
   final LocalCubit localeCubit;
   final ColorCubit colorCubit;
+  final CurrencyCubit currencyCubit;
 
   const MyApp({
     super.key,
     required this.themeCubit,
     required this.localeCubit,
     required this.colorCubit,
+    required this.currencyCubit,
   });
 
   @override
@@ -67,6 +73,7 @@ class MyApp extends StatelessWidget {
         BlocProvider.value(value: themeCubit),
         BlocProvider.value(value: localeCubit),
         BlocProvider.value(value: colorCubit),
+        BlocProvider.value(value: currencyCubit),
         BlocProvider(create: (_) => NetworkCubit()),
         BlocProvider(create: (_) => getIt<DrawerStatsCubit>()),
       ],

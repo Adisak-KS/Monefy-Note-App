@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/models/currency.dart';
 import '../../../core/models/wallet.dart';
 import '../../../core/models/wallet_type.dart';
 
@@ -398,6 +401,7 @@ class _WalletListTileState extends State<WalletListTile>
   }
 
   Widget _buildBalanceSection(ThemeData theme, Color color, bool isDebt) {
+    final currency = context.watch<CurrencyCubit>().state;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -405,8 +409,8 @@ class _WalletListTileState extends State<WalletListTile>
           duration: const Duration(milliseconds: 200),
           child: Text(
             widget.hideBalance
-                ? '฿ ••••'
-                : _formatCurrency(widget.wallet.balance),
+                ? '${currency.symbol} ••••'
+                : _formatCurrency(widget.wallet.balance, currency),
             key: ValueKey(widget.hideBalance ? 'hidden' : widget.wallet.balance),
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
@@ -540,23 +544,27 @@ class _WalletListTileState extends State<WalletListTile>
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.wallet.name,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          _formatCurrency(widget.wallet.balance),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: color,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                    child: BlocBuilder<CurrencyCubit, Currency>(
+                      builder: (context, currency) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.wallet.name,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              _formatCurrency(widget.wallet.balance, currency),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: color,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -633,11 +641,10 @@ class _WalletListTileState extends State<WalletListTile>
     );
   }
 
-  String _formatCurrency(double amount) {
+  String _formatCurrency(double amount, Currency currency) {
     final formatter = NumberFormat.currency(
-      locale: 'th_TH',
-      symbol: '\u0E3F',
-      decimalDigits: 2,
+      symbol: currency.symbol,
+      decimalDigits: (currency == Currency.jpy || currency == Currency.krw || currency == Currency.vnd) ? 0 : 2,
     );
     return formatter.format(amount.abs());
   }

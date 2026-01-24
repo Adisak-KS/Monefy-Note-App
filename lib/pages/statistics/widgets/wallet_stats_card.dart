@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
 import '../../../core/models/wallet_type.dart';
 import '../bloc/statistics_state.dart';
 
@@ -103,6 +105,7 @@ class _WalletStatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
     final currencyFormat = NumberFormat('#,##0');
 
     return Container(
@@ -147,13 +150,13 @@ class _WalletStatItem extends StatelessWidget {
                     _MiniStat(
                       icon: Icons.arrow_downward_rounded,
                       color: const Color(0xFF22C55E),
-                      value: '฿${currencyFormat.format(stat.totalIncome)}',
+                      value: '${currency.symbol}${currencyFormat.format(stat.totalIncome)}',
                     ),
                     const SizedBox(width: 12),
                     _MiniStat(
                       icon: Icons.arrow_upward_rounded,
                       color: const Color(0xFFEF4444),
-                      value: '฿${currencyFormat.format(stat.totalExpense)}',
+                      value: '${currency.symbol}${currencyFormat.format(stat.totalExpense)}',
                     ),
                   ],
                 ),

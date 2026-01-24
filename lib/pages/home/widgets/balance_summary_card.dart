@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/models/currency.dart';
 
 class BalanceSummaryCard extends StatefulWidget {
   final double totalIncome;
@@ -77,7 +80,11 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final currencyFormat = NumberFormat.currency(locale: 'th_TH', symbol: '฿');
+    final currency = context.watch<CurrencyCubit>().state;
+    final currencyFormat = NumberFormat.currency(
+      symbol: currency.symbol,
+      decimalDigits: (currency == Currency.jpy || currency == Currency.krw || currency == Currency.vnd) ? 0 : 2,
+    );
 
     return AnimatedBuilder(
       animation: _controller,

@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
 import '../bloc/statistics_state.dart';
 
 class TopCategoriesList extends StatelessWidget {
@@ -133,6 +135,7 @@ class _CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
     final currencyFormat = NumberFormat('#,##0');
 
     return Padding(
@@ -234,7 +237,7 @@ class _CategoryItem extends StatelessWidget {
           ),
           // Amount
           Text(
-            '฿${currencyFormat.format(stat.amount)}',
+            '${currency.symbol}${currencyFormat.format(stat.amount)}',
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: isExpense

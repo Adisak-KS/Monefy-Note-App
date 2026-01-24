@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
 import '../bloc/statistics_state.dart';
 
 class CategoryPieChart extends StatefulWidget {
@@ -210,34 +212,39 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                     ),
                   ),
                   // Total Amount Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? theme.colorScheme.surfaceContainerHighest
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        if (!isDark)
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
+                  Builder(
+                    builder: (context) {
+                      final currency = context.watch<CurrencyCubit>().state;
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? theme.colorScheme.surfaceContainerHighest
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            if (!isDark)
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                          ],
+                        ),
+                        child: Text(
+                          '${currency.symbol}${NumberFormat('#,##0').format(_totalAmount)}',
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: widget.isExpense
+                                ? const Color(0xFFEF4444)
+                                : const Color(0xFF22C55E),
                           ),
-                      ],
-                    ),
-                    child: Text(
-                      '฿${NumberFormat('#,##0').format(_totalAmount)}',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: widget.isExpense
-                            ? const Color(0xFFEF4444)
-                            : const Color(0xFF22C55E),
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -511,6 +518,7 @@ class _CategoryPieChartState extends State<CategoryPieChart>
 
   Widget _buildLegendItem(CategoryStatistic data, int index) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
     final color = _parseColor(data.category.color, index);
     final isTouched = index == touchedIndex;
     final currencyFormat = NumberFormat('#,##0');
@@ -587,7 +595,7 @@ class _CategoryPieChartState extends State<CategoryPieChart>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '฿${currencyFormat.format(data.amount)}',
+                  '${currency.symbol}${currencyFormat.format(data.amount)}',
                   style: theme.textTheme.labelSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: isTouched ? color : theme.colorScheme.onSurface,
@@ -638,6 +646,7 @@ class _CenterContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
     final currencyFormat = NumberFormat('#,##0');
 
     return AnimatedSwitcher(
@@ -660,7 +669,7 @@ class _CenterContent extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '฿${currencyFormat.format(selectedData!.amount)}',
+                  '${currency.symbol}${currencyFormat.format(selectedData!.amount)}',
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),

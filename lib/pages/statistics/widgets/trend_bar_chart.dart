@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
 import '../bloc/statistics_state.dart';
 
 class TrendBarChart extends StatefulWidget {
@@ -240,6 +242,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                           final value = isIncome ? stat.income : stat.expense;
                           final format = NumberFormat('#,##0');
                           final dateFormat = DateFormat('MMM d');
+                          final currency = context.read<CurrencyCubit>().state;
                           return BarTooltipItem(
                             '${dateFormat.format(stat.date)}\n',
                             theme.textTheme.labelSmall!.copyWith(
@@ -256,7 +259,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                 ),
                               ),
                               TextSpan(
-                                text: '฿${format.format(value)}',
+                                text: '${currency.symbol}${format.format(value)}',
                                 style: theme.textTheme.titleSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: isIncome
@@ -511,6 +514,7 @@ class _SummaryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currency = context.watch<CurrencyCubit>().state;
     final format = NumberFormat('#,##0');
 
     return Expanded(
@@ -559,7 +563,7 @@ class _SummaryChip extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '฿${format.format(amount)}',
+                    '${currency.symbol}${format.format(amount)}',
                     style: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: color,

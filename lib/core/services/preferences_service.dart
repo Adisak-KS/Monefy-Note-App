@@ -12,6 +12,7 @@ class PreferencesService {
   static const _keySecurityType = 'security_type';
   static const _keyBiometricEnabled = 'biometric_enabled';
   static const _keyAppColor = 'app_color';
+  static const _keyDefaultCurrency = 'default_currency';
 
   // Singleton
   static final PreferencesService _instance = PreferencesService._internal();
@@ -137,5 +138,16 @@ class PreferencesService {
   Future<void> saveAppColor(AppColor color) async {
     final p = await prefs;
     await p.setString(_keyAppColor, color.theme.name);
+  }
+
+  // Default Currency
+  Future<String> getDefaultCurrency() async {
+    final p = await prefs;
+    return p.getString(_keyDefaultCurrency) ?? 'THB';
+  }
+
+  Future<void> saveDefaultCurrency(String currencyCode) async {
+    final p = await prefs;
+    await p.setString(_keyDefaultCurrency, currencyCode);
   }
 }

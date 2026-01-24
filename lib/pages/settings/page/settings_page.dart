@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/models/currency.dart';
 import '../../../core/theme/app_color.dart';
 import '../../../core/theme/color_cubit.dart';
 import '../../../core/theme/theme_cubit.dart';
@@ -16,6 +18,7 @@ import '../widgets/settings_tile.dart';
 import '../widgets/theme_selector_dialog.dart';
 import '../widgets/language_selector_dialog.dart';
 import '../widgets/color_selector_dialog.dart';
+import '../widgets/currency_selector_dialog.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -211,25 +214,30 @@ class _SettingsPageContentState extends State<_SettingsPageContent>
                 value: _getLanguageLabel(state.locale),
                 onTap: () => _showLanguageSelector(context, state),
               ),
-              SettingsTile(
-                icon: Icons.attach_money_rounded,
-                iconColor: Colors.green,
-                title: 'settings.currency'.tr(),
-                subtitle: 'settings.currency_description'.tr(),
-                trailing: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '฿ THB',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ),
+              BlocBuilder<CurrencyCubit, Currency>(
+                builder: (context, currency) {
+                  return SettingsTile(
+                    icon: Icons.attach_money_rounded,
+                    iconColor: Colors.green,
+                    title: 'settings.currency'.tr(),
+                    subtitle: 'settings.currency_description'.tr(),
+                    trailing: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '${currency.flag} ${currency.code}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ),
+                    onTap: () => _showCurrencySelector(context, currency),
+                  );
+                },
               ),
             ],
           ),
@@ -408,6 +416,18 @@ class _SettingsPageContentState extends State<_SettingsPageContent>
       currentColor: currentColor,
       onColorChanged: (color) {
         colorCubit.setColor(color);
+      },
+    );
+  }
+
+  void _showCurrencySelector(BuildContext context, Currency currentCurrency) {
+    final currencyCubit = context.read<CurrencyCubit>();
+
+    CurrencySelectorDialog.show(
+      context,
+      currentCurrency: currentCurrency,
+      onCurrencyChanged: (currency) {
+        currencyCubit.setCurrency(currency);
       },
     );
   }

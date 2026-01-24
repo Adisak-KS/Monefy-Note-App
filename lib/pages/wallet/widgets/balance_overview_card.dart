@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/models/currency.dart';
 
 class BalanceOverviewCard extends StatefulWidget {
   final double totalBalance;
@@ -217,17 +220,21 @@ class _BalanceOverviewCardState extends State<BalanceOverviewCard>
                   ],
                 ),
                 const SizedBox(height: 16),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Text(
-                    widget.hideBalance ? '฿ ••••••••' : _formatCurrency(netWorth),
-                    key: ValueKey(widget.hideBalance ? 'hidden' : netWorth),
-                    style: theme.textTheme.displaySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
+                BlocBuilder<CurrencyCubit, Currency>(
+                  builder: (context, currency) {
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: Text(
+                        widget.hideBalance ? '${currency.symbol} ••••••••' : _formatCurrency(netWorth, currency),
+                        key: ValueKey(widget.hideBalance ? 'hidden' : netWorth),
+                        style: theme.textTheme.displaySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 8),
                 Container(
@@ -343,11 +350,10 @@ class _BalanceOverviewCardState extends State<BalanceOverviewCard>
     );
   }
 
-  String _formatCurrency(double amount) {
+  String _formatCurrency(double amount, Currency currency) {
     final formatter = NumberFormat.currency(
-      locale: 'th_TH',
-      symbol: '\u0E3F',
-      decimalDigits: 2,
+      symbol: currency.symbol,
+      decimalDigits: (currency == Currency.jpy || currency == Currency.krw || currency == Currency.vnd) ? 0 : 2,
     );
     return formatter.format(amount);
   }
@@ -376,64 +382,67 @@ class _BalanceItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                iconGradient[0].withValues(alpha: 0.15),
-                iconGradient[1].withValues(alpha: 0.08),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return BlocBuilder<CurrencyCubit, Currency>(
+      builder: (context, currency) {
+        return Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    iconGradient[0].withValues(alpha: 0.15),
+                    iconGradient[1].withValues(alpha: 0.08),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: iconGradient[0].withValues(alpha: 0.2),
+                ),
+              ),
+              child: ShaderMask(
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    colors: iconGradient,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds);
+                },
+                child: Icon(icon, color: Colors.white, size: 22),
+              ),
             ),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: iconGradient[0].withValues(alpha: 0.2),
+            const SizedBox(height: 12),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          child: ShaderMask(
-            shaderCallback: (bounds) {
-              return LinearGradient(
-                colors: iconGradient,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds);
-            },
-            child: Icon(icon, color: Colors.white, size: 22),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          label,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 4),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: Text(
-            hideBalance ? '฿ ••••' : _formatCurrency(amount),
-            key: ValueKey(hideBalance ? 'hidden' : amount),
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: isDebt ? const Color(0xFFEF4444) : const Color(0xFF22C55E),
+            const SizedBox(height: 4),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: Text(
+                hideBalance ? '${currency.symbol} ••••' : _formatCurrency(amount, currency),
+                key: ValueKey(hideBalance ? 'hidden' : amount),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDebt ? const Color(0xFFEF4444) : const Color(0xFF22C55E),
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
-  String _formatCurrency(double amount) {
+  String _formatCurrency(double amount, Currency currency) {
     final formatter = NumberFormat.currency(
-      locale: 'th_TH',
-      symbol: '\u0E3F',
-      decimalDigits: 0,
+      symbol: currency.symbol,
+      decimalDigits: (currency == Currency.jpy || currency == Currency.krw || currency == Currency.vnd) ? 0 : 0,
     );
     return formatter.format(amount);
   }
