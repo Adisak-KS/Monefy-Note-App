@@ -2,8 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../bloc/drawer_stats_cubit.dart';
 import '../bloc/drawer_stats_state.dart';
+import '../theme/theme_cubit.dart';
+import '../../pages/settings/widgets/theme_selector_dialog.dart';
 
 class ProfileDrawer extends StatefulWidget {
   const ProfileDrawer({super.key});
@@ -84,19 +87,19 @@ class _ProfileDrawerState extends State<ProfileDrawer>
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _buildAnimatedMenuItem(0, theme, Icons.account_balance_wallet_rounded, 'nav.wallet'.tr(), () => _navigateTo(context, '/wallet')),
-                  _buildAnimatedMenuItem(1, theme, Icons.bar_chart_rounded, 'nav.statistics'.tr(), () => _navigateTo(context, '/statistics')),
+                  _buildAnimatedMenuItem(0, theme, Icons.account_balance_wallet_rounded, 'nav.wallet'.tr(), () => _showComingSoon(context)),
+                  _buildAnimatedMenuItem(1, theme, Icons.bar_chart_rounded, 'nav.statistics'.tr(), () => _showComingSoon(context)),
                   _buildAnimatedMenuItem(2, theme, Icons.category_rounded, 'drawer.categories'.tr(), () => _navigateTo(context, '/categories')),
                   _buildAnimatedMenuItem(3, theme, Icons.savings_rounded, 'drawer.budgets'.tr(), () => _navigateTo(context, '/budgets')),
                   const SizedBox(height: 16),
                   _buildSectionHeader(theme, 'drawer.preferences'.tr(), 4),
                   _buildAnimatedThemeToggle(context, theme, isDark, 5),
                   _buildAnimatedLanguageSelector(context, theme, 6),
-                  _buildAnimatedMenuItem(7, theme, Icons.notifications_outlined, 'drawer.notifications'.tr(), () => _navigateTo(context, '/notifications')),
-                  _buildAnimatedMenuItem(8, theme, Icons.security_rounded, 'drawer.security'.tr(), () => _navigateTo(context, '/security')),
+                  _buildAnimatedMenuItem(7, theme, Icons.notifications_outlined, 'drawer.notifications'.tr(), () => _showComingSoon(context)),
+                  _buildAnimatedMenuItem(8, theme, Icons.security_rounded, 'drawer.security'.tr(), () => _navigateTo(context, '/security-setup')),
                   const SizedBox(height: 16),
                   _buildSectionHeader(theme, 'drawer.about'.tr(), 9),
-                  _buildAnimatedMenuItem(10, theme, Icons.help_outline_rounded, 'drawer.help'.tr(), () => _navigateTo(context, '/help')),
+                  _buildAnimatedMenuItem(10, theme, Icons.help_outline_rounded, 'drawer.help'.tr(), () => _showComingSoon(context)),
                   _buildAnimatedMenuItem(11, theme, Icons.info_outline_rounded, 'drawer.about_app'.tr(), () => _showAboutDialog(context), subtitle: 'v1.0.0'),
                   const SizedBox(height: 16),
                 ],
@@ -591,7 +594,15 @@ class _ProfileDrawerState extends State<ProfileDrawer>
             child: InkWell(
               onTap: () {
                 HapticFeedback.selectionClick();
-                // Toggle theme
+                Navigator.pop(context);
+                final themeCubit = context.read<ThemeCubit>();
+                ThemeSelectorDialog.show(
+                  context,
+                  currentTheme: themeCubit.state,
+                  onThemeChanged: (mode) {
+                    themeCubit.setTheme(mode);
+                  },
+                );
               },
               borderRadius: BorderRadius.circular(14),
               child: Container(
@@ -820,7 +831,30 @@ class _ProfileDrawerState extends State<ProfileDrawer>
 
   void _navigateTo(BuildContext context, String route) {
     Navigator.pop(context);
-    // Navigator.pushNamed(context, route);
+    context.push(route);
+  }
+
+  void _showComingSoon(BuildContext context) {
+    Navigator.pop(context);
+    final theme = Theme.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.construction_rounded,
+              color: theme.colorScheme.onPrimary,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Text('common.coming_soon'.tr()),
+          ],
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
   }
 
   void _showAboutDialog(BuildContext context) {
