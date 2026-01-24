@@ -87,6 +87,10 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
       decimalDigits: (currency == Currency.jpy || currency == Currency.krw || currency == Currency.vnd) ? 0 : 2,
     );
 
+    // Determine contrast color based on primary color brightness
+    final isLightPrimary = ColorUtils.isLightColor(theme.colorScheme.primary);
+    final contrastColor = isLightPrimary ? Colors.black : Colors.white;
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -162,8 +166,8 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               shape: BoxShape.circle,
                               gradient: RadialGradient(
                                 colors: [
-                                  Colors.white.withValues(alpha: 0.15),
-                                  Colors.white.withValues(alpha: 0.0),
+                                  contrastColor.withValues(alpha: 0.15),
+                                  contrastColor.withValues(alpha: 0.0),
                                 ],
                               ),
                             ),
@@ -179,8 +183,8 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               shape: BoxShape.circle,
                               gradient: RadialGradient(
                                 colors: [
-                                  Colors.white.withValues(alpha: 0.12),
-                                  Colors.white.withValues(alpha: 0.0),
+                                  contrastColor.withValues(alpha: 0.12),
+                                  contrastColor.withValues(alpha: 0.0),
                                 ],
                               ),
                             ),
@@ -196,8 +200,8 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               shape: BoxShape.circle,
                               gradient: RadialGradient(
                                 colors: [
-                                  Colors.white.withValues(alpha: 0.1),
-                                  Colors.white.withValues(alpha: 0.0),
+                                  contrastColor.withValues(alpha: 0.1),
+                                  contrastColor.withValues(alpha: 0.0),
                                 ],
                               ),
                             ),
@@ -254,12 +258,12 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: contrastColor.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
                                 Icons.account_balance_wallet_rounded,
-                                color: Colors.white.withValues(alpha: 0.9),
+                                color: contrastColor.withValues(alpha: 0.9),
                                 size: 18,
                               ),
                             ),
@@ -267,7 +271,7 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                             Text(
                               'home.today_balance'.tr(),
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
+                                color: contrastColor.withValues(alpha: 0.9),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -281,8 +285,8 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                     _AnimatedCounter(
                       value: widget.balance,
                       formatter: currencyFormat,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: contrastColor,
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                         letterSpacing: -1.5,
@@ -293,10 +297,10 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                     Container(
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.12),
+                        color: contrastColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: contrastColor.withValues(alpha: 0.1),
                           width: 1,
                         ),
                       ),
@@ -309,6 +313,7 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               amount: currencyFormat.format(widget.totalIncome),
                               iconColor: AppColors.incomeLight,
                               iconBgColor: AppColors.incomeLight.withValues(alpha: 0.2),
+                              textColor: contrastColor,
                             ),
                           ),
                           Container(
@@ -320,9 +325,9 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 colors: [
-                                  Colors.white.withValues(alpha: 0.0),
-                                  Colors.white.withValues(alpha: 0.3),
-                                  Colors.white.withValues(alpha: 0.0),
+                                  contrastColor.withValues(alpha: 0.0),
+                                  contrastColor.withValues(alpha: 0.3),
+                                  contrastColor.withValues(alpha: 0.0),
                                 ],
                               ),
                             ),
@@ -334,6 +339,7 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               amount: currencyFormat.format(widget.totalExpense),
                               iconColor: AppColors.expenseLight,
                               iconBgColor: AppColors.expenseLight.withValues(alpha: 0.2),
+                              textColor: contrastColor,
                             ),
                           ),
                         ],
@@ -358,34 +364,40 @@ class _TrendBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPositive = balance >= 0;
+    // Use solid background color for better visibility
+    final bgColor = isPositive ? AppColors.incomeLight : AppColors.expenseLight;
+    final textColor = Colors.white;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isPositive
-            ? AppColors.incomeLight.withValues(alpha: 0.2)
-            : AppColors.expenseLight.withValues(alpha: 0.2),
+        color: bgColor.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isPositive
-              ? AppColors.incomeLight.withValues(alpha: 0.3)
-              : AppColors.expenseLight.withValues(alpha: 0.3),
+          color: bgColor,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: bgColor.withValues(alpha: 0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             isPositive ? Icons.trending_up_rounded : Icons.trending_down_rounded,
-            color: isPositive ? AppColors.incomeLight : AppColors.expenseLight,
+            color: textColor,
             size: 16,
           ),
           const SizedBox(width: 4),
           Text(
             isPositive ? 'home.profit'.tr() : 'home.loss'.tr(),
             style: TextStyle(
-              color: isPositive ? AppColors.incomeLight : AppColors.expenseLight,
+              color: textColor,
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
@@ -429,6 +441,7 @@ class _SummaryItem extends StatelessWidget {
   final String amount;
   final Color iconColor;
   final Color? iconBgColor;
+  final Color textColor;
 
   const _SummaryItem({
     required this.icon,
@@ -436,6 +449,7 @@ class _SummaryItem extends StatelessWidget {
     required this.amount,
     required this.iconColor,
     this.iconBgColor,
+    required this.textColor,
   });
 
   @override
@@ -457,7 +471,7 @@ class _SummaryItem extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.8),
+                color: textColor.withValues(alpha: 0.8),
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),
@@ -467,8 +481,8 @@ class _SummaryItem extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           amount,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: textColor,
             fontSize: 17,
             fontWeight: FontWeight.w700,
           ),

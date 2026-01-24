@@ -79,6 +79,7 @@
     "transaction_deleted": "ลบรายการแล้ว",
     "undo": "ย้อนกลับ",
     "filter_today": "วันนี้",
+    "filter_day": "วัน",
     "filter_week": "สัปดาห์นี้",
     "filter_month": "เดือนนี้",
     "filter_year": "ปีนี้",

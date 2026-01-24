@@ -288,6 +288,50 @@ class AppColors {
   }
 }
 
+// ============================================
+// COLOR UTILITY METHODS
+// ============================================
+class ColorUtils {
+  ColorUtils._();
+
+  /// Check if a color is considered "light" (luminance > 0.5)
+  static bool isLightColor(Color color) {
+    return color.computeLuminance() > 0.5;
+  }
+
+  /// Get contrasting text color (black or white) for a given background
+  static Color getContrastColor(Color backgroundColor) {
+    return isLightColor(backgroundColor) ? Colors.black87 : Colors.white;
+  }
+
+  /// Get contrasting text color with custom opacity
+  static Color getContrastColorWithAlpha(Color backgroundColor, double alpha) {
+    final baseColor = isLightColor(backgroundColor) ? Colors.black : Colors.white;
+    return baseColor.withValues(alpha: alpha);
+  }
+
+  /// Get overlay color for decorations on a given background
+  static Color getOverlayColor(Color backgroundColor, double alpha) {
+    return isLightColor(backgroundColor)
+        ? Colors.black.withValues(alpha: alpha)
+        : Colors.white.withValues(alpha: alpha);
+  }
+
+  /// Get secondary text color with appropriate contrast
+  static Color getSecondaryTextColor(Color backgroundColor) {
+    return isLightColor(backgroundColor)
+        ? Colors.black.withValues(alpha: 0.7)
+        : Colors.white.withValues(alpha: 0.8);
+  }
+
+  /// Get border color for a given background
+  static Color getBorderColor(Color backgroundColor, double alpha) {
+    return isLightColor(backgroundColor)
+        ? Colors.black.withValues(alpha: alpha)
+        : Colors.white.withValues(alpha: alpha);
+  }
+}
+
 /// Colors for Sign-in page that adapt to light/dark mode
 class SignInColors {
   final Color textPrimary;

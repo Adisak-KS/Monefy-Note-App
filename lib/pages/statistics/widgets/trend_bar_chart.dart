@@ -154,9 +154,9 @@ class _TrendBarChartState extends State<TrendBarChart>
                                   ),
                                 ],
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.trending_up_rounded,
-                                color: Colors.white,
+                                color: ColorUtils.getContrastColor(theme.colorScheme.primary),
                                 size: 22,
                               ),
                             ),
@@ -176,7 +176,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                     '${displayData.length} ${'home.filter_day'.tr()}',
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: theme.colorScheme.onSurface
-                                          .withValues(alpha: 0.5),
+                                          .withValues(alpha: 0.65),
                                     ),
                                   ),
                                 ],
@@ -254,7 +254,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                       '${dateFormat.format(stat.date)}\n',
                                       theme.textTheme.labelSmall!.copyWith(
                                         color: theme.colorScheme.onSurface
-                                            .withValues(alpha: 0.5),
+                                            .withValues(alpha: 0.65),
                                       ),
                                       children: [
                                         TextSpan(
@@ -263,7 +263,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                           style: theme.textTheme.labelSmall
                                               ?.copyWith(
                                             color: theme.colorScheme.onSurface
-                                                .withValues(alpha: 0.7),
+                                                .withValues(alpha: 0.8),
                                           ),
                                         ),
                                         TextSpan(
@@ -321,7 +321,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                           style: theme.textTheme.labelSmall
                                               ?.copyWith(
                                             color: theme.colorScheme.onSurface
-                                                .withValues(alpha: 0.4),
+                                                .withValues(alpha: 0.55),
                                             fontSize: 10,
                                           ),
                                         ),
@@ -373,7 +373,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                                       : theme.colorScheme
                                                           .onSurface
                                                           .withValues(
-                                                              alpha: 0.5),
+                                                              alpha: 0.65),
                                                   fontWeight: isTouched
                                                       ? FontWeight.bold
                                                       : FontWeight.w500,
@@ -503,7 +503,7 @@ class _TrendBarChartState extends State<TrendBarChart>
             child: Icon(
               Icons.bar_chart_rounded,
               size: 40,
-              color: theme.colorScheme.primary.withValues(alpha: 0.5),
+              color: theme.colorScheme.primary.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 16),
@@ -511,14 +511,14 @@ class _TrendBarChartState extends State<TrendBarChart>
             widget.title,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
             ),
           ),
           const SizedBox(height: 6),
           Text(
             'statistics.no_data'.tr(),
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -588,7 +588,7 @@ class _SummaryChip extends StatelessWidget {
                   Text(
                     label,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                       fontSize: 10,
                     ),
                   ),

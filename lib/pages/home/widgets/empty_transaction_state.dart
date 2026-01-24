@@ -92,7 +92,7 @@ class _EmptyTransactionStateState extends State<EmptyTransactionState>
                 child: Icon(
                   Icons.receipt_long_outlined,
                   size: 64,
-                  color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.8),
                 ),
               ),
             ),
@@ -107,7 +107,7 @@ class _EmptyTransactionStateState extends State<EmptyTransactionState>
                     Text(
                       'home.no_transactions'.tr(),
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -115,7 +115,7 @@ class _EmptyTransactionStateState extends State<EmptyTransactionState>
                     Text(
                       'home.add_first'.tr(),
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -146,7 +146,7 @@ class _EmptyTransactionStateState extends State<EmptyTransactionState>
               child: Icon(
                 Icons.keyboard_arrow_down,
                 size: 32,
-                color: theme.colorScheme.primary.withValues(alpha: 0.4),
+                color: theme.colorScheme.primary.withValues(alpha: 0.6),
               ),
             );
           },

@@ -197,7 +197,7 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                                 '${widget.data.length} ${'home.category'.tr()}',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.5),
+                                      .withValues(alpha: 0.65),
                                 ),
                               ),
                             ],
@@ -354,7 +354,7 @@ class _CategoryPieChartState extends State<CategoryPieChart>
               color: (widget.isExpense
                       ? AppColors.expense
                       : AppColors.income)
-                  .withValues(alpha: 0.5),
+                  .withValues(alpha: 0.6),
             ),
           ),
           const SizedBox(height: 16),
@@ -362,14 +362,14 @@ class _CategoryPieChartState extends State<CategoryPieChart>
             widget.title,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 6),
           Text(
             'statistics.no_data'.tr(),
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
             ),
           ),
         ],
@@ -499,6 +499,10 @@ class _CategoryPieChartState extends State<CategoryPieChart>
       final radius = isTouched ? 38.0 : 30.0;
       final color = _parseColor(item.category.color, index);
 
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
+      final borderColor = isDark ? Colors.white : Colors.black;
+
       return PieChartSectionData(
         color: color,
         value: item.amount,
@@ -506,7 +510,7 @@ class _CategoryPieChartState extends State<CategoryPieChart>
         radius: radius * _animation.value,
         borderSide: isTouched
             ? BorderSide(
-                color: Colors.white.withValues(alpha: 0.8),
+                color: borderColor.withValues(alpha: isDark ? 0.8 : 0.3),
                 width: 3,
               )
             : BorderSide.none,
@@ -672,7 +676,7 @@ class _CenterContent extends StatelessWidget {
                 Text(
                   '${currency.symbol}${currencyFormat.format(selectedData!.amount)}',
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -694,7 +698,7 @@ class _CenterContent extends StatelessWidget {
                 Text(
                   isExpense ? 'home.expense'.tr() : 'home.income'.tr(),
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),
                 ),
               ],

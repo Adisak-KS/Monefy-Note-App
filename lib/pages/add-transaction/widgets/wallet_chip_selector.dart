@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/models/wallet.dart';
+import '../../../core/theme/app_colors.dart';
 
 class WalletChipSelector extends StatelessWidget {
   final List<Wallet> wallets;
@@ -138,36 +139,44 @@ class _WalletChipState extends State<_WalletChip> {
                   ]
                 : [],
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: widget.isSelected
-                      ? Colors.white.withValues(alpha: 0.2)
-                      : color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  _getWalletIcon(),
-                  size: 16,
-                  color: widget.isSelected ? Colors.white : color,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                widget.wallet.name,
-                style: TextStyle(
-                  color: widget.isSelected
-                      ? Colors.white
-                      : theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                  fontWeight:
-                      widget.isSelected ? FontWeight.w700 : FontWeight.w500,
-                  fontSize: 13,
-                ),
-              ),
-            ],
+          child: Builder(
+            builder: (context) {
+              // Get contrast color for selected state based on primary color brightness
+              final isLightPrimary = ColorUtils.isLightColor(theme.colorScheme.primary);
+              final contrastColor = isLightPrimary ? Colors.black : Colors.white;
+
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: widget.isSelected
+                          ? contrastColor.withValues(alpha: 0.2)
+                          : color.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      _getWalletIcon(),
+                      size: 16,
+                      color: widget.isSelected ? contrastColor : color,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.wallet.name,
+                    style: TextStyle(
+                      color: widget.isSelected
+                          ? contrastColor
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                      fontWeight:
+                          widget.isSelected ? FontWeight.w700 : FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

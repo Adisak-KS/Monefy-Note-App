@@ -48,6 +48,19 @@ class _GlassButtonState extends State<GlassButton>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Glass button is designed for gradient backgrounds
+    // Use contrast colors based on theme
+    final overlayColor = isDark ? Colors.white : Colors.white;
+    final primaryGradientColors = isDark
+        ? [Colors.white, AppColors.lightButtonGradientEnd]
+        : [Colors.white, AppColors.lightButtonGradientEnd];
+    final primaryTextColor = isDark
+        ? AppColors.defaultGradientDark[1]
+        : AppColors.defaultGradientLight[1];
+
     return GestureDetector(
       onTapDown: (_) => _scaleController.forward(),
       onTapUp: (_) => _scaleController.reverse(),
@@ -59,19 +72,19 @@ class _GlassButtonState extends State<GlassButton>
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
           decoration: BoxDecoration(
             gradient: widget.isPrimary
-                ? const LinearGradient(
-                    colors: [Colors.white, Color(0xFFF0F0F0)],
+                ? LinearGradient(
+                    colors: primaryGradientColors,
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   )
                 : null,
             color:
-                widget.isPrimary ? null : Colors.white.withValues(alpha: 0.12),
+                widget.isPrimary ? null : overlayColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(50),
             border: Border.all(
               color: widget.isPrimary
-                  ? Colors.white.withValues(alpha: 0.8)
-                  : Colors.white.withValues(alpha: 0.25),
+                  ? overlayColor.withValues(alpha: 0.8)
+                  : overlayColor.withValues(alpha: 0.25),
               width: 1.5,
             ),
             boxShadow: widget.isPrimary
@@ -82,7 +95,7 @@ class _GlassButtonState extends State<GlassButton>
                       offset: const Offset(0, 4),
                     ),
                     BoxShadow(
-                      color: Colors.white.withValues(alpha: 0.3),
+                      color: overlayColor.withValues(alpha: 0.3),
                       blurRadius: 8,
                       spreadRadius: -2,
                     ),
@@ -105,8 +118,8 @@ class _GlassButtonState extends State<GlassButton>
                       strokeWidth: 2.5,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         widget.isPrimary
-                            ? AppColors.defaultGradientLight[0]
-                            : Colors.white,
+                            ? primaryTextColor
+                            : overlayColor,
                       ),
                     ),
                   )
@@ -119,17 +132,17 @@ class _GlassButtonState extends State<GlassButton>
                           widget.icon,
                           size: 20,
                           color: widget.isPrimary
-                              ? AppColors.defaultGradientLight[0]
-                              : Colors.white,
+                              ? primaryTextColor
+                              : overlayColor,
                         ),
                         const SizedBox(width: 8),
                       ],
                       Text(
                         widget.label,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                               color: widget.isPrimary
-                                  ? AppColors.defaultGradientLight[0]
-                                  : Colors.white,
+                                  ? primaryTextColor
+                                  : overlayColor,
                               fontWeight: FontWeight.w600,
                             ),
                       ),
@@ -139,8 +152,8 @@ class _GlassButtonState extends State<GlassButton>
                           widget.icon,
                           size: 20,
                           color: widget.isPrimary
-                              ? AppColors.defaultGradientLight[0]
-                              : Colors.white,
+                              ? primaryTextColor
+                              : overlayColor,
                         ),
                       ],
                     ],

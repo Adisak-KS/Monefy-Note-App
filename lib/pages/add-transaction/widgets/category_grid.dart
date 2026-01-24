@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/models/category.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/icon_utils.dart';
 
 class CategoryGrid extends StatelessWidget {
@@ -169,10 +170,16 @@ class _CategoryItemState extends State<_CategoryItem>
                           ]
                         : [],
                   ),
-                  child: Icon(
-                    _getCategoryIcon(),
-                    color: widget.isSelected ? Colors.white : color,
-                    size: 22,
+                  child: Builder(
+                    builder: (context) {
+                      // Use contrast color based on category color brightness
+                      final contrastColor = ColorUtils.getContrastColor(color);
+                      return Icon(
+                        _getCategoryIcon(),
+                        color: widget.isSelected ? contrastColor : color,
+                        size: 22,
+                      );
+                    },
                   ),
                 ),
                 // Checkmark badge when selected
@@ -180,29 +187,34 @@ class _CategoryItemState extends State<_CategoryItem>
                   Positioned(
                     top: -4,
                     right: -4,
-                    child: Container(
-                      width: 18,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isDark ? Colors.black : Colors.white,
-                          width: 2,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: color.withValues(alpha: 0.4),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+                    child: Builder(
+                      builder: (context) {
+                        final checkColor = ColorUtils.getContrastColor(color);
+                        return Container(
+                          width: 18,
+                          height: 18,
+                          decoration: BoxDecoration(
+                            color: color,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: theme.colorScheme.surface,
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: color.withValues(alpha: 0.4),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 10,
-                      ),
+                          child: Icon(
+                            Icons.check,
+                            color: checkColor,
+                            size: 10,
+                          ),
+                        );
+                      },
                     ),
                   ),
               ],

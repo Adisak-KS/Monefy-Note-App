@@ -229,7 +229,7 @@ class _BalanceCard extends StatelessWidget {
                 height: 150,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: Colors.white.withValues(alpha: 0.15),
                 ),
               ),
             ),
@@ -241,7 +241,7 @@ class _BalanceCard extends StatelessWidget {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.08),
+                  color: Colors.white.withValues(alpha: 0.12),
                 ),
               ),
             ),
@@ -253,7 +253,7 @@ class _BalanceCard extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: Colors.white.withValues(alpha: 0.08),
                 ),
               ),
             ),
@@ -295,7 +295,7 @@ class _BalanceCard extends StatelessWidget {
                           Text(
                             'home.filter_month'.tr(),
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: Colors.white.withValues(alpha: 0.7),
+                              color: Colors.white.withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -405,7 +405,7 @@ class _BalanceProgressBar extends StatelessWidget {
             const Spacer(),
             _ProgressLabel(
               label: 'home.expense'.tr(),
-              color: Colors.white.withValues(alpha: 0.7),
+              color: Colors.white.withValues(alpha: 0.8),
               icon: Icons.north_east_rounded,
             ),
           ],
@@ -415,7 +415,7 @@ class _BalanceProgressBar extends StatelessWidget {
           height: 8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
-            color: Colors.white.withValues(alpha: 0.2),
+            color: Colors.white.withValues(alpha: 0.3),
           ),
           child: Row(
             children: [

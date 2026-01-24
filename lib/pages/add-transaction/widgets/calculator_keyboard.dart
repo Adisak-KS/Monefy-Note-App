@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/models/wallet.dart';
+import '../../../core/theme/app_colors.dart';
 
 class CalculatorKeyboard extends StatefulWidget {
   final Color primaryColor;
@@ -70,6 +71,10 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
     super.dispose();
   }
 
+  // Helper to determine if primary color needs dark text
+  bool get _isLightPrimary => ColorUtils.isLightColor(widget.primaryColor);
+  Color get _contrastColor => _isLightPrimary ? Colors.black : Colors.white;
+
   @override
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
@@ -113,7 +118,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: _contrastColor.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -308,6 +313,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: _QuickAmountKey(
               amount: amount,
+              primaryColor: widget.primaryColor,
               onTap: () {
                 HapticFeedback.lightImpact();
                 widget.onQuickAmount(amount.toDouble());
@@ -330,7 +336,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               margin: const EdgeInsets.only(left: 4, right: 4),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: _contrastColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -339,13 +345,13 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                   Icon(
                     Icons.calendar_today_rounded,
                     size: 16,
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: _contrastColor.withValues(alpha: 0.9),
                   ),
                   const SizedBox(width: 6),
                   Text(
                     _getDateLabel(context),
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.95),
+                      color: _contrastColor.withValues(alpha: 0.95),
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -354,7 +360,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 18,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: _contrastColor.withValues(alpha: 0.7),
                   ),
                 ],
               ),
@@ -369,7 +375,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               margin: const EdgeInsets.only(left: 4, right: 4),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: _contrastColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -379,7 +385,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                         ? _getWalletIcon(widget.selectedWallet!)
                         : Icons.wallet_rounded,
                     size: 18,
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: _contrastColor.withValues(alpha: 0.9),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -390,7 +396,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                         Text(
                           widget.selectedWallet?.name ?? 'home.wallet'.tr(),
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.95),
+                            color: _contrastColor.withValues(alpha: 0.95),
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),
@@ -400,7 +406,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                           Text(
                             '฿${_formatBalance(widget.selectedWallet!.balance)}',
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
+                              color: _contrastColor.withValues(alpha: 0.7),
                               fontWeight: FontWeight.w500,
                               fontSize: 11,
                             ),
@@ -411,7 +417,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard>
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 18,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: _contrastColor.withValues(alpha: 0.7),
                   ),
                 ],
               ),
@@ -564,27 +570,36 @@ class _CalcKey extends StatefulWidget {
 class _CalcKeyState extends State<_CalcKey> {
   bool _isPressed = false;
 
+  // Helper to get contrast color based on primary color brightness
+  bool get _isLightPrimary => ColorUtils.isLightColor(widget.primaryColor);
+  Color get _contrastColor => _isLightPrimary ? Colors.black : Colors.white;
+  Color get _inverseContrastColor => _isLightPrimary ? Colors.white : Colors.black;
+
   @override
   Widget build(BuildContext context) {
     Color bgColor;
     Color textColor;
 
     if (widget.isOperator) {
-      bgColor = Colors.white.withValues(alpha: 0.25);
-      textColor = Colors.white;
+      // Operator keys: semi-transparent contrast background with contrast text
+      bgColor = _contrastColor.withValues(alpha: 0.25);
+      textColor = _contrastColor;
     } else if (widget.label == 'C') {
-      bgColor = Colors.white.withValues(alpha: 0.9);
+      // Clear key: high contrast background with primary color text
+      bgColor = _contrastColor.withValues(alpha: 0.9);
       textColor = widget.primaryColor;
     } else if (widget.label == '⌫') {
-      bgColor = Colors.white.withValues(alpha: 0.9);
+      // Backspace key: high contrast background with primary color text
+      bgColor = _contrastColor.withValues(alpha: 0.9);
       textColor = widget.primaryColor;
     } else if (widget.label == '=') {
-      bgColor = Colors.white.withValues(alpha: 0.25);
-      textColor = Colors.white;
+      // Equals key: semi-transparent contrast background with contrast text
+      bgColor = _contrastColor.withValues(alpha: 0.25);
+      textColor = _contrastColor;
     } else {
-      // Number keys (0-9, ., 00)
-      bgColor = Colors.white.withValues(alpha: 0.9);
-      textColor = Colors.black87;
+      // Number keys (0-9, ., 00): high contrast background with inverse text
+      bgColor = _contrastColor.withValues(alpha: 0.9);
+      textColor = _inverseContrastColor.withValues(alpha: 0.87);
     }
 
     return GestureDetector(
@@ -646,6 +661,9 @@ class _SaveKey extends StatefulWidget {
 class _SaveKeyState extends State<_SaveKey> {
   bool _isPressed = false;
 
+  bool get _isLightPrimary => ColorUtils.isLightColor(widget.primaryColor);
+  Color get _contrastColor => _isLightPrimary ? Colors.black : Colors.white;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -661,12 +679,12 @@ class _SaveKeyState extends State<_SaveKey> {
           height: 54,
           decoration: BoxDecoration(
             color: _isPressed
-                ? Colors.white.withValues(alpha: 0.85)
-                : Colors.white,
+                ? _contrastColor.withValues(alpha: 0.85)
+                : _contrastColor,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
+                color: (_isLightPrimary ? Colors.white : Colors.black).withValues(alpha: 0.15),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -701,6 +719,9 @@ class _TallSaveKey extends StatefulWidget {
 class _TallSaveKeyState extends State<_TallSaveKey> {
   bool _isPressed = false;
 
+  bool get _isLightPrimary => ColorUtils.isLightColor(widget.primaryColor);
+  Color get _contrastColor => _isLightPrimary ? Colors.black : Colors.white;
+
   @override
   Widget build(BuildContext context) {
     // Height: 58 (button) + 10 (spacing) + 58 (button) = 126
@@ -720,8 +741,8 @@ class _TallSaveKeyState extends State<_TallSaveKey> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.white,
-                Colors.white.withValues(alpha: 0.95),
+                _contrastColor,
+                _contrastColor.withValues(alpha: 0.95),
               ],
             ),
             borderRadius: BorderRadius.circular(16),
@@ -746,9 +767,9 @@ class _TallSaveKeyState extends State<_TallSaveKey> {
                   color: widget.primaryColor,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.check_rounded,
-                  color: Colors.white,
+                  color: _contrastColor,
                   size: 24,
                 ),
               ),
@@ -772,10 +793,12 @@ class _TallSaveKeyState extends State<_TallSaveKey> {
 
 class _QuickAmountKey extends StatefulWidget {
   final int amount;
+  final Color primaryColor;
   final VoidCallback onTap;
 
   const _QuickAmountKey({
     required this.amount,
+    required this.primaryColor,
     required this.onTap,
   });
 
@@ -785,6 +808,9 @@ class _QuickAmountKey extends StatefulWidget {
 
 class _QuickAmountKeyState extends State<_QuickAmountKey> {
   bool _isPressed = false;
+
+  bool get _isLightPrimary => ColorUtils.isLightColor(widget.primaryColor);
+  Color get _contrastColor => _isLightPrimary ? Colors.black : Colors.white;
 
   String _formatAmount(int amount) {
     if (amount >= 1000) {
@@ -808,21 +834,21 @@ class _QuickAmountKeyState extends State<_QuickAmountKey> {
           height: 36,
           decoration: BoxDecoration(
             color: _isPressed
-                ? Colors.white.withValues(alpha: 0.25)
-                : Colors.white.withValues(alpha: 0.15),
+                ? _contrastColor.withValues(alpha: 0.25)
+                : _contrastColor.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: _contrastColor.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
           child: Center(
             child: Text(
               _formatAmount(widget.amount),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: _contrastColor,
               ),
             ),
           ),

@@ -216,7 +216,7 @@ class _TransactionTileState extends State<TransactionTile>
                                   widget.transaction.description!,
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: theme.colorScheme.onSurface
-                                        .withValues(alpha: 0.5),
+                                        .withValues(alpha: 0.65),
                                     fontSize: 12,
                                   ),
                                   maxLines: 1,
@@ -231,7 +231,7 @@ class _TransactionTileState extends State<TransactionTile>
                                 height: 3,
                                 decoration: BoxDecoration(
                                   color: theme.colorScheme.onSurface.withValues(
-                                    alpha: 0.3,
+                                    alpha: 0.4,
                                   ),
                                   shape: BoxShape.circle,
                                 ),
@@ -241,7 +241,7 @@ class _TransactionTileState extends State<TransactionTile>
                               Icons.access_time_rounded,
                               size: 12,
                               color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.4,
+                                alpha: 0.55,
                               ),
                             ),
                             const SizedBox(width: 3),
@@ -249,7 +249,7 @@ class _TransactionTileState extends State<TransactionTile>
                               timeFormat.format(widget.transaction.date),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurface.withValues(
-                                  alpha: 0.5,
+                                  alpha: 0.65,
                                 ),
                                 fontSize: 12,
                               ),
