@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/models/category.dart';
 import '../../../core/models/transaction_type.dart';
 import '../../../core/models/wallet.dart';
+import '../../../core/utils/icon_utils.dart';
 import '../bloc/home_cubit.dart';
 import '../bloc/home_state.dart';
 import 'section_header.dart';
@@ -201,22 +202,7 @@ class _QuickActionButtonState extends State<_QuickActionButton>
   }
 
   IconData _getCategoryIcon() {
-    switch (widget.category.icon) {
-      case 'restaurant':
-        return Icons.restaurant_rounded;
-      case 'directions_car':
-        return Icons.directions_car_rounded;
-      case 'shopping_bag':
-        return Icons.shopping_bag_rounded;
-      case 'movie':
-        return Icons.movie_rounded;
-      case 'receipt':
-        return Icons.receipt_rounded;
-      case 'medical_services':
-        return Icons.medical_services_rounded;
-      default:
-        return Icons.category_rounded;
-    }
+    return IconUtils.getIconData(widget.category.icon ?? 'category');
   }
 
   Future<void> _showQuickAddDialog(BuildContext context) async {

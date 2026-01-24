@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/models/category.dart';
+import '../../../core/utils/icon_utils.dart';
 
 class CategoryGrid extends StatelessWidget {
   final List<Category> categories;
@@ -105,40 +106,7 @@ class _CategoryItemState extends State<_CategoryItem>
   }
 
   IconData _getCategoryIcon() {
-    switch (widget.category.icon) {
-      case 'restaurant':
-        return Icons.restaurant;
-      case 'directions_car':
-        return Icons.directions_car;
-      case 'shopping_bag':
-        return Icons.shopping_bag;
-      case 'movie':
-        return Icons.movie;
-      case 'receipt':
-        return Icons.receipt;
-      case 'medical_services':
-        return Icons.medical_services;
-      case 'payments':
-        return Icons.payments;
-      case 'work':
-        return Icons.work;
-      case 'trending_up':
-        return Icons.trending_up;
-      case 'card_giftcard':
-        return Icons.card_giftcard;
-      case 'home':
-        return Icons.home;
-      case 'school':
-        return Icons.school;
-      case 'flight':
-        return Icons.flight;
-      case 'fitness_center':
-        return Icons.fitness_center;
-      case 'pets':
-        return Icons.pets;
-      default:
-        return Icons.category;
-    }
+    return IconUtils.getIconData(widget.category.icon ?? 'category');
   }
 
   @override

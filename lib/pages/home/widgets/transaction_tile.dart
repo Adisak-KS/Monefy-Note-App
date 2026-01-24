@@ -7,6 +7,7 @@ import '../../../core/models/category.dart';
 import '../../../core/models/currency.dart';
 import '../../../core/models/transaction.dart';
 import '../../../core/models/transaction_type.dart';
+import '../../../core/utils/icon_utils.dart';
 
 class TransactionTile extends StatefulWidget {
   final Transaction transaction;
@@ -331,30 +332,6 @@ class _TransactionTileState extends State<TransactionTile>
   }
 
   IconData _getCategoryIcon() {
-    // Map icon name to IconData
-    switch (widget.category?.icon) {
-      case 'restaurant':
-        return Icons.restaurant;
-      case 'directions_car':
-        return Icons.directions_car;
-      case 'shopping_bag':
-        return Icons.shopping_bag;
-      case 'movie':
-        return Icons.movie;
-      case 'receipt':
-        return Icons.receipt;
-      case 'medical_services':
-        return Icons.medical_services;
-      case 'payments':
-        return Icons.payments;
-      case 'work':
-        return Icons.work;
-      case 'trending_up':
-        return Icons.trending_up;
-      case 'card_giftcard':
-        return Icons.card_giftcard;
-      default:
-        return Icons.category;
-    }
+    return IconUtils.getIconData(widget.category?.icon ?? 'category');
   }
 }

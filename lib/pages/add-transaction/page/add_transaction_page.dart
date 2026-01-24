@@ -7,6 +7,7 @@ import '../../../core/models/category.dart';
 import '../../../core/models/transaction.dart';
 import '../../../core/models/transaction_type.dart';
 import '../../../core/models/wallet.dart';
+import '../../../core/utils/icon_utils.dart';
 import '../../home/bloc/home_cubit.dart';
 import '../../home/bloc/home_state.dart';
 import '../widgets/amount_display.dart';
@@ -75,14 +76,16 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       setState(() {
         final existing = widget.existingTransaction;
         if (existing != null) {
-          _selectedWallet = state.wallets.firstWhere(
-            (w) => w.id == existing.walletId,
-            orElse: () => state.wallets.first,
-          );
-          _selectedCategory = state.categories.firstWhere(
-            (c) => c.id == existing.categoryId,
-            orElse: () => state.categories.first,
-          );
+          // Edit mode - find existing wallet/category or fallback to first
+          final matchingWallet = state.wallets.where((w) => w.id == existing.walletId);
+          _selectedWallet = matchingWallet.isNotEmpty
+              ? matchingWallet.first
+              : (state.wallets.isNotEmpty ? state.wallets.first : null);
+
+          final matchingCategory = state.categories.where((c) => c.id == existing.categoryId);
+          _selectedCategory = matchingCategory.isNotEmpty
+              ? matchingCategory.first
+              : (state.categories.isNotEmpty ? state.categories.first : null);
         } else {
           // New transaction - select first wallet and first category
           if (state.wallets.isNotEmpty) {
@@ -1021,40 +1024,7 @@ class _RecentCategoryChipState extends State<_RecentCategoryChip> {
   }
 
   IconData _getCategoryIcon() {
-    switch (widget.category.icon) {
-      case 'restaurant':
-        return Icons.restaurant;
-      case 'directions_car':
-        return Icons.directions_car;
-      case 'shopping_bag':
-        return Icons.shopping_bag;
-      case 'movie':
-        return Icons.movie;
-      case 'receipt':
-        return Icons.receipt;
-      case 'medical_services':
-        return Icons.medical_services;
-      case 'payments':
-        return Icons.payments;
-      case 'work':
-        return Icons.work;
-      case 'trending_up':
-        return Icons.trending_up;
-      case 'card_giftcard':
-        return Icons.card_giftcard;
-      case 'home':
-        return Icons.home;
-      case 'school':
-        return Icons.school;
-      case 'flight':
-        return Icons.flight;
-      case 'fitness_center':
-        return Icons.fitness_center;
-      case 'pets':
-        return Icons.pets;
-      default:
-        return Icons.category;
-    }
+    return IconUtils.getIconData(widget.category.icon ?? 'category');
   }
 
   @override
