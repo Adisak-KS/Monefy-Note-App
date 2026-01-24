@@ -20,6 +20,7 @@ import '../widgets/section_header.dart';
 import '../widgets/wallet_balance_row.dart';
 import '../widgets/animated_transaction_list.dart';
 import '../../../core/widgets/profile_drawer.dart';
+import '../../../core/widgets/exit_confirmation_dialog.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -44,6 +45,7 @@ class _HomePageContentState extends State<_HomePageContent> {
   final ScrollController _scrollController = ScrollController();
   bool _isFabVisible = true;
   double _lastScrollPosition = 0;
+  bool _isDialogShowing = false;
 
   @override
   void initState() {
@@ -89,9 +91,23 @@ class _HomePageContentState extends State<_HomePageContent> {
           _showUndoSnackBar(context);
         }
       },
-      child: Scaffold(
-        drawer: const ProfileDrawer(),
-        body: Stack(
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (didPop || _isDialogShowing) return;
+          _isDialogShowing = true;
+
+          final shouldExit = await showExitConfirmationDialog(context);
+
+          _isDialogShowing = false;
+
+          if (shouldExit) {
+            SystemNavigator.pop();
+          }
+        },
+        child: Scaffold(
+          drawer: const ProfileDrawer(),
+          body: Stack(
           children: [
             // Gradient Background
             const _GradientBackground(),
@@ -120,14 +136,15 @@ class _HomePageContentState extends State<_HomePageContent> {
             ),
           ],
         ),
-        floatingActionButton: AnimatedSlide(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          offset: _isFabVisible ? Offset.zero : const Offset(0, 2),
-          child: AnimatedOpacity(
+          floatingActionButton: AnimatedSlide(
             duration: const Duration(milliseconds: 300),
-            opacity: _isFabVisible ? 1.0 : 0.0,
-            child: const AddTransactionFab(),
+            curve: Curves.easeInOut,
+            offset: _isFabVisible ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isFabVisible ? 1.0 : 0.0,
+              child: const AddTransactionFab(),
+            ),
           ),
         ),
       ),

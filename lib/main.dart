@@ -13,6 +13,7 @@ import 'package:monefy_note_app/core/theme/app_color.dart';
 import 'package:monefy_note_app/core/theme/app_theme.dart' show AppTheme;
 import 'package:monefy_note_app/core/theme/color_cubit.dart';
 import 'package:monefy_note_app/core/theme/theme_cubit.dart';
+import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
 import 'package:monefy_note_app/injection.dart';
 
 void main() async {
@@ -95,6 +96,14 @@ class MyApp extends StatelessWidget {
                     localizationsDelegates: context.localizationDelegates,
                     supportedLocales: context.supportedLocales,
                     locale: context.locale,
+                    builder: (context, child) {
+                      return GestureDetector(
+                        onTap: () => FocusScope.of(context).unfocus(),
+                        child: NetworkStatusBanner(
+                          child: child ?? const SizedBox.shrink(),
+                        ),
+                      );
+                    },
                   );
                 },
               );

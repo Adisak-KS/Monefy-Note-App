@@ -4,6 +4,7 @@
     "tagline": "Simple money tracking",
     "exit_title": "Exit App?",
     "exit_message": "Are you sure you want to exit?",
+    "press_back_to_exit": "Press back again to exit",
     "cancel": "Cancel",
     "exit": "Exit"
   },
