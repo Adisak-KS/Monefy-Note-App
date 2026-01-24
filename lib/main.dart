@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:monefy_note_app/core/bloc/drawer_stats_cubit.dart';
 import 'package:monefy_note_app/core/cubit/network_cubit.dart';
+import 'package:monefy_note_app/core/localization/locale_cubit.dart';
 import 'package:monefy_note_app/core/router/app_router.dart';
 import 'package:monefy_note_app/core/services/network_service.dart';
+import 'package:monefy_note_app/core/services/preferences_service.dart';
 import 'package:monefy_note_app/core/theme/app_theme.dart' show AppTheme;
 import 'package:monefy_note_app/core/theme/theme_cubit.dart';
 import 'package:monefy_note_app/injection.dart';
@@ -16,24 +18,47 @@ void main() async {
   await NetworkService.instance.initialize();
   configureDependencies();
 
+  // Initialize preferences service
+  final preferencesService = PreferencesService();
+
+  // Create and initialize cubits
+  final themeCubit = ThemeCubit(preferencesService: preferencesService);
+  final localeCubit = LocalCubit(preferencesService: preferencesService);
+
+  // Load saved preferences
+  await themeCubit.init();
+  await localeCubit.init();
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('th', 'TH'), Locale('en', 'US')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en', 'US'),
-      child: const MyApp(),
+      startLocale: localeCubit.state,
+      child: MyApp(
+        themeCubit: themeCubit,
+        localeCubit: localeCubit,
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeCubit themeCubit;
+  final LocalCubit localeCubit;
+
+  const MyApp({
+    super.key,
+    required this.themeCubit,
+    required this.localeCubit,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider.value(value: themeCubit),
+        BlocProvider.value(value: localeCubit),
         BlocProvider(create: (_) => NetworkCubit()),
         BlocProvider(create: (_) => getIt<DrawerStatsCubit>()),
       ],

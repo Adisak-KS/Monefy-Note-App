@@ -10,6 +10,9 @@ import 'package:monefy_note_app/pages/security-setup/page/security_setup_page.da
 import 'package:monefy_note_app/pages/security-verify/page/security_verify_page.dart';
 import 'package:monefy_note_app/pages/add-transaction/page/add_transaction_page.dart';
 import 'package:monefy_note_app/pages/home/bloc/home_cubit.dart';
+import 'package:monefy_note_app/pages/categories/page/categories_page.dart';
+import 'package:monefy_note_app/pages/budgets/page/budgets_page.dart';
+import 'package:monefy_note_app/pages/settings/page/settings_page.dart';
 
 final appRoutes = GoRouter(
   // initialLocation: '/splash',
@@ -74,6 +77,24 @@ final appRoutes = GoRouter(
           child: const AddTransactionPage(),
         );
       },
+    ),
+
+    GoRoute(
+      path: '/categories',
+      name: 'categories',
+      builder: (context, state) => const CategoriesPage(),
+    ),
+
+    GoRoute(
+      path: '/budgets',
+      name: 'budgets',
+      builder: (context, state) => const BudgetsPage(),
+    ),
+
+    GoRoute(
+      path: '/settings',
+      name: 'settings',
+      builder: (context, state) => const SettingsPage(),
     ),
   ],
 );
