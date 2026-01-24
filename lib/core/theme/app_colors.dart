@@ -1,5 +1,68 @@
 import 'package:flutter/material.dart';
 
+// ============================================
+// SPACING CONSTANTS
+// ============================================
+class AppSpacing {
+  AppSpacing._();
+
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double xxxl = 32;
+}
+
+// ============================================
+// BORDER RADIUS CONSTANTS
+// ============================================
+class AppRadius {
+  AppRadius._();
+
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double xxxl = 28;
+  static const double pill = 50;
+
+  // Convenience BorderRadius
+  static final BorderRadius xsAll = BorderRadius.circular(xs);
+  static final BorderRadius smAll = BorderRadius.circular(sm);
+  static final BorderRadius mdAll = BorderRadius.circular(md);
+  static final BorderRadius lgAll = BorderRadius.circular(lg);
+  static final BorderRadius xlAll = BorderRadius.circular(xl);
+  static final BorderRadius xxlAll = BorderRadius.circular(xxl);
+  static final BorderRadius xxxlAll = BorderRadius.circular(xxxl);
+  static final BorderRadius pillAll = BorderRadius.circular(pill);
+}
+
+// ============================================
+// ANIMATION DURATION CONSTANTS
+// ============================================
+class AppDurations {
+  AppDurations._();
+
+  static const Duration fastest = Duration(milliseconds: 100);
+  static const Duration fast = Duration(milliseconds: 200);
+  static const Duration medium = Duration(milliseconds: 300);
+  static const Duration slow = Duration(milliseconds: 400);
+  static const Duration slower = Duration(milliseconds: 500);
+  static const Duration slowest = Duration(milliseconds: 600);
+
+  // Specific use cases
+  static const Duration pageTransition = Duration(milliseconds: 300);
+  static const Duration tooltip = Duration(milliseconds: 200);
+  static const Duration snackbar = Duration(seconds: 3);
+}
+
+// ============================================
+// COLORS
+// ============================================
 class AppColors {
   AppColors._();
 
