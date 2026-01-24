@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/widgets/page_gradient_background.dart';
 import '../../../core/widgets/profile_drawer.dart';
+import '../../../core/widgets/skeleton/skeleton.dart';
 import '../../../injection.dart';
 import '../bloc/statistics_cubit.dart';
 import '../bloc/statistics_state.dart';
@@ -187,23 +188,19 @@ class _LoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
+    return const SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
-            strokeWidth: 3,
-            valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'common.loading'.tr(),
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-          ),
+          SizedBox(height: 16),
+          SkeletonOverviewCards(),
+          SizedBox(height: 24),
+          SkeletonStatsCard(),
+          SizedBox(height: 16),
+          SkeletonStatsCard(),
+          SizedBox(height: 16),
+          SkeletonStatsCard(),
+          SizedBox(height: 100),
         ],
       ),
     );

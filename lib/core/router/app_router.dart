@@ -15,8 +15,8 @@ import 'package:monefy_note_app/pages/budgets/page/budgets_page.dart';
 import 'package:monefy_note_app/pages/settings/page/settings_page.dart';
 
 final appRoutes = GoRouter(
-  // initialLocation: '/splash',
-  initialLocation: '/home',
+  initialLocation: '/splash',
+  // initialLocation: '/home',
 
   routes: [
     GoRoute(

@@ -68,6 +68,7 @@ dependencies:
   flutter_slidable: ^4.0.3
   flutter_colorpicker: ^1.1.0
   flutter_iconpicker: ^4.0.3
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

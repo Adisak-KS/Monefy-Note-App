@@ -10,6 +10,7 @@ import '../../../core/theme/color_cubit.dart';
 import '../../../core/theme/theme_cubit.dart';
 import '../../../core/localization/locale_cubit.dart';
 import '../../../core/widgets/page_gradient_background.dart';
+import '../../../core/widgets/skeleton/skeleton.dart';
 import '../../../injection.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
@@ -503,26 +504,7 @@ class _LoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(
-            strokeWidth: 3,
-            valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'common.loading'.tr(),
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SkeletonSettingsPage();
   }
 }
 
