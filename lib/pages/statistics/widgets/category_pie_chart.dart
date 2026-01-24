@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/utils/icon_utils.dart';
 import '../bloc/statistics_state.dart';
 
 class CategoryPieChart extends StatefulWidget {
@@ -91,157 +92,234 @@ class _CategoryPieChartState extends State<CategoryPieChart>
 
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child) {
+      builder: (context, _) {
         return Opacity(
           opacity: _animation.value,
           child: Transform.translate(
             offset: Offset(0, 30 * (1 - _animation.value)),
-            child: child,
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: isDark
-              ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(
-            color: (widget.isExpense
-                    ? const Color(0xFFEF4444)
-                    : const Color(0xFF22C55E))
-                .withValues(alpha: 0.15),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: (widget.isExpense
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFF22C55E))
-                  .withValues(alpha: 0.08),
-              blurRadius: 25,
-              offset: const Offset(0, 10),
-            ),
-            if (!isDark)
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-          ],
-        ),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.all(20),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: widget.isExpense
-                      ? [
-                          const Color(0xFFEF4444).withValues(alpha: 0.08),
-                          const Color(0xFFEF4444).withValues(alpha: 0.02),
-                        ]
-                      : [
-                          const Color(0xFF22C55E).withValues(alpha: 0.08),
-                          const Color(0xFF22C55E).withValues(alpha: 0.02),
-                        ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                color: isDark
+                    ? theme.colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.5)
+                    : theme.colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(
+                  color: (widget.isExpense
+                          ? const Color(0xFFEF4444)
+                          : const Color(0xFF22C55E))
+                      .withValues(alpha: isDark ? 0.15 : 0.25),
+                  width: 1.5,
                 ),
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(28),
-                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: (widget.isExpense
+                            ? const Color(0xFFEF4444)
+                            : const Color(0xFF22C55E))
+                        .withValues(alpha: isDark ? 0.08 : 0.12),
+                    blurRadius: 25,
+                    offset: const Offset(0, 10),
+                  ),
+                  if (!isDark)
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                ],
               ),
-              child: Row(
+              child: Column(
                 children: [
+                  // Header
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: widget.isExpense
                             ? [
-                                const Color(0xFFEF4444),
-                                const Color(0xFFF97316),
+                                Color(0xFFEF4444)
+                                    .withValues(alpha: isDark ? 0.08 : 0.15),
+                                Color(0xFFEF4444)
+                                    .withValues(alpha: isDark ? 0.02 : 0.05),
                               ]
                             : [
-                                const Color(0xFF22C55E),
-                                const Color(0xFF10B981),
+                                Color(0xFF22C55E)
+                                    .withValues(alpha: isDark ? 0.08 : 0.15),
+                                Color(0xFF22C55E)
+                                    .withValues(alpha: isDark ? 0.02 : 0.05),
                               ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (widget.isExpense
-                                  ? const Color(0xFFEF4444)
-                                  : const Color(0xFF22C55E))
-                              .withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(28),
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.donut_large_rounded,
-                      color: Colors.white,
-                      size: 22,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          widget.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: widget.isExpense
+                                  ? [
+                                      const Color(0xFFEF4444),
+                                      const Color(0xFFF97316),
+                                    ]
+                                  : [
+                                      const Color(0xFF22C55E),
+                                      const Color(0xFF10B981),
+                                    ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: [
+                              BoxShadow(
+                                color: (widget.isExpense
+                                        ? const Color(0xFFEF4444)
+                                        : const Color(0xFF22C55E))
+                                    .withValues(alpha: 0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.donut_large_rounded,
+                            color: Colors.white,
+                            size: 22,
                           ),
                         ),
-                        Text(
-                          '${widget.data.length} ${'home.category'.tr()}',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.5),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.title,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '${widget.data.length} ${'home.category'.tr()}',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.5),
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                        // Total Amount Badge
+                        Builder(
+                          builder: (context) {
+                            final currency =
+                                context.watch<CurrencyCubit>().state;
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? theme.colorScheme.surfaceContainerHighest
+                                    : theme.colorScheme.surface,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  if (!isDark)
+                                    BoxShadow(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.1),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                ],
+                              ),
+                              child: Text(
+                                '${currency.symbol}${NumberFormat('#,##0').format(_totalAmount)}',
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: widget.isExpense
+                                      ? const Color(0xFFEF4444)
+                                      : const Color(0xFF22C55E),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
-                  // Total Amount Badge
-                  Builder(
-                    builder: (context) {
-                      final currency = context.watch<CurrencyCubit>().state;
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? theme.colorScheme.surfaceContainerHighest
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            if (!isDark)
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
+                  // Chart Section - Responsive
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isCompact = constraints.maxWidth < 360;
+                      final chartSize = isCompact
+                          ? constraints.maxWidth * 0.5
+                          : (constraints.maxWidth * 0.45).clamp(140.0, 180.0);
+                      final centerRadius = chartSize * 0.3;
+
+                      if (isCompact) {
+                        // Vertical layout for small screens
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                          child: Column(
+                            children: [
+                              // Pie Chart
+                              SizedBox(
+                                height: chartSize,
+                                width: chartSize,
+                                child: _buildPieChart(centerRadius),
                               ),
-                          ],
-                        ),
-                        child: Text(
-                          '${currency.symbol}${NumberFormat('#,##0').format(_totalAmount)}',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: widget.isExpense
-                                ? const Color(0xFFEF4444)
-                                : const Color(0xFF22C55E),
+                              const SizedBox(height: 16),
+                              // Legend - Horizontal Wrap
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: widget.data
+                                    .take(5)
+                                    .toList()
+                                    .asMap()
+                                    .entries
+                                    .map((entry) => _buildCompactLegendItem(
+                                        entry.value, entry.key))
+                                    .toList(),
+                              ),
+                            ],
                           ),
+                        );
+                      }
+
+                      // Horizontal layout for larger screens
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                        child: Row(
+                          children: [
+                            // Pie Chart with Center Content
+                            SizedBox(
+                              height: chartSize,
+                              width: chartSize,
+                              child: _buildPieChart(centerRadius),
+                            ),
+                            const SizedBox(width: 16),
+                            // Legend
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: widget.data
+                                    .take(5)
+                                    .toList()
+                                    .asMap()
+                                    .entries
+                                    .map((entry) =>
+                                        _buildLegendItem(entry.value, entry.key))
+                                    .toList(),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -249,80 +327,9 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                 ],
               ),
             ),
-            // Chart Section - Responsive
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final isCompact = constraints.maxWidth < 360;
-                final chartSize = isCompact
-                    ? constraints.maxWidth * 0.5
-                    : (constraints.maxWidth * 0.45).clamp(140.0, 180.0);
-                final centerRadius = chartSize * 0.3;
-
-                if (isCompact) {
-                  // Vertical layout for small screens
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    child: Column(
-                      children: [
-                        // Pie Chart
-                        SizedBox(
-                          height: chartSize,
-                          width: chartSize,
-                          child: _buildPieChart(centerRadius),
-                        ),
-                        const SizedBox(height: 16),
-                        // Legend - Horizontal Wrap
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: widget.data
-                              .take(5)
-                              .toList()
-                              .asMap()
-                              .entries
-                              .map((entry) =>
-                                  _buildCompactLegendItem(entry.value, entry.key))
-                              .toList(),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                // Horizontal layout for larger screens
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-                  child: Row(
-                    children: [
-                      // Pie Chart with Center Content
-                      SizedBox(
-                        height: chartSize,
-                        width: chartSize,
-                        child: _buildPieChart(centerRadius),
-                      ),
-                      const SizedBox(width: 16),
-                      // Legend
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: widget.data
-                              .take(5)
-                              .toList()
-                              .asMap()
-                              .entries
-                              .map((entry) =>
-                                  _buildLegendItem(entry.value, entry.key))
-                              .toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -333,10 +340,11 @@ class _CategoryPieChartState extends State<CategoryPieChart>
       decoration: BoxDecoration(
         color: isDark
             ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
-            : Colors.white,
+            : theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.1),
+          color:
+              theme.colorScheme.outline.withValues(alpha: isDark ? 0.1 : 0.15),
         ),
       ),
       child: Column(
@@ -390,38 +398,37 @@ class _CategoryPieChartState extends State<CategoryPieChart>
         // Animated Pie Chart
         AnimatedBuilder(
           animation: _rotationAnimation,
-          builder: (context, child) {
+          builder: (context, _) {
             return Transform.rotate(
               angle: _rotationAnimation.value * 3.14159,
-              child: child,
+              child: PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (event, response) {
+                      if (event.isInterestedForInteractions) {
+                        HapticFeedback.selectionClick();
+                      }
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            response == null ||
+                            response.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex =
+                            response.touchedSection!.touchedSectionIndex;
+                      });
+                    },
+                  ),
+                  borderData: FlBorderData(show: false),
+                  sectionsSpace: 4,
+                  centerSpaceRadius: centerRadius,
+                  startDegreeOffset: -90,
+                  sections: _buildSections(),
+                ),
+              ),
             );
           },
-          child: PieChart(
-            PieChartData(
-              pieTouchData: PieTouchData(
-                touchCallback: (event, response) {
-                  if (event.isInterestedForInteractions) {
-                    HapticFeedback.selectionClick();
-                  }
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        response == null ||
-                        response.touchedSection == null) {
-                      touchedIndex = -1;
-                      return;
-                    }
-                    touchedIndex =
-                        response.touchedSection!.touchedSectionIndex;
-                  });
-                },
-              ),
-              borderData: FlBorderData(show: false),
-              sectionsSpace: 4,
-              centerSpaceRadius: centerRadius,
-              startDegreeOffset: -90,
-              sections: _buildSections(),
-            ),
-          ),
         ),
         // Center Content
         _CenterContent(
@@ -453,7 +460,8 @@ class _CategoryPieChartState extends State<CategoryPieChart>
         decoration: BoxDecoration(
           color: isTouched
               ? color.withValues(alpha: 0.15)
-              : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+              : theme.colorScheme.surfaceContainerHighest
+                  .withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(20),
           border: isTouched
               ? Border.all(color: color.withValues(alpha: 0.5), width: 1.5)
@@ -535,7 +543,8 @@ class _CategoryPieChartState extends State<CategoryPieChart>
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         margin: const EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
-          color: isTouched ? color.withValues(alpha: 0.12) : Colors.transparent,
+          color:
+              isTouched ? color.withValues(alpha: 0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: isTouched
               ? Border.all(color: color.withValues(alpha: 0.3), width: 1.5)
@@ -656,16 +665,18 @@ class _CenterContent extends StatelessWidget {
               key: ValueKey(touchedIndex),
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  selectedData!.category.icon ?? '📦',
-                  style: const TextStyle(fontSize: 24),
+                Icon(
+                  IconUtils.getIconData(selectedData!.category.icon ?? 'category'),
+                  size: 24,
+                  color: parseColor(selectedData!.category.color, touchedIndex),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${selectedData!.percentage.toStringAsFixed(0)}%',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: parseColor(selectedData!.category.color, touchedIndex),
+                    color:
+                        parseColor(selectedData!.category.color, touchedIndex),
                   ),
                 ),
                 Text(

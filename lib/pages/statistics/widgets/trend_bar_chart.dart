@@ -75,376 +75,405 @@ class _TrendBarChartState extends State<TrendBarChart>
 
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child) {
+      builder: (context, _) {
         return Opacity(
           opacity: _animation.value,
           child: Transform.translate(
             offset: Offset(0, 30 * (1 - _animation.value)),
-            child: child,
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: isDark
-              ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(
-            color: theme.colorScheme.primary.withValues(alpha: 0.15),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 0.08),
-              blurRadius: 25,
-              offset: const Offset(0, 10),
-            ),
-            if (!isDark)
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-          ],
-        ),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.all(20),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    theme.colorScheme.primary.withValues(alpha: 0.08),
-                    theme.colorScheme.primary.withValues(alpha: 0.02),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                color: isDark
+                    ? theme.colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.5)
+                    : theme.colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(
+                  color: theme.colorScheme.primary
+                      .withValues(alpha: isDark ? 0.15 : 0.25),
+                  width: 1.5,
                 ),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(28)),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.colorScheme.primary
+                        .withValues(alpha: isDark ? 0.08 : 0.12),
+                    blurRadius: 25,
+                    offset: const Offset(0, 10),
+                  ),
+                  if (!isDark)
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                ],
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              theme.colorScheme.primary,
-                              theme.colorScheme.primary.withValues(alpha: 0.8),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme.colorScheme.primary
-                                  .withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.trending_up_rounded,
-                          color: Colors.white,
-                          size: 22,
-                        ),
+                  // Header
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary
+                              .withValues(alpha: isDark ? 0.08 : 0.15),
+                          theme.colorScheme.primary
+                              .withValues(alpha: isDark ? 0.02 : 0.05),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.title,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              '${displayData.length} ${'home.filter_day'.tr()}',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.5),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Summary Stats Row
-                  Row(
-                    children: [
-                      _SummaryChip(
-                        icon: Icons.south_west_rounded,
-                        label: 'home.income'.tr(),
-                        amount: totalIncome,
-                        color: const Color(0xFF22C55E),
-                        isDark: isDark,
-                      ),
-                      const SizedBox(width: 12),
-                      _SummaryChip(
-                        icon: Icons.north_east_rounded,
-                        label: 'home.expense'.tr(),
-                        amount: totalExpense,
-                        color: const Color(0xFFEF4444),
-                        isDark: isDark,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            // Chart Section - Responsive
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final isCompact = constraints.maxWidth < 360;
-                final chartHeight = isCompact ? 180.0 : 220.0;
-                final barWidth = isCompact ? 8.0 : 12.0;
-                final touchedBarWidth = isCompact ? 12.0 : 16.0;
-
-                return Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    isCompact ? 8 : 12,
-                    20,
-                    isCompact ? 12 : 20,
-                    20,
-                  ),
-                  child: SizedBox(
-                    height: chartHeight,
-                    child: BarChart(
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceAround,
-                        maxY: maxY,
-                    barTouchData: BarTouchData(
-                      enabled: true,
-                      touchTooltipData: BarTouchTooltipData(
-                        getTooltipColor: (group) => isDark
-                            ? theme.colorScheme.surfaceContainerHighest
-                            : Colors.white,
-                        tooltipPadding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                        tooltipMargin: 8,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          final stat = displayData[groupIndex];
-                          final isIncome = rodIndex == 0;
-                          final value = isIncome ? stat.income : stat.expense;
-                          final format = NumberFormat('#,##0');
-                          final dateFormat = DateFormat('MMM d');
-                          final currency = context.read<CurrencyCubit>().state;
-                          return BarTooltipItem(
-                            '${dateFormat.format(stat.date)}\n',
-                            theme.textTheme.labelSmall!.copyWith(
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.5),
-                            ),
-                            children: [
-                              TextSpan(
-                                text:
-                                    '${isIncome ? 'home.income'.tr() : 'home.expense'.tr()}: ',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.7),
-                                ),
-                              ),
-                              TextSpan(
-                                text: '${currency.symbol}${format.format(value)}',
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: isIncome
-                                      ? const Color(0xFF22C55E)
-                                      : const Color(0xFFEF4444),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      touchCallback: (event, response) {
-                        if (event.isInterestedForInteractions) {
-                          HapticFeedback.selectionClick();
-                        }
-                        setState(() {
-                          if (response == null || response.spot == null) {
-                            touchedGroupIndex = -1;
-                            return;
-                          }
-                          touchedGroupIndex =
-                              response.spot!.touchedBarGroupIndex;
-                        });
-                      },
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(28)),
                     ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      topTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 50,
-                          getTitlesWidget: (value, meta) {
-                            if (value == 0) return const SizedBox.shrink();
-                            final format = NumberFormat.compact();
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Text(
-                                format.format(value),
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.4),
-                                  fontSize: 10,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    theme.colorScheme.primary,
+                                    theme.colorScheme.primary
+                                        .withValues(alpha: 0.8),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
+                                borderRadius: BorderRadius.circular(14),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: theme.colorScheme.primary
+                                        .withValues(alpha: 0.3),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 36,
-                          getTitlesWidget: (value, meta) {
-                            final index = value.toInt();
-                            if (index < 0 || index >= displayData.length) {
-                              return const SizedBox.shrink();
-                            }
-                            final stat = displayData[index];
-                            final dayFormat = DateFormat('E');
-                            final isTouched = touchedGroupIndex == index;
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                              child: const Icon(
+                                Icons.trending_up_rounded,
+                                color: Colors.white,
+                                size: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
                               child: Column(
-                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: isTouched ? 8 : 0,
-                                      vertical: isTouched ? 4 : 0,
+                                  Text(
+                                    widget.title,
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    decoration: BoxDecoration(
-                                      color: isTouched
-                                          ? theme.colorScheme.primary
-                                              .withValues(alpha: 0.1)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      dayFormat.format(stat.date),
-                                      style:
-                                          theme.textTheme.labelSmall?.copyWith(
-                                        color: isTouched
-                                            ? theme.colorScheme.primary
-                                            : theme.colorScheme.onSurface
-                                                .withValues(alpha: 0.5),
-                                        fontWeight: isTouched
-                                            ? FontWeight.bold
-                                            : FontWeight.w500,
-                                        fontSize: 11,
-                                      ),
+                                  ),
+                                  Text(
+                                    '${displayData.length} ${'home.filter_day'.tr()}',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.5),
                                     ),
                                   ),
                                 ],
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      horizontalInterval: maxY / 4,
-                      getDrawingHorizontalLine: (value) {
-                        return FlLine(
-                          color:
-                              theme.colorScheme.outline.withValues(alpha: 0.08),
-                          strokeWidth: 1,
-                          dashArray: [6, 4],
-                        );
-                      },
-                    ),
-                    borderData: FlBorderData(show: false),
-                    barGroups: displayData.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final stat = entry.value;
-                      final isTouched = index == touchedGroupIndex;
-
-                      return BarChartGroupData(
-                        x: index,
-                        barsSpace: 4,
-                        barRods: [
-                          BarChartRodData(
-                            toY: stat.income * _animation.value,
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFF22C55E),
-                                Color(0xFF10B981),
-                              ],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
+                        const SizedBox(height: 16),
+                        // Summary Stats Row
+                        Row(
+                          children: [
+                            _SummaryChip(
+                              icon: Icons.south_west_rounded,
+                              label: 'home.income'.tr(),
+                              amount: totalIncome,
+                              color: const Color(0xFF22C55E),
+                              isDark: isDark,
                             ),
-                            width: isTouched ? touchedBarWidth : barWidth,
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(6),
+                            const SizedBox(width: 12),
+                            _SummaryChip(
+                              icon: Icons.north_east_rounded,
+                              label: 'home.expense'.tr(),
+                              amount: totalExpense,
+                              color: const Color(0xFFEF4444),
+                              isDark: isDark,
                             ),
-                            borderSide: isTouched
-                                ? BorderSide(
-                                    color: const Color(0xFF22C55E)
-                                        .withValues(alpha: 0.5),
-                                    width: 2,
-                                  )
-                                : BorderSide.none,
-                          ),
-                          BarChartRodData(
-                            toY: stat.expense * _animation.value,
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFFEF4444),
-                                Color(0xFFF97316),
-                              ],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                            ),
-                            width: isTouched ? touchedBarWidth : barWidth,
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(6),
-                            ),
-                            borderSide: isTouched
-                                ? BorderSide(
-                                    color: const Color(0xFFEF4444)
-                                        .withValues(alpha: 0.5),
-                                    width: 2,
-                                  )
-                                : BorderSide.none,
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
+                  // Chart Section - Responsive
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isCompact = constraints.maxWidth < 360;
+                      final chartHeight = isCompact ? 180.0 : 220.0;
+                      final barWidth = isCompact ? 8.0 : 12.0;
+                      final touchedBarWidth = isCompact ? 12.0 : 16.0;
+
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          isCompact ? 8 : 12,
+                          20,
+                          isCompact ? 12 : 20,
+                          20,
+                        ),
+                        child: SizedBox(
+                          height: chartHeight,
+                          child: BarChart(
+                            BarChartData(
+                              alignment: BarChartAlignment.spaceAround,
+                              maxY: maxY,
+                              barTouchData: BarTouchData(
+                                enabled: true,
+                                touchTooltipData: BarTouchTooltipData(
+                                  getTooltipColor: (group) => isDark
+                                      ? theme.colorScheme.surfaceContainerHighest
+                                      : theme.colorScheme.surface,
+                                  tooltipPadding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 10,
+                                  ),
+                                  tooltipMargin: 8,
+                                  getTooltipItem:
+                                      (group, groupIndex, rod, rodIndex) {
+                                    final stat = displayData[groupIndex];
+                                    final isIncome = rodIndex == 0;
+                                    final value =
+                                        isIncome ? stat.income : stat.expense;
+                                    final format = NumberFormat('#,##0');
+                                    final dateFormat = DateFormat('MMM d');
+                                    final currency =
+                                        context.read<CurrencyCubit>().state;
+                                    return BarTooltipItem(
+                                      '${dateFormat.format(stat.date)}\n',
+                                      theme.textTheme.labelSmall!.copyWith(
+                                        color: theme.colorScheme.onSurface
+                                            .withValues(alpha: 0.5),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${isIncome ? 'home.income'.tr() : 'home.expense'.tr()}: ',
+                                          style: theme.textTheme.labelSmall
+                                              ?.copyWith(
+                                            color: theme.colorScheme.onSurface
+                                                .withValues(alpha: 0.7),
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              '${currency.symbol}${format.format(value)}',
+                                          style: theme.textTheme.titleSmall
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: isIncome
+                                                ? const Color(0xFF22C55E)
+                                                : const Color(0xFFEF4444),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                touchCallback: (event, response) {
+                                  if (event.isInterestedForInteractions) {
+                                    HapticFeedback.selectionClick();
+                                  }
+                                  setState(() {
+                                    if (response == null ||
+                                        response.spot == null) {
+                                      touchedGroupIndex = -1;
+                                      return;
+                                    }
+                                    touchedGroupIndex =
+                                        response.spot!.touchedBarGroupIndex;
+                                  });
+                                },
+                              ),
+                              titlesData: FlTitlesData(
+                                show: true,
+                                topTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                rightTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 50,
+                                    getTitlesWidget: (value, meta) {
+                                      if (value == 0) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      final format = NumberFormat.compact();
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8),
+                                        child: Text(
+                                          format.format(value),
+                                          style: theme.textTheme.labelSmall
+                                              ?.copyWith(
+                                            color: theme.colorScheme.onSurface
+                                                .withValues(alpha: 0.4),
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 36,
+                                    getTitlesWidget: (value, meta) {
+                                      final index = value.toInt();
+                                      if (index < 0 ||
+                                          index >= displayData.length) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      final stat = displayData[index];
+                                      final dayFormat = DateFormat('E');
+                                      final isTouched =
+                                          touchedGroupIndex == index;
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: isTouched ? 8 : 0,
+                                                vertical: isTouched ? 4 : 0,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: isTouched
+                                                    ? theme.colorScheme.primary
+                                                        .withValues(alpha: 0.1)
+                                                    : Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                dayFormat.format(stat.date),
+                                                style: theme
+                                                    .textTheme.labelSmall
+                                                    ?.copyWith(
+                                                  color: isTouched
+                                                      ? theme.colorScheme.primary
+                                                      : theme.colorScheme
+                                                          .onSurface
+                                                          .withValues(
+                                                              alpha: 0.5),
+                                                  fontWeight: isTouched
+                                                      ? FontWeight.bold
+                                                      : FontWeight.w500,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              gridData: FlGridData(
+                                show: true,
+                                drawVerticalLine: false,
+                                horizontalInterval: maxY / 4,
+                                getDrawingHorizontalLine: (value) {
+                                  return FlLine(
+                                    color: theme.colorScheme.outline
+                                        .withValues(alpha: 0.08),
+                                    strokeWidth: 1,
+                                    dashArray: [6, 4],
+                                  );
+                                },
+                              ),
+                              borderData: FlBorderData(show: false),
+                              barGroups:
+                                  displayData.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final stat = entry.value;
+                                final isTouched = index == touchedGroupIndex;
+
+                                return BarChartGroupData(
+                                  x: index,
+                                  barsSpace: 4,
+                                  barRods: [
+                                    BarChartRodData(
+                                      toY: stat.income * _animation.value,
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color(0xFF22C55E),
+                                          Color(0xFF10B981),
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                      width: isTouched
+                                          ? touchedBarWidth
+                                          : barWidth,
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(6),
+                                      ),
+                                      borderSide: isTouched
+                                          ? BorderSide(
+                                              color: const Color(0xFF22C55E)
+                                                  .withValues(alpha: 0.5),
+                                              width: 2,
+                                            )
+                                          : BorderSide.none,
+                                    ),
+                                    BarChartRodData(
+                                      toY: stat.expense * _animation.value,
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color(0xFFEF4444),
+                                          Color(0xFFF97316),
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                      width: isTouched
+                                          ? touchedBarWidth
+                                          : barWidth,
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(6),
+                                      ),
+                                      borderSide: isTouched
+                                          ? BorderSide(
+                                              color: const Color(0xFFEF4444)
+                                                  .withValues(alpha: 0.5),
+                                              width: 2,
+                                            )
+                                          : BorderSide.none,
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -455,10 +484,11 @@ class _TrendBarChartState extends State<TrendBarChart>
       decoration: BoxDecoration(
         color: isDark
             ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
-            : Colors.white,
+            : theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.1),
+          color:
+              theme.colorScheme.outline.withValues(alpha: isDark ? 0.1 : 0.15),
         ),
       ),
       child: Column(
@@ -523,10 +553,10 @@ class _SummaryChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isDark
               ? theme.colorScheme.surfaceContainerHighest
-              : Colors.white,
+              : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: color.withValues(alpha: 0.2),
+            color: color.withValues(alpha: isDark ? 0.2 : 0.3),
             width: 1.5,
           ),
           boxShadow: isDark
@@ -557,8 +587,7 @@ class _SummaryChip extends StatelessWidget {
                   Text(
                     label,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color:
-                          theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       fontSize: 10,
                     ),
                   ),

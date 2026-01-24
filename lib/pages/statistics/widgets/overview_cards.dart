@@ -516,23 +516,23 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
             color: widget.isDark
                 ? theme.colorScheme.surfaceContainerHighest
                     .withValues(alpha: 0.6)
-                : Colors.white,
+                : theme.colorScheme.surfaceContainer,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: widget.iconColor.withValues(alpha: 0.2),
+              color: widget.iconColor.withValues(alpha: widget.isDark ? 0.2 : 0.3),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.iconColor.withValues(alpha: 0.1),
+                color: widget.iconColor.withValues(alpha: widget.isDark ? 0.1 : 0.15),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
               if (!widget.isDark)
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
                 ),
             ],
           ),
