@@ -5,7 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../bloc/drawer_stats_cubit.dart';
 import '../bloc/drawer_stats_state.dart';
+import '../theme/app_color.dart';
+import '../theme/color_cubit.dart';
 import '../theme/theme_cubit.dart';
+import '../../pages/settings/widgets/color_selector_dialog.dart';
 import '../../pages/settings/widgets/theme_selector_dialog.dart';
 
 class ProfileDrawer extends StatefulWidget {
@@ -40,7 +43,7 @@ class _ProfileDrawerState extends State<ProfileDrawer>
     );
 
     // Create staggered animations for menu items
-    _menuAnimations = List.generate(12, (index) {
+    _menuAnimations = List.generate(13, (index) {
       final start = index * 0.06;
       final end = start + 0.4;
       return CurvedAnimation(
@@ -94,13 +97,14 @@ class _ProfileDrawerState extends State<ProfileDrawer>
                   const SizedBox(height: 16),
                   _buildSectionHeader(theme, 'drawer.preferences'.tr(), 4),
                   _buildAnimatedThemeToggle(context, theme, isDark, 5),
-                  _buildAnimatedLanguageSelector(context, theme, 6),
-                  _buildAnimatedMenuItem(7, theme, Icons.notifications_outlined, 'drawer.notifications'.tr(), () => _showComingSoon(context)),
-                  _buildAnimatedMenuItem(8, theme, Icons.security_rounded, 'drawer.security'.tr(), () => _navigateTo(context, '/security-setup')),
+                  _buildAnimatedColorSelector(context, theme, 6),
+                  _buildAnimatedLanguageSelector(context, theme, 7),
+                  _buildAnimatedMenuItem(8, theme, Icons.notifications_outlined, 'drawer.notifications'.tr(), () => _showComingSoon(context)),
+                  _buildAnimatedMenuItem(9, theme, Icons.security_rounded, 'drawer.security'.tr(), () => _navigateTo(context, '/security-setup')),
                   const SizedBox(height: 16),
-                  _buildSectionHeader(theme, 'drawer.about'.tr(), 9),
-                  _buildAnimatedMenuItem(10, theme, Icons.help_outline_rounded, 'drawer.help'.tr(), () => _showComingSoon(context)),
-                  _buildAnimatedMenuItem(11, theme, Icons.info_outline_rounded, 'drawer.about_app'.tr(), () => _showAboutDialog(context), subtitle: 'v1.0.0'),
+                  _buildSectionHeader(theme, 'drawer.about'.tr(), 10),
+                  _buildAnimatedMenuItem(11, theme, Icons.help_outline_rounded, 'drawer.help'.tr(), () => _showComingSoon(context)),
+                  _buildAnimatedMenuItem(12, theme, Icons.info_outline_rounded, 'drawer.about_app'.tr(), () => _showAboutDialog(context), subtitle: 'v1.0.0'),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -677,6 +681,107 @@ class _ProfileDrawerState extends State<ProfileDrawer>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAnimatedColorSelector(
+    BuildContext context,
+    ThemeData theme,
+    int index,
+  ) {
+    return BlocBuilder<ColorCubit, AppColor>(
+      builder: (context, appColor) {
+        return FadeTransition(
+          opacity: index < _menuAnimations.length ? _menuAnimations[index] : const AlwaysStoppedAnimation(1),
+          child: SlideTransition(
+            position: index < _menuAnimations.length
+                ? Tween<Offset>(
+                    begin: const Offset(-0.3, 0),
+                    end: Offset.zero,
+                  ).animate(_menuAnimations[index])
+                : const AlwaysStoppedAnimation(Offset.zero),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(14),
+                child: InkWell(
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    Navigator.pop(context);
+                    ColorSelectorDialog.show(
+                      context,
+                      currentColor: appColor,
+                      onColorChanged: (color) {
+                        context.read<ColorCubit>().setColor(color);
+                      },
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                appColor.primary.withValues(alpha: 0.3),
+                                appColor.secondary.withValues(alpha: 0.2),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.color_lens_rounded,
+                            size: 20,
+                            color: appColor.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Text(
+                            'settings.color'.tr(),
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [appColor.primary, appColor.secondary],
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: appColor.primary.withValues(alpha: 0.3),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

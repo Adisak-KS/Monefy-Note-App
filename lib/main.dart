@@ -8,7 +8,9 @@ import 'package:monefy_note_app/core/localization/locale_cubit.dart';
 import 'package:monefy_note_app/core/router/app_router.dart';
 import 'package:monefy_note_app/core/services/network_service.dart';
 import 'package:monefy_note_app/core/services/preferences_service.dart';
+import 'package:monefy_note_app/core/theme/app_color.dart';
 import 'package:monefy_note_app/core/theme/app_theme.dart' show AppTheme;
+import 'package:monefy_note_app/core/theme/color_cubit.dart';
 import 'package:monefy_note_app/core/theme/theme_cubit.dart';
 import 'package:monefy_note_app/injection.dart';
 
@@ -24,10 +26,12 @@ void main() async {
   // Create and initialize cubits
   final themeCubit = ThemeCubit(preferencesService: preferencesService);
   final localeCubit = LocalCubit(preferencesService: preferencesService);
+  final colorCubit = ColorCubit(preferencesService: preferencesService);
 
   // Load saved preferences
   await themeCubit.init();
   await localeCubit.init();
+  await colorCubit.init();
 
   runApp(
     EasyLocalization(
@@ -38,6 +42,7 @@ void main() async {
       child: MyApp(
         themeCubit: themeCubit,
         localeCubit: localeCubit,
+        colorCubit: colorCubit,
       ),
     ),
   );
@@ -46,11 +51,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   final ThemeCubit themeCubit;
   final LocalCubit localeCubit;
+  final ColorCubit colorCubit;
 
   const MyApp({
     super.key,
     required this.themeCubit,
     required this.localeCubit,
+    required this.colorCubit,
   });
 
   @override
@@ -59,25 +66,30 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider.value(value: themeCubit),
         BlocProvider.value(value: localeCubit),
+        BlocProvider.value(value: colorCubit),
         BlocProvider(create: (_) => NetworkCubit()),
         BlocProvider(create: (_) => getIt<DrawerStatsCubit>()),
       ],
-      child: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, themeMode) {
-          return ScreenUtilInit(
-            designSize: const Size(375, 812), // iPhone X Size
-            minTextAdapt: true,
-            builder: (_, child) {
-              return MaterialApp.router(
-                title: 'Monefy Note',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.light,
-                darkTheme: AppTheme.dark,
-                themeMode: themeMode,
-                routerConfig: appRoutes,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
+      child: BlocBuilder<ColorCubit, AppColor>(
+        builder: (context, appColor) {
+          return BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              return ScreenUtilInit(
+                designSize: const Size(375, 812), // iPhone X Size
+                minTextAdapt: true,
+                builder: (_, child) {
+                  return MaterialApp.router(
+                    title: 'Monefy Note',
+                    debugShowCheckedModeBanner: false,
+                    theme: AppTheme.light(appColor),
+                    darkTheme: AppTheme.dark(appColor),
+                    themeMode: themeMode,
+                    routerConfig: appRoutes,
+                    localizationsDelegates: context.localizationDelegates,
+                    supportedLocales: context.supportedLocales,
+                    locale: context.locale,
+                  );
+                },
               );
             },
           );

@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:monefy_note_app/main.dart';
 import 'package:monefy_note_app/core/theme/theme_cubit.dart';
+import 'package:monefy_note_app/core/theme/color_cubit.dart';
 import 'package:monefy_note_app/core/localization/locale_cubit.dart';
 
 void main() {
@@ -17,11 +18,13 @@ void main() {
     // Create cubits for testing
     final themeCubit = ThemeCubit();
     final localeCubit = LocalCubit();
+    final colorCubit = ColorCubit();
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
       themeCubit: themeCubit,
       localeCubit: localeCubit,
+      colorCubit: colorCubit,
     ));
 
     // Verify app builds successfully

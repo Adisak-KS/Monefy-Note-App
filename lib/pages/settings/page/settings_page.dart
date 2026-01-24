@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/theme/app_color.dart';
+import '../../../core/theme/color_cubit.dart';
 import '../../../core/theme/theme_cubit.dart';
 import '../../../core/localization/locale_cubit.dart';
 import '../../../core/widgets/page_gradient_background.dart';
@@ -13,6 +15,7 @@ import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/theme_selector_dialog.dart';
 import '../widgets/language_selector_dialog.dart';
+import '../widgets/color_selector_dialog.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -161,6 +164,16 @@ class _SettingsPageContentState extends State<_SettingsPageContent>
                 title: 'settings.theme'.tr(),
                 value: _getThemeLabel(state.themeMode),
                 onTap: () => _showThemeSelector(context, state),
+              ),
+              BlocBuilder<ColorCubit, AppColor>(
+                builder: (context, appColor) {
+                  return SettingsValueTile(
+                    icon: Icons.color_lens_outlined,
+                    title: 'settings.color'.tr(),
+                    value: appColor.nameKey.tr(),
+                    onTap: () => _showColorSelector(context, appColor),
+                  );
+                },
               ),
             ],
           ),
@@ -383,6 +396,18 @@ class _SettingsPageContentState extends State<_SettingsPageContent>
         settingsCubit.setLocale(locale);
         localeCubit.setLocal(locale);
         context.setLocale(locale);
+      },
+    );
+  }
+
+  void _showColorSelector(BuildContext context, AppColor currentColor) {
+    final colorCubit = context.read<ColorCubit>();
+
+    ColorSelectorDialog.show(
+      context,
+      currentColor: currentColor,
+      onColorChanged: (color) {
+        colorCubit.setColor(color);
       },
     );
   }

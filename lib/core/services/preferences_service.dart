@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monefy_note_app/core/models/security_type.dart';
+import 'package:monefy_note_app/core/theme/app_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesService {
@@ -10,6 +11,7 @@ class PreferencesService {
   static const _keySecurityConfigured = 'security_configured';
   static const _keySecurityType = 'security_type';
   static const _keyBiometricEnabled = 'biometric_enabled';
+  static const _keyAppColor = 'app_color';
 
   // Singleton
   static final PreferencesService _instance = PreferencesService._internal();
@@ -113,5 +115,27 @@ class PreferencesService {
   Future<void> setBiometricEnabled(bool value) async {
     final p = await prefs;
     await p.setBool(_keyBiometricEnabled, value);
+  }
+
+  // App Color
+  Future<AppColor> getAppColor() async {
+    final p = await prefs;
+    final value = p.getString(_keyAppColor);
+    if (value == null) return AppColor.presets.first;
+
+    try {
+      final theme = AppColorTheme.values.firstWhere(
+        (t) => t.name == value,
+        orElse: () => AppColorTheme.blue,
+      );
+      return AppColor.fromTheme(theme);
+    } catch (_) {
+      return AppColor.presets.first;
+    }
+  }
+
+  Future<void> saveAppColor(AppColor color) async {
+    final p = await prefs;
+    await p.setString(_keyAppColor, color.theme.name);
   }
 }
