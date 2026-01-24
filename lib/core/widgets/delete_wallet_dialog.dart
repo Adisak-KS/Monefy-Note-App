@@ -204,7 +204,7 @@ class _DeleteWalletDialogContent extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: isDark
-                      ? Colors.white.withValues(alpha: 0.7)
+                      ? Colors.white.withValues(alpha: 0.85)
                       : Colors.grey.shade600,
                   fontSize: 15,
                   fontWeight: FontWeight.normal,

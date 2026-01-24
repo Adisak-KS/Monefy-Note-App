@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/models/currency.dart';
+import '../../../core/theme/app_colors.dart';
 
 class CurrencySelectorDialog extends StatefulWidget {
   final Currency currentCurrency;
@@ -259,10 +260,10 @@ class _CurrencyOption extends StatelessWidget {
                       color: primaryColor,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.check_rounded,
                       size: 16,
-                      color: Colors.white,
+                      color: ColorUtils.getContrastColor(primaryColor),
                     ),
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/theme/app_colors.dart';
 
 class ThemeSelectorDialog extends StatelessWidget {
   final ThemeMode currentTheme;
@@ -152,26 +153,31 @@ class _ThemeOption extends StatelessWidget {
                   ]
                 : null,
           ),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: 32,
-                color: isSelected
-                    ? Colors.white
-                    : theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: isSelected
-                      ? Colors.white
-                      : theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ],
+          child: Builder(
+            builder: (context) {
+              final contrastColor = ColorUtils.getContrastColor(theme.colorScheme.primary);
+              return Column(
+                children: [
+                  Icon(
+                    icon,
+                    size: 32,
+                    color: isSelected
+                        ? contrastColor
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: isSelected
+                          ? contrastColor
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

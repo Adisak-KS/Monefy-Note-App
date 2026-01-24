@@ -110,6 +110,7 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
   }
 
   Widget _buildHeader() {
+    final contrastColor = _getContrastColor(_pickerColor);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -130,12 +131,12 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: contrastColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.palette_rounded,
-              color: Colors.white,
+              color: contrastColor,
               size: 24,
             ),
           ),
@@ -148,7 +149,7 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
                   'wallet.custom_color'.tr(),
                   style: widget.theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: contrastColor,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -158,13 +159,13 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
                     vertical: 3,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: contrastColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     _hexCode,
                     style: widget.theme.textTheme.labelSmall?.copyWith(
-                      color: Colors.white,
+                      color: contrastColor,
                       fontFamily: 'monospace',
                       fontWeight: FontWeight.w600,
                     ),
@@ -178,12 +179,12 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
             icon: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: contrastColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.close_rounded,
-                color: Colors.white,
+                color: contrastColor,
                 size: 18,
               ),
             ),
@@ -261,27 +262,32 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
                   ]
                 : null,
           ),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: 20,
-                color: isSelected
-                    ? Colors.white
-                    : (_isDark ? Colors.white54 : Colors.grey),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? Colors.white
-                      : (_isDark ? Colors.white54 : Colors.grey),
-                ),
-              ),
-            ],
+          child: Builder(
+            builder: (context) {
+              final tabContrastColor = _getContrastColor(_pickerColor);
+              return Column(
+                children: [
+                  Icon(
+                    icon,
+                    size: 20,
+                    color: isSelected
+                        ? tabContrastColor
+                        : (_isDark ? Colors.white60 : Colors.grey.shade600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected
+                          ? tabContrastColor
+                          : (_isDark ? Colors.white60 : Colors.grey.shade600),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

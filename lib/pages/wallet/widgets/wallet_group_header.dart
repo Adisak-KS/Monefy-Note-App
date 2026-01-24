@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../core/models/wallet_type.dart';
+import '../../../core/theme/app_colors.dart';
 
 class WalletGroupHeader extends StatefulWidget {
   final WalletType type;
@@ -143,7 +144,7 @@ class _WalletGroupHeaderState extends State<WalletGroupHeader>
                 ),
                 child: Icon(
                   widget.type.icon,
-                  color: Colors.white,
+                  color: ColorUtils.getContrastColor(color),
                   size: 22,
                 ),
               ),

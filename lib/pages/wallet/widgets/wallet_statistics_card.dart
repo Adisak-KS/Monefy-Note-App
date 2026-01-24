@@ -183,7 +183,7 @@ class _WalletStatisticsCardState extends State<WalletStatisticsCard>
                       duration: const Duration(milliseconds: 300),
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        color: isDark ? Colors.white54 : Colors.grey.shade600,
+                        color: isDark ? Colors.white60 : Colors.grey.shade600,
                         size: 24,
                       ),
                     ),
@@ -256,7 +256,7 @@ class _WalletStatisticsCardState extends State<WalletStatisticsCard>
                 'wallet.net_worth'.tr(),
                 style: TextStyle(
                   fontSize: 11,
-                  color: isDark ? Colors.white54 : Colors.grey.shade600,
+                  color: isDark ? Colors.white60 : Colors.grey.shade600,
                 ),
               ),
               const SizedBox(height: 2),
@@ -428,7 +428,7 @@ class _WalletStatisticsCardState extends State<WalletStatisticsCard>
             label,
             style: TextStyle(
               color: isSelected
-                  ? Colors.white
+                  ? ColorUtils.getContrastColor(theme.colorScheme.primary)
                   : isDark
                       ? Colors.white70
                       : Colors.grey.shade700,
@@ -566,8 +566,8 @@ class _WalletStatisticsCardState extends State<WalletStatisticsCard>
                 );
                 return LineTooltipItem(
                   currencyFormat.format(spot.y),
-                  const TextStyle(
-                    color: Colors.white,
+                  TextStyle(
+                    color: ColorUtils.getContrastColor(theme.colorScheme.primary),
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),

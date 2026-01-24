@@ -7,6 +7,7 @@ import '../../../core/cubit/currency_cubit.dart';
 import '../../../core/models/currency.dart';
 import '../../../core/models/wallet.dart';
 import '../../../core/models/wallet_type.dart';
+import '../../../core/theme/app_colors.dart';
 
 class WalletListTile extends StatefulWidget {
   final Wallet wallet;
@@ -325,7 +326,7 @@ class _WalletListTileState extends State<WalletListTile>
           ),
           Icon(
             _getWalletIcon(widget.wallet.type),
-            color: Colors.white,
+            color: ColorUtils.getContrastColor(color),
             size: 22,
           ),
         ],
@@ -538,7 +539,7 @@ class _WalletListTileState extends State<WalletListTile>
                     ),
                     child: Icon(
                       _getWalletIcon(widget.wallet.type),
-                      color: Colors.white,
+                      color: ColorUtils.getContrastColor(color),
                       size: 20,
                     ),
                   ),

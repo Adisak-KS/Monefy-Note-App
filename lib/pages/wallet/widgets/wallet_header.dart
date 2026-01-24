@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../core/theme/app_colors.dart';
 
 class WalletHeader extends StatefulWidget {
   final VoidCallback? onAvatarTap;
@@ -281,7 +282,8 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
           },
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
-            return const SizedBox(
+            final loadingColor = ColorUtils.getContrastColor(widget.theme.colorScheme.primary);
+            return SizedBox(
               width: 44,
               height: 44,
               child: Center(
@@ -290,7 +292,7 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                   height: 20,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.white,
+                    color: loadingColor,
                   ),
                 ),
               ),
@@ -305,21 +307,22 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
 
   Widget _buildFallbackAvatar() {
     final initials = _getInitials();
+    final contrastColor = ColorUtils.getContrastColor(widget.theme.colorScheme.primary);
 
     if (initials.isNotEmpty) {
       return Text(
         initials,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: contrastColor,
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
       );
     }
 
-    return const Icon(
+    return Icon(
       Icons.person_rounded,
-      color: Colors.white,
+      color: contrastColor,
       size: 26,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/theme/app_colors.dart';
 
 class LanguageSelectorDialog extends StatelessWidget {
   final Locale currentLocale;
@@ -176,10 +177,10 @@ class _LanguageOption extends StatelessWidget {
                   color: theme.colorScheme.primary,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.check_rounded,
                   size: 16,
-                  color: Colors.white,
+                  color: ColorUtils.getContrastColor(theme.colorScheme.primary),
                 ),
               ),
           ],
