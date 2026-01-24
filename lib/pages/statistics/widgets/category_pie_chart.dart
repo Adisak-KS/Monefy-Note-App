@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/icon_utils.dart';
 import '../bloc/statistics_state.dart';
 
@@ -56,18 +57,7 @@ class _CategoryPieChartState extends State<CategoryPieChart>
     super.dispose();
   }
 
-  static const _defaultColors = [
-    Color(0xFF6366F1), // Indigo
-    Color(0xFFF59E0B), // Amber
-    Color(0xFF10B981), // Emerald
-    Color(0xFFEC4899), // Pink
-    Color(0xFF8B5CF6), // Purple
-    Color(0xFF06B6D4), // Cyan
-    Color(0xFFEF4444), // Red
-    Color(0xFF84CC16), // Lime
-    Color(0xFFF97316), // Orange
-    Color(0xFF14B8A6), // Teal
-  ];
+  static const _defaultColors = AppColors.chartPalette;
 
   Color _parseColor(String? colorHex, int index) {
     if (colorHex != null) {
@@ -107,16 +97,16 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
                   color: (widget.isExpense
-                          ? const Color(0xFFEF4444)
-                          : const Color(0xFF22C55E))
+                          ? AppColors.expense
+                          : AppColors.income)
                       .withValues(alpha: isDark ? 0.15 : 0.25),
                   width: 1.5,
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: (widget.isExpense
-                            ? const Color(0xFFEF4444)
-                            : const Color(0xFF22C55E))
+                            ? AppColors.expense
+                            : AppColors.income)
                         .withValues(alpha: isDark ? 0.08 : 0.12),
                     blurRadius: 25,
                     offset: const Offset(0, 10),
@@ -138,15 +128,15 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                       gradient: LinearGradient(
                         colors: widget.isExpense
                             ? [
-                                Color(0xFFEF4444)
+                                AppColors.expense
                                     .withValues(alpha: isDark ? 0.08 : 0.15),
-                                Color(0xFFEF4444)
+                                AppColors.expense
                                     .withValues(alpha: isDark ? 0.02 : 0.05),
                               ]
                             : [
-                                Color(0xFF22C55E)
+                                AppColors.income
                                     .withValues(alpha: isDark ? 0.08 : 0.15),
-                                Color(0xFF22C55E)
+                                AppColors.income
                                     .withValues(alpha: isDark ? 0.02 : 0.05),
                               ],
                         begin: Alignment.topLeft,
@@ -164,12 +154,12 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                             gradient: LinearGradient(
                               colors: widget.isExpense
                                   ? [
-                                      const Color(0xFFEF4444),
-                                      const Color(0xFFF97316),
+                                      AppColors.expense,
+                                      AppColors.orange,
                                     ]
                                   : [
-                                      const Color(0xFF22C55E),
-                                      const Color(0xFF10B981),
+                                      AppColors.income,
+                                      AppColors.emerald,
                                     ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -178,8 +168,8 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                             boxShadow: [
                               BoxShadow(
                                 color: (widget.isExpense
-                                        ? const Color(0xFFEF4444)
-                                        : const Color(0xFF22C55E))
+                                        ? AppColors.expense
+                                        : AppColors.income)
                                     .withValues(alpha: 0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
@@ -243,8 +233,8 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                                 style: theme.textTheme.titleSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: widget.isExpense
-                                      ? const Color(0xFFEF4444)
-                                      : const Color(0xFF22C55E),
+                                      ? AppColors.expense
+                                      : AppColors.income,
                                 ),
                               ),
                             );
@@ -353,8 +343,8 @@ class _CategoryPieChartState extends State<CategoryPieChart>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: (widget.isExpense
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFF22C55E))
+                      ? AppColors.expense
+                      : AppColors.income)
                   .withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
@@ -362,8 +352,8 @@ class _CategoryPieChartState extends State<CategoryPieChart>
               Icons.donut_large_rounded,
               size: 40,
               color: (widget.isExpense
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFF22C55E))
+                      ? AppColors.expense
+                      : AppColors.income)
                   .withValues(alpha: 0.5),
             ),
           ),
@@ -697,8 +687,8 @@ class _CenterContent extends StatelessWidget {
                       : Icons.savings_rounded,
                   size: 28,
                   color: isExpense
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFF22C55E),
+                      ? AppColors.expense
+                      : AppColors.income,
                 ),
                 const SizedBox(height: 4),
                 Text(

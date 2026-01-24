@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/theme/app_colors.dart';
 import '../bloc/statistics_state.dart';
 
 class TrendBarChart extends StatefulWidget {
@@ -191,7 +192,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                               icon: Icons.south_west_rounded,
                               label: 'home.income'.tr(),
                               amount: totalIncome,
-                              color: const Color(0xFF22C55E),
+                              color: AppColors.income,
                               isDark: isDark,
                             ),
                             const SizedBox(width: 12),
@@ -199,7 +200,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                               icon: Icons.north_east_rounded,
                               label: 'home.expense'.tr(),
                               amount: totalExpense,
-                              color: const Color(0xFFEF4444),
+                              color: AppColors.expense,
                               isDark: isDark,
                             ),
                           ],
@@ -272,8 +273,8 @@ class _TrendBarChartState extends State<TrendBarChart>
                                               ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             color: isIncome
-                                                ? const Color(0xFF22C55E)
-                                                : const Color(0xFFEF4444),
+                                                ? AppColors.income
+                                                : AppColors.expense,
                                           ),
                                         ),
                                       ],
@@ -416,7 +417,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                       gradient: const LinearGradient(
                                         colors: [
                                           Color(0xFF22C55E),
-                                          Color(0xFF10B981),
+                                          AppColors.emerald,
                                         ],
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
@@ -429,7 +430,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                       ),
                                       borderSide: isTouched
                                           ? BorderSide(
-                                              color: const Color(0xFF22C55E)
+                                              color: AppColors.income
                                                   .withValues(alpha: 0.5),
                                               width: 2,
                                             )
@@ -440,7 +441,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                       gradient: const LinearGradient(
                                         colors: [
                                           Color(0xFFEF4444),
-                                          Color(0xFFF97316),
+                                          AppColors.orange,
                                         ],
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
@@ -453,7 +454,7 @@ class _TrendBarChartState extends State<TrendBarChart>
                                       ),
                                       borderSide: isTouched
                                           ? BorderSide(
-                                              color: const Color(0xFFEF4444)
+                                              color: AppColors.expense
                                                   .withValues(alpha: 0.5),
                                               width: 2,
                                             )

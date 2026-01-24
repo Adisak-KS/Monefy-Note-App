@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
 import '../../../core/models/currency.dart';
+import '../../../core/theme/app_colors.dart';
 
 class BalanceOverviewCard extends StatefulWidget {
   final double totalBalance;
@@ -122,16 +123,8 @@ class _BalanceOverviewCardState extends State<BalanceOverviewCard>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isPositive
-              ? [
-                  const Color(0xFF667EEA),
-                  const Color(0xFF764BA2),
-                  const Color(0xFF6B8DD6),
-                ]
-              : [
-                  const Color(0xFFEB5757),
-                  const Color(0xFFC53030),
-                  const Color(0xFFEB5757),
-                ],
+              ? AppColors.indigoGradient
+              : AppColors.debtGradient,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -302,7 +295,7 @@ class _BalanceOverviewCardState extends State<BalanceOverviewCard>
   Widget _buildBalanceDebtSection(ThemeData theme, bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A1F2E) : Colors.white,
+        color: isDark ? AppColors.darkSheet : Colors.white,
       ),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: Row(
@@ -310,7 +303,7 @@ class _BalanceOverviewCardState extends State<BalanceOverviewCard>
           Expanded(
             child: _BalanceItem(
               icon: Icons.arrow_upward_rounded,
-              iconGradient: const [Color(0xFF22C55E), Color(0xFF16A34A)],
+              iconGradient: AppColors.incomeGradient,
               label: 'wallet.total_balance'.tr(),
               amount: widget.totalBalance,
               theme: theme,
@@ -336,7 +329,7 @@ class _BalanceOverviewCardState extends State<BalanceOverviewCard>
           Expanded(
             child: _BalanceItem(
               icon: Icons.arrow_downward_rounded,
-              iconGradient: const [Color(0xFFEF4444), Color(0xFFDC2626)],
+              iconGradient: AppColors.expenseGradient,
               label: 'wallet.total_debt'.tr(),
               amount: widget.totalDebt,
               theme: theme,
@@ -429,7 +422,7 @@ class _BalanceItem extends StatelessWidget {
                 key: ValueKey(hideBalance ? 'hidden' : amount),
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: isDebt ? const Color(0xFFEF4444) : const Color(0xFF22C55E),
+                  color: isDebt ? AppColors.expense : AppColors.income,
                 ),
               ),
             ),

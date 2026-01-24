@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 /// A reusable gradient background widget for pages
 /// Used in HomePage, WalletPage, and similar pages
@@ -22,16 +23,8 @@ class PageGradientBackground extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: isDark
-              ? const [
-                  Color(0xFF0D1117),
-                  Color(0xFF161B22),
-                  Color(0xFF0D1117),
-                ]
-              : const [
-                  Color(0xFFF8FAFC),
-                  Color(0xFFFFFFFF),
-                  Color(0xFFF1F5F9),
-                ],
+              ? AppColors.darkBackgroundGradient
+              : AppColors.lightBackgroundGradient,
           stops: const [0.0, 0.5, 1.0],
         ),
       ),

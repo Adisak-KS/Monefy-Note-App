@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
 import '../../../core/models/wallet_type.dart';
+import '../../../core/theme/app_colors.dart';
 import '../bloc/statistics_state.dart';
 
 class WalletStatsCard extends StatelessWidget {
@@ -149,13 +150,13 @@ class _WalletStatItem extends StatelessWidget {
                   children: [
                     _MiniStat(
                       icon: Icons.arrow_downward_rounded,
-                      color: const Color(0xFF22C55E),
+                      color: AppColors.income,
                       value: '${currency.symbol}${currencyFormat.format(stat.totalIncome)}',
                     ),
                     const SizedBox(width: 12),
                     _MiniStat(
                       icon: Icons.arrow_upward_rounded,
-                      color: const Color(0xFFEF4444),
+                      color: AppColors.expense,
                       value: '${currency.symbol}${currencyFormat.format(stat.totalExpense)}',
                     ),
                   ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../theme/app_colors.dart';
 
 /// Icon category for wallet/category icon selection
 class IconCategory {
@@ -429,7 +430,7 @@ class _IconPickerSheetState extends State<IconPickerSheet> {
         maxHeight: MediaQuery.of(context).size.height * 0.8,
       ),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A1A2E) : Colors.white,
+        color: isDark ? AppColors.darkDialogAlt : Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         boxShadow: [
           BoxShadow(
@@ -614,8 +615,8 @@ class _IconPickerSheetState extends State<IconPickerSheet> {
         shaderCallback: (bounds) => LinearGradient(
           colors: [
             Colors.transparent,
-            isDark ? const Color(0xFF1A1A2E) : Colors.white,
-            isDark ? const Color(0xFF1A1A2E) : Colors.white,
+            isDark ? AppColors.darkDialogAlt : Colors.white,
+            isDark ? AppColors.darkDialogAlt : Colors.white,
             Colors.transparent,
           ],
           stops: const [0, 0.02, 0.98, 1],

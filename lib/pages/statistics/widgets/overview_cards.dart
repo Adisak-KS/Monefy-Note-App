@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/theme/app_colors.dart';
 
 class OverviewCards extends StatefulWidget {
   final double totalIncome;
@@ -121,8 +122,8 @@ class _OverviewCardsState extends State<OverviewCards>
                   },
                   child: _AnimatedStatCard(
                     icon: Icons.south_west_rounded,
-                    iconColor: const Color(0xFF22C55E),
-                    gradientColors: const [Color(0xFF22C55E), Color(0xFF16A34A)],
+                    iconColor: AppColors.income,
+                    gradientColors: AppColors.incomeGradient,
                     label: 'home.income'.tr(),
                     amount: widget.totalIncome,
                     isDark: isDark,
@@ -144,8 +145,8 @@ class _OverviewCardsState extends State<OverviewCards>
                   },
                   child: _AnimatedStatCard(
                     icon: Icons.north_east_rounded,
-                    iconColor: const Color(0xFFEF4444),
-                    gradientColors: const [Color(0xFFEF4444), Color(0xFFDC2626)],
+                    iconColor: AppColors.expense,
+                    gradientColors: AppColors.expenseGradient,
                     label: 'home.expense'.tr(),
                     amount: widget.totalExpense,
                     isDark: isDark,
@@ -187,7 +188,7 @@ class _BalanceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: (isProfit ? const Color(0xFF6366F1) : const Color(0xFFEF4444))
+            color: (isProfit ? AppColors.indigo : AppColors.expense)
                 .withValues(alpha: 0.3),
             blurRadius: 25,
             offset: const Offset(0, 12),
@@ -205,14 +206,14 @@ class _BalanceCard extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: isProfit
                       ? [
-                          const Color(0xFF6366F1),
-                          const Color(0xFF8B5CF6),
-                          const Color(0xFFA855F7),
+                          AppColors.indigo,
+                          AppColors.purple,
+                          AppColors.purpleViolet,
                         ]
                       : [
-                          const Color(0xFFEF4444),
-                          const Color(0xFFF97316),
-                          const Color(0xFFFB923C),
+                          AppColors.expense,
+                          AppColors.orange,
+                          AppColors.orangeAlt,
                         ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

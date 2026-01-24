@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/models/wallet.dart';
 import '../../../core/models/wallet_type.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/delete_wallet_dialog.dart';
 import '../../../core/widgets/page_gradient_background.dart';
 import '../../../injection.dart';
@@ -651,7 +652,7 @@ class _SpeedDialFABState extends State<_SpeedDialFAB>
                   icon: Icons.swap_horiz_rounded,
                   label: 'wallet.transfer'.tr(),
                   gradient: widget.canTransfer
-                      ? const [Color(0xFF8B5CF6), Color(0xFF6D28D9)]
+                      ? AppColors.purpleGradient
                       : [
                           theme.colorScheme.outline.withValues(alpha: 0.5),
                           theme.colorScheme.outline.withValues(alpha: 0.5),
@@ -669,7 +670,7 @@ class _SpeedDialFABState extends State<_SpeedDialFAB>
                 _SpeedDialOption(
                   icon: Icons.category_rounded,
                   label: 'wallet.add_wallet_type'.tr(),
-                  gradient: const [Color(0xFFF59E0B), Color(0xFFD97706)],
+                  gradient: AppColors.amberGradient,
                   onTap: () {
                     _close();
                     widget.onAddWalletType();
@@ -680,7 +681,7 @@ class _SpeedDialFABState extends State<_SpeedDialFAB>
                 _SpeedDialOption(
                   icon: Icons.account_balance_wallet_rounded,
                   label: 'wallet.add_wallet'.tr(),
-                  gradient: const [Color(0xFF22C55E), Color(0xFF16A34A)],
+                  gradient: AppColors.incomeGradient,
                   onTap: () {
                     _close();
                     widget.onAddWallet();
@@ -805,7 +806,7 @@ class _SpeedDialOptionState extends State<_SpeedDialOption> {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                  color: isDark ? AppColors.darkCard : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -1525,7 +1526,7 @@ class _CollapsedSummaryRow extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFF22C55E).withValues(alpha: 0.1),
+              color: AppColors.income.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -1535,7 +1536,7 @@ class _CollapsedSummaryRow extends StatelessWidget {
                   width: 6,
                   height: 6,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF22C55E),
+                    color: AppColors.income,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -1543,7 +1544,7 @@ class _CollapsedSummaryRow extends StatelessWidget {
                 Text(
                   hideBalance ? '฿••••••' : '฿${_formatCurrency(totalBalance)}',
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: const Color(0xFF22C55E),
+                    color: AppColors.income,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1555,7 +1556,7 @@ class _CollapsedSummaryRow extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+              color: AppColors.expense.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -1565,7 +1566,7 @@ class _CollapsedSummaryRow extends StatelessWidget {
                   width: 6,
                   height: 6,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFEF4444),
+                    color: AppColors.expense,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -1573,7 +1574,7 @@ class _CollapsedSummaryRow extends StatelessWidget {
                 Text(
                   hideBalance ? '฿••••••' : '฿${_formatCurrency(totalDebt)}',
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: const Color(0xFFEF4444),
+                    color: AppColors.expense,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

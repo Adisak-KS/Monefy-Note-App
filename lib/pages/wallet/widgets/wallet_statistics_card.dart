@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/models/wallet.dart';
 import '../../../core/models/balance_history.dart';
+import '../../../core/theme/app_colors.dart';
 
 enum StatisticsPeriod { week, month, quarter }
 
@@ -131,8 +132,8 @@ class _WalletStatisticsCardState extends State<WalletStatisticsCard>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
-              ? [const Color(0xFF1E293B), const Color(0xFF293548)]
-              : [Colors.white, const Color(0xFFF8FAFC)],
+              ? [AppColors.darkCard, AppColors.darkCardAlt]
+              : [Colors.white, AppColors.lightBackground],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -457,7 +458,7 @@ class _WalletStatisticsCardState extends State<WalletStatisticsCard>
             Icons.keyboard_arrow_down_rounded,
             color: isDark ? Colors.white70 : Colors.grey.shade700,
           ),
-          dropdownColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+          dropdownColor: isDark ? AppColors.darkCard : Colors.white,
           items: widget.wallets.map((wallet) {
             return DropdownMenuItem<String>(
               value: wallet.id,

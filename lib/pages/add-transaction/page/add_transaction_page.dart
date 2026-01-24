@@ -7,6 +7,7 @@ import '../../../core/models/category.dart';
 import '../../../core/models/transaction.dart';
 import '../../../core/models/transaction_type.dart';
 import '../../../core/models/wallet.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/icon_utils.dart';
 import '../../home/bloc/home_cubit.dart';
 import '../../home/bloc/home_state.dart';
@@ -308,9 +309,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isExpense = _type == TransactionType.expense;
-    final primaryColor = isExpense
-        ? const Color(0xFFEF4444)
-        : const Color(0xFF22C55E);
+    final primaryColor = isExpense ? AppColors.expense : AppColors.income;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -476,14 +475,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         controller: _tabController,
         indicator: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              _type == TransactionType.expense
-                  ? const Color(0xFFEF4444)
-                  : const Color(0xFF22C55E),
-              _type == TransactionType.expense
-                  ? const Color(0xFFDC2626)
-                  : const Color(0xFF16A34A),
-            ],
+            colors: _type == TransactionType.expense
+                ? AppColors.expenseGradient
+                : AppColors.incomeGradient,
           ),
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
@@ -558,9 +552,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   Widget _buildCategorySection(ThemeData theme) {
     final isExpense = _type == TransactionType.expense;
-    final primaryColor = isExpense
-        ? const Color(0xFFEF4444)
-        : const Color(0xFF22C55E);
+    final primaryColor = isExpense ? AppColors.expense : AppColors.income;
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {

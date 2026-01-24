@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/icon_utils.dart';
 import '../bloc/statistics_state.dart';
 
@@ -17,18 +18,7 @@ class TopCategoriesList extends StatelessWidget {
     this.isExpense = true,
   });
 
-  static const _defaultColors = [
-    Color(0xFFFF6B6B),
-    Color(0xFF4ECDC4),
-    Color(0xFFFFE66D),
-    Color(0xFF95E1D3),
-    Color(0xFFDDA0DD),
-    Color(0xFF98D8C8),
-    Color(0xFF6C5CE7),
-    Color(0xFFFD79A8),
-    Color(0xFF00B894),
-    Color(0xFFE17055),
-  ];
+  static const _defaultColors = AppColors.chartPaletteAlt;
 
   Color _parseColor(String? colorHex, int index) {
     if (colorHex != null) {
@@ -79,15 +69,15 @@ class TopCategoriesList extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: isExpense
-                      ? const Color(0xFFEF4444).withValues(alpha: 0.1)
-                      : const Color(0xFF22C55E).withValues(alpha: 0.1),
+                      ? AppColors.expense.withValues(alpha: 0.1)
+                      : AppColors.income.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.leaderboard_rounded,
                   color: isExpense
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFF22C55E),
+                      ? AppColors.expense
+                      : AppColors.income,
                   size: 20,
                 ),
               ),
@@ -150,9 +140,9 @@ class _CategoryItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: index < 3
                   ? [
-                      const Color(0xFFFFD700),
-                      const Color(0xFFC0C0C0),
-                      const Color(0xFFCD7F32),
+                      AppColors.gold,
+                      AppColors.silver,
+                      AppColors.bronze,
                     ][index]
                       .withValues(alpha: 0.2)
                   : theme.colorScheme.surfaceContainerHighest,
@@ -165,9 +155,9 @@ class _CategoryItem extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: index < 3
                       ? [
-                          const Color(0xFFFFD700),
-                          const Color(0xFF808080),
-                          const Color(0xFFCD7F32),
+                          AppColors.gold,
+                          AppColors.goldAlt,
+                          AppColors.bronze,
                         ][index]
                       : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -243,8 +233,8 @@ class _CategoryItem extends StatelessWidget {
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: isExpense
-                  ? const Color(0xFFEF4444)
-                  : const Color(0xFF22C55E),
+                  ? AppColors.expense
+                  : AppColors.income,
             ),
           ),
         ],

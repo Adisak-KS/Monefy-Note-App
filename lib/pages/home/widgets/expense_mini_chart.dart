@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/models/category.dart';
 import '../../../core/models/transaction.dart';
 import '../../../core/models/transaction_type.dart';
+import '../../../core/theme/app_colors.dart';
 import '../bloc/home_cubit.dart';
 import '../bloc/home_state.dart';
 import 'section_header.dart';
@@ -299,14 +300,7 @@ class _ExpenseMiniChartState extends State<ExpenseMiniChart>
     return null;
   }
 
-  static const _defaultColors = [
-    Color(0xFFFF6B6B),
-    Color(0xFF4ECDC4),
-    Color(0xFFFFE66D),
-    Color(0xFF95E1D3),
-    Color(0xFFDDA0DD),
-    Color(0xFF98D8C8),
-  ];
+  static const _defaultColors = AppColors.chartPaletteAlt;
 }
 
 class _CategoryExpense {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:monefy_note_app/core/cubit/network_cubit.dart';
 import 'package:monefy_note_app/core/services/network_service.dart';
+import 'package:monefy_note_app/core/theme/app_colors.dart';
 
 class NetworkStatusBanner extends StatefulWidget {
   const NetworkStatusBanner({
@@ -138,14 +139,14 @@ class _NetworkStatusBannerState extends State<NetworkStatusBanner>
                           ),
                           decoration: BoxDecoration(
                             color: isOffline
-                                ? const Color(0xFFE53935)
-                                : const Color(0xFF43A047),
+                                ? AppColors.networkOffline
+                                : AppColors.networkOnline,
                             borderRadius: BorderRadius.circular(50),
                             boxShadow: [
                               BoxShadow(
                                 color: (isOffline
-                                        ? const Color(0xFFE53935)
-                                        : const Color(0xFF43A047))
+                                        ? AppColors.networkOffline
+                                        : AppColors.networkOnline)
                                     .withValues(alpha: 0.35),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),

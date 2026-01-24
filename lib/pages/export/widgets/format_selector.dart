@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../core/services/export_service.dart';
+import '../../../core/theme/app_colors.dart';
 
 class FormatSelector extends StatelessWidget {
   final ExportFormat selectedFormat;
@@ -35,7 +36,7 @@ class FormatSelector extends StatelessWidget {
                 icon: Icons.table_chart_rounded,
                 label: 'Excel',
                 extension: '.xlsx',
-                color: const Color(0xFF217346),
+                color: AppColors.excel,
               ),
             ),
             const SizedBox(width: 12),
@@ -46,7 +47,7 @@ class FormatSelector extends StatelessWidget {
                 icon: Icons.description_rounded,
                 label: 'CSV',
                 extension: '.csv',
-                color: const Color(0xFF0277BD),
+                color: AppColors.csv,
               ),
             ),
             const SizedBox(width: 12),
@@ -57,7 +58,7 @@ class FormatSelector extends StatelessWidget {
                 icon: Icons.picture_as_pdf_rounded,
                 label: 'PDF',
                 extension: '.pdf',
-                color: const Color(0xFFD32F2F),
+                color: AppColors.pdf,
               ),
             ),
           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import '../theme/app_colors.dart';
 
 /// Shows a custom color picker dialog and returns the selected color
 /// Returns null if cancelled
@@ -82,7 +83,7 @@ class _ColorPickerDialogContentState extends State<_ColorPickerDialogContent> {
         margin: const EdgeInsets.symmetric(horizontal: 24),
         constraints: const BoxConstraints(maxWidth: 400),
         decoration: BoxDecoration(
-          color: _isDark ? const Color(0xFF1E1E2E) : Colors.white,
+          color: _isDark ? AppColors.darkDialog : Colors.white,
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(

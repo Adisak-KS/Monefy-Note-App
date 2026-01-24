@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubit/currency_cubit.dart';
 import '../../../core/models/currency.dart';
+import '../../../core/theme/app_colors.dart';
 
 class BalanceSummaryCard extends StatefulWidget {
   final double totalIncome;
@@ -306,8 +307,8 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               icon: Icons.south_west_rounded,
                               label: 'home.income'.tr(),
                               amount: currencyFormat.format(widget.totalIncome),
-                              iconColor: const Color(0xFF4ADE80),
-                              iconBgColor: const Color(0xFF4ADE80).withValues(alpha: 0.2),
+                              iconColor: AppColors.incomeLight,
+                              iconBgColor: AppColors.incomeLight.withValues(alpha: 0.2),
                             ),
                           ),
                           Container(
@@ -331,8 +332,8 @@ class _BalanceSummaryCardState extends State<BalanceSummaryCard>
                               icon: Icons.north_east_rounded,
                               label: 'home.expense'.tr(),
                               amount: currencyFormat.format(widget.totalExpense),
-                              iconColor: const Color(0xFFF87171),
-                              iconBgColor: const Color(0xFFF87171).withValues(alpha: 0.2),
+                              iconColor: AppColors.expenseLight,
+                              iconBgColor: AppColors.expenseLight.withValues(alpha: 0.2),
                             ),
                           ),
                         ],
@@ -362,13 +363,13 @@ class _TrendBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isPositive
-            ? const Color(0xFF4ADE80).withValues(alpha: 0.2)
-            : const Color(0xFFF87171).withValues(alpha: 0.2),
+            ? AppColors.incomeLight.withValues(alpha: 0.2)
+            : AppColors.expenseLight.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isPositive
-              ? const Color(0xFF4ADE80).withValues(alpha: 0.3)
-              : const Color(0xFFF87171).withValues(alpha: 0.3),
+              ? AppColors.incomeLight.withValues(alpha: 0.3)
+              : AppColors.expenseLight.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -377,14 +378,14 @@ class _TrendBadge extends StatelessWidget {
         children: [
           Icon(
             isPositive ? Icons.trending_up_rounded : Icons.trending_down_rounded,
-            color: isPositive ? const Color(0xFF4ADE80) : const Color(0xFFF87171),
+            color: isPositive ? AppColors.incomeLight : AppColors.expenseLight,
             size: 16,
           ),
           const SizedBox(width: 4),
           Text(
             isPositive ? 'home.profit'.tr() : 'home.loss'.tr(),
             style: TextStyle(
-              color: isPositive ? const Color(0xFF4ADE80) : const Color(0xFFF87171),
+              color: isPositive ? AppColors.incomeLight : AppColors.expenseLight,
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),

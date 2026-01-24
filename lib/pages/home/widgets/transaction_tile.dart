@@ -7,6 +7,7 @@ import '../../../core/models/category.dart';
 import '../../../core/models/currency.dart';
 import '../../../core/models/transaction.dart';
 import '../../../core/models/transaction_type.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/icon_utils.dart';
 
 class TransactionTile extends StatefulWidget {
@@ -272,29 +273,19 @@ class _TransactionTileState extends State<TransactionTile>
                           gradient: LinearGradient(
                             colors: isIncome
                                 ? [
-                                    const Color(
-                                      0xFF22C55E,
-                                    ).withValues(alpha: 0.15),
-                                    const Color(
-                                      0xFF16A34A,
-                                    ).withValues(alpha: 0.1),
+                                    AppColors.income.withValues(alpha: 0.15),
+                                    AppColors.incomeDark.withValues(alpha: 0.1),
                                   ]
                                 : [
-                                    const Color(
-                                      0xFFEF4444,
-                                    ).withValues(alpha: 0.15),
-                                    const Color(
-                                      0xFFDC2626,
-                                    ).withValues(alpha: 0.1),
+                                    AppColors.expense.withValues(alpha: 0.15),
+                                    AppColors.expenseDark.withValues(alpha: 0.1),
                                   ],
                           ),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isIncome
-                                ? const Color(0xFF22C55E).withValues(alpha: 0.2)
-                                : const Color(
-                                    0xFFEF4444,
-                                  ).withValues(alpha: 0.2),
+                                ? AppColors.income.withValues(alpha: 0.2)
+                                : AppColors.expense.withValues(alpha: 0.2),
                             width: 1,
                           ),
                         ),
@@ -304,8 +295,8 @@ class _TransactionTileState extends State<TransactionTile>
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
                             color: isIncome
-                                ? const Color(0xFF16A34A)
-                                : const Color(0xFFDC2626),
+                                ? AppColors.incomeDark
+                                : AppColors.expenseDark,
                           ),
                         ),
                       ),

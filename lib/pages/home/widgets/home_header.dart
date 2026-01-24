@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../core/theme/app_colors.dart';
 
 class HomeHeader extends StatefulWidget {
   final VoidCallback? onAvatarTap;
@@ -319,18 +320,17 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                       width: 14,
                       height: 14,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF22C55E),
+                        color: AppColors.income,
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: widget.isDark
-                              ? const Color(0xFF161B22)
+                              ? AppColors.darkSurface
                               : Colors.white,
                           width: 2.5,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color:
-                                const Color(0xFF22C55E).withValues(alpha: 0.4),
+                            color: AppColors.income.withValues(alpha: 0.4),
                             blurRadius: 4,
                           ),
                         ],
