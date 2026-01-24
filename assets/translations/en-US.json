@@ -245,7 +245,17 @@
   "statistics": {
     "title": "Statistics",
     "coming_soon": "Coming Soon",
-    "by_wallet": "By Wallet"
+    "by_wallet": "By Wallet",
+    "daily_trend": "Daily Trend",
+    "expense_by_category": "Expense by Category",
+    "income_by_category": "Income by Category",
+    "top_expenses": "Top Expenses",
+    "top_income": "Top Income",
+    "no_data": "No data available",
+    "profit": "Profit",
+    "loss": "Loss",
+    "total_transactions": "Total Transactions",
+    "average_per_day": "Avg per Day"
   },
   "settings": {
     "title": "Settings",

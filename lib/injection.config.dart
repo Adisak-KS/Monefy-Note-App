@@ -19,6 +19,7 @@ import 'core/repositories/custom_wallet_type_repository.dart' as _i453;
 import 'core/repositories/transaction_repository.dart' as _i140;
 import 'core/repositories/wallet_repository.dart' as _i678;
 import 'pages/home/bloc/home_cubit.dart' as _i65;
+import 'pages/statistics/bloc/statistics_cubit.dart' as _i339;
 import 'pages/wallet/bloc/wallet_cubit.dart' as _i984;
 import 'pages/wallet/features/add_wallet_type/bloc/custom_wallet_type_cubit.dart'
     as _i749;
@@ -45,6 +46,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i453.CustomWalletTypeRepository>(
       () => repositoryModule.customWalletTypeRepository,
+    );
+    gh.factory<_i339.StatisticsCubit>(
+      () => _i339.StatisticsCubit(
+        gh<_i140.TransactionRepository>(),
+        gh<_i94.CategoryRepository>(),
+        gh<_i678.WalletRepository>(),
+      ),
     );
     gh.factory<_i749.CustomWalletTypeCubit>(
       () => _i749.CustomWalletTypeCubit(gh<_i453.CustomWalletTypeRepository>()),

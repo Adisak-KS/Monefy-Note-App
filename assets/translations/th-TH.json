@@ -245,7 +245,17 @@
   "statistics": {
     "title": "สถิติ",
     "coming_soon": "เร็วๆ นี้",
-    "by_wallet": "ตามกระเป๋า"
+    "by_wallet": "ตามกระเป๋า",
+    "daily_trend": "แนวโน้มรายวัน",
+    "expense_by_category": "รายจ่ายตามหมวดหมู่",
+    "income_by_category": "รายรับตามหมวดหมู่",
+    "top_expenses": "รายจ่ายสูงสุด",
+    "top_income": "รายรับสูงสุด",
+    "no_data": "ไม่มีข้อมูล",
+    "profit": "กำไร",
+    "loss": "ขาดทุน",
+    "total_transactions": "รายการทั้งหมด",
+    "average_per_day": "เฉลี่ยต่อวัน"
   },
   "settings": {
     "title": "ตั้งค่า",
