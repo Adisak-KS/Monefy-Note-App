@@ -13,10 +13,11 @@ import 'package:monefy_note_app/pages/home/bloc/home_cubit.dart';
 import 'package:monefy_note_app/pages/categories/page/categories_page.dart';
 import 'package:monefy_note_app/pages/budgets/page/budgets_page.dart';
 import 'package:monefy_note_app/pages/settings/page/settings_page.dart';
+import 'package:monefy_note_app/pages/export/page/export_page.dart';
 
 final appRoutes = GoRouter(
-  initialLocation: '/splash',
-  // initialLocation: '/home',
+  // initialLocation: '/splash',
+  initialLocation: '/home',
 
   routes: [
     GoRoute(
@@ -95,6 +96,12 @@ final appRoutes = GoRouter(
       path: '/settings',
       name: 'settings',
       builder: (context, state) => const SettingsPage(),
+    ),
+
+    GoRoute(
+      path: '/export',
+      name: 'export',
+      builder: (context, state) => const ExportPage(),
     ),
   ],
 );

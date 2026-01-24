@@ -456,5 +456,27 @@
     "about_app": "About App",
     "guest": "Guest User",
     "free_plan": "Free Plan"
+  },
+  "export": {
+    "title": "Export Data",
+    "select_data": "Select data type",
+    "transactions": "Transactions",
+    "transactions_desc": "Export all transaction records",
+    "wallets": "Wallets",
+    "wallets_desc": "Export wallet information",
+    "summary": "Summary Report",
+    "summary_desc": "Export income/expense summary",
+    "select_range": "Select date range",
+    "this_month": "This Month",
+    "last_month": "Last Month",
+    "this_year": "This Year",
+    "custom": "Custom",
+    "select_format": "Select format",
+    "export_button": "Export",
+    "exporting": "Exporting...",
+    "success": "Export Successful!",
+    "file_ready": "Your file is ready to share",
+    "share": "Share",
+    "error": "Export failed. Please try again."
   }
 }

@@ -20,9 +20,12 @@ import 'core/repositories/category_repository.dart' as _i94;
 import 'core/repositories/custom_wallet_type_repository.dart' as _i453;
 import 'core/repositories/transaction_repository.dart' as _i140;
 import 'core/repositories/wallet_repository.dart' as _i678;
+import 'core/services/export_service.dart' as _i580;
+import 'core/services/export_service_impl.dart' as _i876;
 import 'core/services/preferences_service.dart' as _i811;
 import 'pages/budgets/bloc/budget_cubit.dart' as _i458;
 import 'pages/categories/bloc/category_cubit.dart' as _i723;
+import 'pages/export/bloc/export_cubit.dart' as _i656;
 import 'pages/home/bloc/home_cubit.dart' as _i65;
 import 'pages/settings/bloc/settings_cubit.dart' as _i78;
 import 'pages/statistics/bloc/statistics_cubit.dart' as _i339;
@@ -67,6 +70,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i678.WalletRepository>(),
       ),
     );
+    gh.lazySingleton<_i580.ExportService>(() => _i876.ExportServiceImpl());
     gh.factory<_i749.CustomWalletTypeCubit>(
       () => _i749.CustomWalletTypeCubit(gh<_i453.CustomWalletTypeRepository>()),
     );
@@ -75,6 +79,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i78.SettingsCubit>(
       () => _i78.SettingsCubit(gh<_i811.PreferencesService>()),
+    );
+    gh.factory<_i656.ExportCubit>(
+      () => _i656.ExportCubit(
+        gh<_i580.ExportService>(),
+        gh<_i140.TransactionRepository>(),
+        gh<_i678.WalletRepository>(),
+      ),
     );
     gh.factory<_i65.HomeCubit>(
       () => _i65.HomeCubit(

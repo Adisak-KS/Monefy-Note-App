@@ -292,7 +292,7 @@ class _SettingsPageContentState extends State<_SettingsPageContent>
                 subtitle: 'settings.export_description'.tr(),
                 showArrow: true,
                 onTap: () {
-                  _showComingSoon(context);
+                  context.push('/export');
                 },
               ),
               SettingsTile(
