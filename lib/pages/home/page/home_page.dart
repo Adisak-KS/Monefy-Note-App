@@ -75,6 +75,13 @@ class _HomePageContentState extends State<_HomePageContent> {
       }
       _lastScrollPosition = currentPosition;
     }
+
+    // Check for infinite scroll - load more when near the bottom
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final threshold = maxScroll * 0.8; // Load more at 80% scroll
+    if (currentPosition >= threshold) {
+      context.read<HomeCubit>().loadMore();
+    }
   }
 
   @override
@@ -227,6 +234,35 @@ class _HomePageContentState extends State<_HomePageContent> {
             categories: state.categories,
             onDelete: (id) => _confirmDelete(context, id),
             onEdit: (transaction) => _openEditSheet(context, transaction),
+          ),
+        // Loading more indicator
+        if (state.isLoadingMore)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+            ),
+          ),
+        // Show "Load more" hint if there are more items
+        if (hasTransactions && state.hasMore && !state.isLoadingMore)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: Text(
+                  '${state.todayTransactions.length} / ${state.totalCount}',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ),
+            ),
           ),
         if (hasTransactions)
           const SliverToBoxAdapter(child: SizedBox(height: 80)),

@@ -87,10 +87,8 @@ final appRoutes = GoRouter(
     GoRoute(
       path: '/home',
       name: 'home',
-      pageBuilder: (context, state) => AppPageTransitions.fade(
-        key: state.pageKey,
-        child: const MainShell(),
-      ),
+      pageBuilder: (context, state) =>
+          AppPageTransitions.fade(key: state.pageKey, child: const MainShell()),
     ),
 
     GoRoute(

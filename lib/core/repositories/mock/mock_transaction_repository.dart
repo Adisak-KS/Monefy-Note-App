@@ -1,3 +1,4 @@
+import '../../models/paginated_result.dart';
 import '../../models/transaction.dart';
 import '../../models/transaction_type.dart';
 import '../../services/mock_data_service.dart';
@@ -76,5 +77,51 @@ class MockTransactionRepository implements TransactionRepository {
       }
     }
     return total;
+  }
+
+  @override
+  Future<PaginatedResult<Transaction>> getPaginated({
+    required int page,
+    int pageSize = 20,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    List<Transaction> filtered;
+
+    if (startDate != null && endDate != null) {
+      filtered = await getByDateRange(startDate, endDate);
+    } else {
+      filtered = await getAll();
+    }
+
+    // Sort by date descending (newest first)
+    filtered.sort((a, b) => b.date.compareTo(a.date));
+
+    final totalCount = filtered.length;
+    final startIndex = (page - 1) * pageSize;
+    final endIndex = startIndex + pageSize;
+
+    final items = startIndex < filtered.length
+        ? filtered.sublist(
+            startIndex,
+            endIndex > filtered.length ? filtered.length : endIndex,
+          )
+        : <Transaction>[];
+
+    return PaginatedResult<Transaction>(
+      items: items,
+      totalCount: totalCount,
+      currentPage: page,
+      pageSize: pageSize,
+    );
+  }
+
+  @override
+  Future<int> getCount({DateTime? startDate, DateTime? endDate}) async {
+    if (startDate != null && endDate != null) {
+      final filtered = await getByDateRange(startDate, endDate);
+      return filtered.length;
+    }
+    return _transactions.length;
   }
 }

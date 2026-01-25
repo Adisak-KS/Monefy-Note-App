@@ -8,6 +8,7 @@ import '../bloc/drawer_stats_state.dart';
 import '../theme/app_color.dart';
 import '../theme/color_cubit.dart';
 import '../theme/theme_cubit.dart';
+import 'cached_avatar.dart';
 import '../../pages/settings/widgets/color_selector_dialog.dart';
 import '../../pages/settings/widgets/theme_selector_dialog.dart';
 
@@ -221,7 +222,7 @@ class _ProfileDrawerState extends State<ProfileDrawer>
     );
   }
 
-  Widget _buildAnimatedAvatar(ThemeData theme) {
+  Widget _buildAnimatedAvatar(ThemeData theme, {String? avatarUrl}) {
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
@@ -263,10 +264,15 @@ class _ProfileDrawerState extends State<ProfileDrawer>
             ),
             borderRadius: BorderRadius.circular(18),
           ),
-          child: const Icon(
-            Icons.person_rounded,
-            color: Colors.white,
-            size: 36,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: CachedAvatar(
+              imageUrl: avatarUrl,
+              size: 64,
+              fallbackIcon: Icons.person_rounded,
+              backgroundColor: Colors.transparent,
+              iconColor: Colors.white,
+            ),
           ),
         ),
       ),

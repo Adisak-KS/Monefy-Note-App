@@ -4,6 +4,7 @@ import 'package:monefy_note_app/core/repositories/category_repository.dart';
 import 'package:monefy_note_app/core/repositories/wallet_repository.dart';
 import 'package:monefy_note_app/core/repositories/budget_repository.dart';
 import 'package:monefy_note_app/core/bloc/drawer_stats_cubit.dart';
+import 'package:monefy_note_app/core/models/paginated_result.dart';
 import 'package:monefy_note_app/core/models/transaction.dart';
 import 'package:monefy_note_app/core/models/category.dart';
 import 'package:monefy_note_app/core/models/wallet.dart';
@@ -112,6 +113,24 @@ class TestDataFactory {
       description: description,
     );
   }
+
+  /// Create a paginated result from a list of transactions
+  static PaginatedResult<Transaction> createPaginatedResult(
+    List<Transaction> transactions, {
+    int page = 1,
+    int pageSize = 20,
+  }) {
+    return PaginatedResult<Transaction>(
+      items: transactions,
+      totalCount: transactions.length,
+      currentPage: page,
+      pageSize: pageSize,
+    );
+  }
+
+  /// Default paginated result for mocks
+  static PaginatedResult<Transaction> get mockPaginatedTransactions =>
+      createPaginatedResult(mockTransactions);
 }
 
 // Register fallback values (call this in setUpAll)

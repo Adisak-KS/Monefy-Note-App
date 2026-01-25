@@ -20,6 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
   final WalletRepository _walletRepository;
   final DrawerStatsCubit _drawerStatsCubit;
   static const _uuid = Uuid();
+  static const _pageSize = 20;
 
   Transaction? _recentlyDeletedTransaction;
   Timer? _undoTimer;
@@ -54,25 +55,37 @@ class HomeCubit extends Cubit<HomeState> {
           ? _customDateRange!
           : _currentFilter.getDateRange();
 
-      final transactions = await _transactionRepository.getByDateRange(
-        dateRange.start,
-        dateRange.end,
+      // Use pagination for initial load
+      final paginatedResult = await _transactionRepository.getPaginated(
+        page: 1,
+        pageSize: _pageSize,
+        startDate: dateRange.start,
+        endDate: dateRange.end,
       );
+
       final categories = await _categoryRepository.getAll();
       final wallets = await _walletRepository.getAll();
 
-      final totalIncome = _calculateTotal(transactions, TransactionType.income);
-      final totalExpense = _calculateTotal(transactions, TransactionType.expense);
+      // Get all transactions for totals calculation
+      final allTransactions = await _transactionRepository.getByDateRange(
+        dateRange.start,
+        dateRange.end,
+      );
+      final totalIncome = _calculateTotal(allTransactions, TransactionType.income);
+      final totalExpense = _calculateTotal(allTransactions, TransactionType.expense);
 
       emit(
         HomeLoaded(
-          todayTransactions: transactions,
+          todayTransactions: paginatedResult.items,
           categories: categories,
           wallets: wallets,
           totalIncome: totalIncome,
           totalExpense: totalExpense,
           filterType: _currentFilter,
           customDateRange: _customDateRange,
+          currentPage: 1,
+          totalCount: paginatedResult.totalCount,
+          hasMore: paginatedResult.hasMore,
         ),
       );
 
@@ -80,10 +93,47 @@ class HomeCubit extends Cubit<HomeState> {
       _drawerStatsCubit.updateStats(
         totalIncome: totalIncome,
         totalExpense: totalExpense,
-        transactionCount: transactions.length,
+        transactionCount: paginatedResult.totalCount,
       );
     } catch (error) {
       emit(HomeError(error.toString()));
+    }
+  }
+
+  /// Load more transactions for infinite scroll
+  Future<void> loadMore() async {
+    final currentState = state;
+    if (currentState is! HomeLoaded) return;
+    if (!currentState.hasMore || currentState.isLoadingMore) return;
+
+    emit(currentState.copyWith(isLoadingMore: true));
+
+    try {
+      final dateRange = _currentFilter == DateFilterType.custom
+          ? _customDateRange!
+          : _currentFilter.getDateRange();
+
+      final nextPage = currentState.currentPage + 1;
+      final paginatedResult = await _transactionRepository.getPaginated(
+        page: nextPage,
+        pageSize: _pageSize,
+        startDate: dateRange.start,
+        endDate: dateRange.end,
+      );
+
+      final updatedTransactions = [
+        ...currentState.todayTransactions,
+        ...paginatedResult.items,
+      ];
+
+      emit(currentState.copyWith(
+        todayTransactions: updatedTransactions,
+        currentPage: nextPage,
+        hasMore: paginatedResult.hasMore,
+        isLoadingMore: false,
+      ));
+    } catch (error) {
+      emit(currentState.copyWith(isLoadingMore: false));
     }
   }
 

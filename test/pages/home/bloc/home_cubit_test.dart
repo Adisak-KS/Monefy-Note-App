@@ -52,6 +52,12 @@ void main() {
       blocTest<HomeCubit, HomeState>(
         'emits [HomeLoading, HomeLoaded] when loadData succeeds',
         build: () {
+          when(() => mockTransactionRepo.getPaginated(
+                page: any(named: 'page'),
+                pageSize: any(named: 'pageSize'),
+                startDate: any(named: 'startDate'),
+                endDate: any(named: 'endDate'),
+              )).thenAnswer((_) async => TestDataFactory.mockPaginatedTransactions);
           when(() => mockTransactionRepo.getByDateRange(any(), any()))
               .thenAnswer((_) async => TestDataFactory.mockTransactions);
           when(() => mockCategoryRepo.getAll())
@@ -69,6 +75,12 @@ void main() {
               .having((s) => s.totalExpense, 'total expense', 100),
         ],
         verify: (_) {
+          verify(() => mockTransactionRepo.getPaginated(
+                page: any(named: 'page'),
+                pageSize: any(named: 'pageSize'),
+                startDate: any(named: 'startDate'),
+                endDate: any(named: 'endDate'),
+              )).called(1);
           verify(() => mockTransactionRepo.getByDateRange(any(), any())).called(1);
           verify(() => mockCategoryRepo.getAll()).called(1);
           verify(() => mockWalletRepo.getAll()).called(1);
@@ -83,8 +95,12 @@ void main() {
       blocTest<HomeCubit, HomeState>(
         'emits [HomeLoading, HomeError] when loadData fails',
         build: () {
-          when(() => mockTransactionRepo.getByDateRange(any(), any()))
-              .thenThrow(Exception('Failed to load'));
+          when(() => mockTransactionRepo.getPaginated(
+                page: any(named: 'page'),
+                pageSize: any(named: 'pageSize'),
+                startDate: any(named: 'startDate'),
+                endDate: any(named: 'endDate'),
+              )).thenThrow(Exception('Failed to load'));
           when(() => mockCategoryRepo.getAll())
               .thenAnswer((_) async => TestDataFactory.mockCategories);
           when(() => mockWalletRepo.getAll())
@@ -123,6 +139,12 @@ void main() {
               amount: 300,
             ),
           ];
+          when(() => mockTransactionRepo.getPaginated(
+                page: any(named: 'page'),
+                pageSize: any(named: 'pageSize'),
+                startDate: any(named: 'startDate'),
+                endDate: any(named: 'endDate'),
+              )).thenAnswer((_) async => TestDataFactory.createPaginatedResult(transactions));
           when(() => mockTransactionRepo.getByDateRange(any(), any()))
               .thenAnswer((_) async => transactions);
           when(() => mockCategoryRepo.getAll())
@@ -147,6 +169,12 @@ void main() {
         'adds transaction and reloads data',
         build: () {
           when(() => mockTransactionRepo.add(any())).thenAnswer((_) async {});
+          when(() => mockTransactionRepo.getPaginated(
+                page: any(named: 'page'),
+                pageSize: any(named: 'pageSize'),
+                startDate: any(named: 'startDate'),
+                endDate: any(named: 'endDate'),
+              )).thenAnswer((_) async => TestDataFactory.mockPaginatedTransactions);
           when(() => mockTransactionRepo.getByDateRange(any(), any()))
               .thenAnswer((_) async => TestDataFactory.mockTransactions);
           when(() => mockCategoryRepo.getAll())
@@ -272,6 +300,12 @@ void main() {
               .thenAnswer((_) async => deletedTransaction);
           when(() => mockTransactionRepo.delete(any())).thenAnswer((_) async {});
           when(() => mockTransactionRepo.add(any())).thenAnswer((_) async {});
+          when(() => mockTransactionRepo.getPaginated(
+                page: any(named: 'page'),
+                pageSize: any(named: 'pageSize'),
+                startDate: any(named: 'startDate'),
+                endDate: any(named: 'endDate'),
+              )).thenAnswer((_) async => TestDataFactory.mockPaginatedTransactions);
           when(() => mockTransactionRepo.getByDateRange(any(), any()))
               .thenAnswer((_) async => TestDataFactory.mockTransactions);
           when(() => mockCategoryRepo.getAll())

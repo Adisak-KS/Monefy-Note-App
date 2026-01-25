@@ -27,6 +27,11 @@ class HomeLoaded extends HomeState {
   final DateTimeRange? customDateRange;
   final String searchQuery;
   final bool isSearching;
+  // Pagination fields
+  final int currentPage;
+  final int totalCount;
+  final bool hasMore;
+  final bool isLoadingMore;
 
   const HomeLoaded({
     required this.todayTransactions,
@@ -39,6 +44,10 @@ class HomeLoaded extends HomeState {
     this.customDateRange,
     this.searchQuery = '',
     this.isSearching = false,
+    this.currentPage = 1,
+    this.totalCount = 0,
+    this.hasMore = false,
+    this.isLoadingMore = false,
   });
 
   List<Transaction> get filteredTransactions {
@@ -68,6 +77,10 @@ class HomeLoaded extends HomeState {
     DateTimeRange? customDateRange,
     String? searchQuery,
     bool? isSearching,
+    int? currentPage,
+    int? totalCount,
+    bool? hasMore,
+    bool? isLoadingMore,
   }) {
     return HomeLoaded(
       todayTransactions: todayTransactions ?? this.todayTransactions,
@@ -82,6 +95,10 @@ class HomeLoaded extends HomeState {
       customDateRange: customDateRange ?? this.customDateRange,
       searchQuery: searchQuery ?? this.searchQuery,
       isSearching: isSearching ?? this.isSearching,
+      currentPage: currentPage ?? this.currentPage,
+      totalCount: totalCount ?? this.totalCount,
+      hasMore: hasMore ?? this.hasMore,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 
@@ -97,6 +114,10 @@ class HomeLoaded extends HomeState {
         customDateRange,
         searchQuery,
         isSearching,
+        currentPage,
+        totalCount,
+        hasMore,
+        isLoadingMore,
       ];
 }
 
