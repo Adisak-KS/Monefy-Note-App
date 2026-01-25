@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,17 +15,38 @@ import 'package:monefy_note_app/core/theme/app_color.dart';
 import 'package:monefy_note_app/core/theme/app_theme.dart' show AppTheme;
 import 'package:monefy_note_app/core/theme/color_cubit.dart';
 import 'package:monefy_note_app/core/theme/theme_cubit.dart';
+import 'package:monefy_note_app/core/widgets/error_boundary.dart';
 import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
+import 'package:monefy_note_app/core/di/repository_module.dart';
 import 'package:monefy_note_app/injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await NetworkService.instance.initialize();
+  await initializeRepositories();
   configureDependencies();
 
   // Allow Google Fonts to work offline (use cached/bundled fonts)
   GoogleFonts.config.allowRuntimeFetching = false;
+
+  // Set up global error handling for Flutter framework errors
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    if (kDebugMode) {
+      debugPrint('FlutterError: ${details.exception}');
+      debugPrint('Stack trace: ${details.stack}');
+    }
+  };
+
+  // Handle errors that aren't caught by the Flutter framework
+  PlatformDispatcher.instance.onError = (error, stack) {
+    if (kDebugMode) {
+      debugPrint('PlatformDispatcher error: $error');
+      debugPrint('Stack trace: $stack');
+    }
+    return true;
+  };
 
   // Initialize preferences service
   final preferencesService = PreferencesService();
@@ -42,16 +64,23 @@ void main() async {
   await currencyCubit.init();
 
   runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('th', 'TH'), Locale('en', 'US')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en', 'US'),
-      startLocale: localeCubit.state,
-      child: MyApp(
-        themeCubit: themeCubit,
-        localeCubit: localeCubit,
-        colorCubit: colorCubit,
-        currencyCubit: currencyCubit,
+    ErrorBoundary(
+      onError: (error, stack) {
+        if (kDebugMode) {
+          debugPrint('ErrorBoundary caught: $error');
+        }
+      },
+      child: EasyLocalization(
+        supportedLocales: const [Locale('th', 'TH'), Locale('en', 'US')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
+        startLocale: localeCubit.state,
+        child: MyApp(
+          themeCubit: themeCubit,
+          localeCubit: localeCubit,
+          colorCubit: colorCubit,
+          currencyCubit: currencyCubit,
+        ),
       ),
     ),
   );

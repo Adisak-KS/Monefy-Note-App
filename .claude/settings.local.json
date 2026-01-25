@@ -28,7 +28,8 @@
       "Bash(powershell -Command \"Remove-Item ''c:\\\\Users\\\\BMS\\\\Desktop\\\\learning\\\\project\\\\monefy_note_app\\\\lib\\\\core\\\\bloc\\\\drawer_stats_state.freezed.dart'' -Force\")",
       "Bash(flutter build:*)",
       "Bash(grep:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(flutter test:*)"
     ],
     "deny": [],
     "ask": []

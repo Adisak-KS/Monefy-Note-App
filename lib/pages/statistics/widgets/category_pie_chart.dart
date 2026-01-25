@@ -503,6 +503,9 @@ class _CategoryPieChartState extends State<CategoryPieChart>
       final isDark = theme.brightness == Brightness.dark;
       final borderColor = isDark ? Colors.white : Colors.black;
 
+      // Show percentage badge for slices that are large enough (>5%)
+      final showBadge = item.percentage >= 5;
+
       return PieChartSectionData(
         color: color,
         value: item.amount,
@@ -514,6 +517,15 @@ class _CategoryPieChartState extends State<CategoryPieChart>
                 width: 3,
               )
             : BorderSide.none,
+        badgeWidget: showBadge
+            ? _PercentageBadge(
+                percentage: item.percentage,
+                color: color,
+                isTouched: isTouched,
+                isDark: isDark,
+              )
+            : null,
+        badgePositionPercentageOffset: 1.1,
       );
     }).toList();
   }
@@ -625,6 +637,56 @@ class _CategoryPieChartState extends State<CategoryPieChart>
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PercentageBadge extends StatelessWidget {
+  final double percentage;
+  final Color color;
+  final bool isTouched;
+  final bool isDark;
+
+  const _PercentageBadge({
+    required this.percentage,
+    required this.color,
+    required this.isTouched,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: EdgeInsets.symmetric(
+        horizontal: isTouched ? 8 : 6,
+        vertical: isTouched ? 4 : 2,
+      ),
+      decoration: BoxDecoration(
+        color: isTouched
+            ? color
+            : (isDark ? Colors.black87 : Colors.white),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isTouched ? Colors.white : color,
+          width: isTouched ? 2 : 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: isTouched ? 0.4 : 0.2),
+            blurRadius: isTouched ? 8 : 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Text(
+        '${percentage.toStringAsFixed(0)}%',
+        style: TextStyle(
+          fontSize: isTouched ? 11 : 9,
+          fontWeight: FontWeight.bold,
+          color: isTouched ? Colors.white : color,
         ),
       ),
     );

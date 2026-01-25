@@ -10,11 +10,13 @@ import '../bloc/statistics_state.dart';
 class TrendBarChart extends StatefulWidget {
   final List<DailyStatistic> data;
   final String title;
+  final bool showTrendLine;
 
   const TrendBarChart({
     super.key,
     required this.data,
     required this.title,
+    this.showTrendLine = true,
   });
 
   @override
@@ -225,7 +227,9 @@ class _TrendBarChartState extends State<TrendBarChart>
                         ),
                         child: SizedBox(
                           height: chartHeight,
-                          child: BarChart(
+                          child: Stack(
+                            children: [
+                              BarChart(
                             BarChartData(
                               alignment: BarChartAlignment.spaceAround,
                               maxY: maxY,
@@ -464,6 +468,66 @@ class _TrendBarChartState extends State<TrendBarChart>
                                 );
                               }).toList(),
                             ),
+                          ),
+                          // Trend Line Overlay
+                          if (widget.showTrendLine && displayData.length > 1)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: 50,
+                                right: isCompact ? 12 : 20,
+                                top: 0,
+                                bottom: 36,
+                              ),
+                              child: LineChart(
+                                LineChartData(
+                                  minY: 0,
+                                  maxY: maxY,
+                                  lineTouchData: const LineTouchData(enabled: false),
+                                  gridData: const FlGridData(show: false),
+                                  titlesData: const FlTitlesData(show: false),
+                                  borderData: FlBorderData(show: false),
+                                  lineBarsData: [
+                                    // Expense trend line
+                                    LineChartBarData(
+                                      spots: displayData.asMap().entries.map((entry) {
+                                        return FlSpot(
+                                          entry.key.toDouble(),
+                                          entry.value.expense * _animation.value,
+                                        );
+                                      }).toList(),
+                                      isCurved: true,
+                                      curveSmoothness: 0.3,
+                                      color: AppColors.expense.withValues(alpha: 0.7),
+                                      barWidth: 2.5,
+                                      isStrokeCapRound: true,
+                                      dotData: FlDotData(
+                                        show: true,
+                                        getDotPainter: (spot, percent, barData, index) {
+                                          return FlDotCirclePainter(
+                                            radius: 3,
+                                            color: AppColors.expense,
+                                            strokeWidth: 1.5,
+                                            strokeColor: isDark ? Colors.black : Colors.white,
+                                          );
+                                        },
+                                      ),
+                                      belowBarData: BarAreaData(
+                                        show: true,
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            AppColors.expense.withValues(alpha: 0.15),
+                                            AppColors.expense.withValues(alpha: 0.02),
+                                          ],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            ],
                           ),
                         ),
                       );
