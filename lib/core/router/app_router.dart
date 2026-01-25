@@ -14,6 +14,7 @@ import 'package:monefy_note_app/pages/categories/page/categories_page.dart';
 import 'package:monefy_note_app/pages/budgets/page/budgets_page.dart';
 import 'package:monefy_note_app/pages/settings/page/settings_page.dart';
 import 'package:monefy_note_app/pages/export/page/export_page.dart';
+import 'page_transitions.dart';
 
 final appRoutes = GoRouter(
   // initialLocation: '/splash',
@@ -23,59 +24,86 @@ final appRoutes = GoRouter(
     GoRoute(
       path: '/splash',
       name: 'splash',
-      builder: (context, state) => const SplashPage(),
+      pageBuilder: (context, state) => AppPageTransitions.fade(
+        key: state.pageKey,
+        child: const SplashPage(),
+      ),
     ),
 
     GoRoute(
       path: '/onboarding',
       name: 'onboarding',
-      builder: (context, state) => const OnboardingPage(),
+      pageBuilder: (context, state) => AppPageTransitions.fade(
+        key: state.pageKey,
+        child: const OnboardingPage(),
+      ),
     ),
 
     GoRoute(
       path: '/sign-in',
       name: 'sign-in',
-      builder: (context, state) => const SignInPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideUp(
+        key: state.pageKey,
+        child: const SignInPage(),
+      ),
     ),
 
     GoRoute(
       path: '/sign-up',
       name: 'sign-up',
-      builder: (context, state) => const SignUpPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideUp(
+        key: state.pageKey,
+        child: const SignUpPage(),
+      ),
     ),
 
     GoRoute(
       path: '/privacy-policy',
       name: 'privacy-policy',
-      builder: (context, state) => const PrivacyPolicyPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const PrivacyPolicyPage(),
+      ),
     ),
 
     GoRoute(
       path: '/security-setup',
       name: 'security-setup',
-      builder: (context, state) => const SecuritySetupPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const SecuritySetupPage(),
+      ),
     ),
 
     GoRoute(
       path: '/security-verify',
       name: 'security-verify',
-      builder: (context, state) => const SecurityVerifyPage(),
+      pageBuilder: (context, state) => AppPageTransitions.fade(
+        key: state.pageKey,
+        child: const SecurityVerifyPage(),
+      ),
     ),
 
     GoRoute(
       path: '/home',
       name: 'home',
-      builder: (context, state) => const MainShell(),
+      pageBuilder: (context, state) => AppPageTransitions.fade(
+        key: state.pageKey,
+        child: const MainShell(),
+      ),
     ),
 
     GoRoute(
       path: '/add-transaction',
       name: 'add-transaction',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final homeCubit = state.extra as HomeCubit?;
-        return BlocProvider.value(
-          value: homeCubit!,
-          child: const AddTransactionPage(),
+        return AppPageTransitions.slideUp(
+          key: state.pageKey,
+          child: BlocProvider.value(
+            value: homeCubit!,
+            child: const AddTransactionPage(),
+          ),
         );
       },
     ),
@@ -83,25 +111,37 @@ final appRoutes = GoRouter(
     GoRoute(
       path: '/categories',
       name: 'categories',
-      builder: (context, state) => const CategoriesPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const CategoriesPage(),
+      ),
     ),
 
     GoRoute(
       path: '/budgets',
       name: 'budgets',
-      builder: (context, state) => const BudgetsPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const BudgetsPage(),
+      ),
     ),
 
     GoRoute(
       path: '/settings',
       name: 'settings',
-      builder: (context, state) => const SettingsPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const SettingsPage(),
+      ),
     ),
 
     GoRoute(
       path: '/export',
       name: 'export',
-      builder: (context, state) => const ExportPage(),
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const ExportPage(),
+      ),
     ),
   ],
 );

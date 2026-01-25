@@ -21,6 +21,7 @@ import '../widgets/wallet_balance_row.dart';
 import '../widgets/animated_transaction_list.dart';
 import '../../../core/widgets/profile_drawer.dart';
 import '../../../core/widgets/exit_confirmation_dialog.dart';
+import '../../../core/widgets/empty_state_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -209,16 +210,10 @@ class _HomePageContentState extends State<_HomePageContent> {
         if (hasNoSearchResults)
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(
-              child: Text(
-                'home.search_no_results'.tr(),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.6),
-                    ),
-              ),
+            child: EmptyStateWidget(
+              icon: Icons.search_off_rounded,
+              title: 'home.search_no_results'.tr(),
+              subtitle: 'home.search_no_results_hint'.tr(),
             ),
           )
         else if (!hasTransactions)
@@ -261,8 +256,36 @@ class _HomePageContentState extends State<_HomePageContent> {
   }
 }
 
-class _GradientBackground extends StatelessWidget {
+class _GradientBackground extends StatefulWidget {
   const _GradientBackground();
+
+  @override
+  State<_GradientBackground> createState() => _GradientBackgroundState();
+}
+
+class _GradientBackgroundState extends State<_GradientBackground>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 8),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -270,191 +293,204 @@ class _GradientBackground extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.sizeOf(context);
 
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: isDark
-              ? [
-                  const Color(0xFF0D1117),
-                  const Color(0xFF161B22),
-                  const Color(0xFF0D1117),
-                ]
-              : [
-                  const Color(0xFFF8FAFC),
-                  const Color(0xFFFFFFFF),
-                  const Color(0xFFF1F5F9),
-                ],
-          stops: const [0.0, 0.5, 1.0],
-        ),
-      ),
-      child: Stack(
-        children: [
-          // Large primary gradient blob - top right
-          Positioned(
-            top: -size.height * 0.15,
-            right: -size.width * 0.3,
-            child: Container(
-              width: size.width * 0.8,
-              height: size.width * 0.8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: isDark
-                      ? [
-                          theme.colorScheme.primary.withValues(alpha: 0.15),
-                          theme.colorScheme.primary.withValues(alpha: 0.05),
-                          Colors.transparent,
-                        ]
-                      : [
-                          theme.colorScheme.primary.withValues(alpha: 0.12),
-                          theme.colorScheme.primary.withValues(alpha: 0.04),
-                          Colors.transparent,
-                        ],
-                  stops: const [0.0, 0.5, 1.0],
-                ),
-              ),
-            ),
-          ),
-          // Secondary gradient blob - left side
-          Positioned(
-            top: size.height * 0.25,
-            left: -size.width * 0.4,
-            child: Container(
-              width: size.width * 0.7,
-              height: size.width * 0.7,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: isDark
-                      ? [
-                          theme.colorScheme.secondary.withValues(alpha: 0.12),
-                          theme.colorScheme.secondary.withValues(alpha: 0.04),
-                          Colors.transparent,
-                        ]
-                      : [
-                          theme.colorScheme.secondary.withValues(alpha: 0.10),
-                          theme.colorScheme.secondary.withValues(alpha: 0.03),
-                          Colors.transparent,
-                        ],
-                  stops: const [0.0, 0.5, 1.0],
-                ),
-              ),
-            ),
-          ),
-          // Tertiary accent blob - bottom right
-          Positioned(
-            bottom: size.height * 0.1,
-            right: -size.width * 0.2,
-            child: Container(
-              width: size.width * 0.6,
-              height: size.width * 0.6,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: isDark
-                      ? [
-                          theme.colorScheme.tertiary.withValues(alpha: 0.10),
-                          theme.colorScheme.tertiary.withValues(alpha: 0.03),
-                          Colors.transparent,
-                        ]
-                      : [
-                          theme.colorScheme.tertiary.withValues(alpha: 0.08),
-                          theme.colorScheme.tertiary.withValues(alpha: 0.02),
-                          Colors.transparent,
-                        ],
-                  stops: const [0.0, 0.5, 1.0],
-                ),
-              ),
-            ),
-          ),
-          // Small floating accent - top left
-          Positioned(
-            top: size.height * 0.08,
-            left: size.width * 0.1,
-            child: Container(
-              width: size.width * 0.25,
-              height: size.width * 0.25,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: isDark
-                      ? [
-                          const Color(0xFF7C3AED).withValues(alpha: 0.12),
-                          Colors.transparent,
-                        ]
-                      : [
-                          const Color(0xFF7C3AED).withValues(alpha: 0.08),
-                          Colors.transparent,
-                        ],
-                ),
-              ),
-            ),
-          ),
-          // Subtle mesh overlay for depth
-          Positioned(
-            bottom: size.height * 0.35,
-            left: size.width * 0.3,
-            child: Container(
-              width: size.width * 0.5,
-              height: size.width * 0.5,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: isDark
-                      ? [
-                          const Color(0xFF06B6D4).withValues(alpha: 0.08),
-                          Colors.transparent,
-                        ]
-                      : [
-                          const Color(0xFF06B6D4).withValues(alpha: 0.06),
-                          Colors.transparent,
-                        ],
-                ),
-              ),
-            ),
-          ),
-          // Soft glow accent - center right (for dark mode enhancement)
-          if (isDark)
-            Positioned(
-              top: size.height * 0.45,
-              right: size.width * 0.05,
-              child: Container(
-                width: size.width * 0.35,
-                height: size.width * 0.35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      const Color(0xFFF472B6).withValues(alpha: 0.08),
-                      Colors.transparent,
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        // Subtle floating offset for light mode only
+        final floatOffset = isDark ? 0.0 : 15 * _animation.value;
+
+        return Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: isDark
+                  ? [
+                      const Color(0xFF0D1117),
+                      const Color(0xFF161B22),
+                      const Color(0xFF0D1117),
+                    ]
+                  : [
+                      const Color(0xFFF8FAFC),
+                      const Color(0xFFFFFFFF),
+                      const Color(0xFFF1F5F9),
                     ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
+          ),
+          child: Stack(
+            children: [
+              // Large primary gradient blob - top right (animated)
+              Positioned(
+                top: -size.height * 0.15 + floatOffset,
+                right: -size.width * 0.3,
+                child: Container(
+                  width: size.width * 0.8,
+                  height: size.width * 0.8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: isDark
+                          ? [
+                              theme.colorScheme.primary.withValues(alpha: 0.15),
+                              theme.colorScheme.primary.withValues(alpha: 0.05),
+                              Colors.transparent,
+                            ]
+                          : [
+                              theme.colorScheme.primary.withValues(
+                                  alpha: 0.12 + 0.03 * _animation.value),
+                              theme.colorScheme.primary.withValues(alpha: 0.04),
+                              Colors.transparent,
+                            ],
+                      stops: const [0.0, 0.5, 1.0],
+                    ),
                   ),
                 ),
               ),
-            ),
-          // Noise texture overlay for premium feel
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.white.withValues(alpha: isDark ? 0.01 : 0.02),
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: isDark ? 0.05 : 0.01),
-                  ],
-                  stops: const [0.0, 0.5, 1.0],
+              // Secondary gradient blob - left side (animated opposite)
+              Positioned(
+                top: size.height * 0.25 - floatOffset * 0.7,
+                left: -size.width * 0.4,
+                child: Container(
+                  width: size.width * 0.7,
+                  height: size.width * 0.7,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: isDark
+                          ? [
+                              theme.colorScheme.secondary
+                                  .withValues(alpha: 0.12),
+                              theme.colorScheme.secondary
+                                  .withValues(alpha: 0.04),
+                              Colors.transparent,
+                            ]
+                          : [
+                              theme.colorScheme.secondary.withValues(
+                                  alpha: 0.10 + 0.02 * _animation.value),
+                              theme.colorScheme.secondary
+                                  .withValues(alpha: 0.03),
+                              Colors.transparent,
+                            ],
+                      stops: const [0.0, 0.5, 1.0],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              // Tertiary accent blob - bottom right (animated)
+              Positioned(
+                bottom: size.height * 0.1 + floatOffset * 0.5,
+                right: -size.width * 0.2,
+                child: Container(
+                  width: size.width * 0.6,
+                  height: size.width * 0.6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: isDark
+                          ? [
+                              theme.colorScheme.tertiary.withValues(alpha: 0.10),
+                              theme.colorScheme.tertiary.withValues(alpha: 0.03),
+                              Colors.transparent,
+                            ]
+                          : [
+                              theme.colorScheme.tertiary.withValues(alpha: 0.08),
+                              theme.colorScheme.tertiary.withValues(alpha: 0.02),
+                              Colors.transparent,
+                            ],
+                      stops: const [0.0, 0.5, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              // Small floating accent - top left (animated)
+              Positioned(
+                top: size.height * 0.08 - floatOffset * 0.3,
+                left: size.width * 0.1,
+                child: Container(
+                  width: size.width * 0.25,
+                  height: size.width * 0.25,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: isDark
+                          ? [
+                              const Color(0xFF7C3AED).withValues(alpha: 0.12),
+                              Colors.transparent,
+                            ]
+                          : [
+                              const Color(0xFF7C3AED).withValues(alpha: 0.08 + 0.02 * _animation.value),
+                              Colors.transparent,
+                            ],
+                    ),
+                  ),
+                ),
+              ),
+              // Subtle mesh overlay for depth
+              Positioned(
+                bottom: size.height * 0.35,
+                left: size.width * 0.3,
+                child: Container(
+                  width: size.width * 0.5,
+                  height: size.width * 0.5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: isDark
+                          ? [
+                              const Color(0xFF06B6D4).withValues(alpha: 0.08),
+                              Colors.transparent,
+                            ]
+                          : [
+                              const Color(0xFF06B6D4).withValues(alpha: 0.06),
+                              Colors.transparent,
+                            ],
+                    ),
+                  ),
+                ),
+              ),
+              // Soft glow accent - center right (for dark mode enhancement)
+              if (isDark)
+                Positioned(
+                  top: size.height * 0.45,
+                  right: size.width * 0.05,
+                  child: Container(
+                    width: size.width * 0.35,
+                    height: size.width * 0.35,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          const Color(0xFFF472B6).withValues(alpha: 0.08),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              // Noise texture overlay for premium feel
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withValues(alpha: isDark ? 0.01 : 0.02),
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: isDark ? 0.05 : 0.01),
+                      ],
+                      stops: const [0.0, 0.5, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

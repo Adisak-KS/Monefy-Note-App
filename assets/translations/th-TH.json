@@ -90,6 +90,7 @@
     "wallets": "กระเป๋าเงิน",
     "search_placeholder": "ค้นหารายการ...",
     "search_no_results": "ไม่พบรายการที่ค้นหา",
+    "search_no_results_hint": "ลองปรับคำค้นหาใหม่",
     "recent_transactions": "รายการล่าสุด",
     "transactions": "รายการ",
     "profit": "กำไร",

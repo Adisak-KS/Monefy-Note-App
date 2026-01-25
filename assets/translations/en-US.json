@@ -90,6 +90,7 @@
     "wallets": "Wallets",
     "search_placeholder": "Search transactions...",
     "search_no_results": "No transactions found",
+    "search_no_results_hint": "Try adjusting your search terms",
     "recent_transactions": "Recent Transactions",
     "transactions": "Transactions",
     "profit": "Profit",

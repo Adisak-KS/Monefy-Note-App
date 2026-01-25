@@ -125,10 +125,20 @@ class SettingsSwitchTile extends StatelessWidget {
       iconColor: iconColor,
       title: title,
       subtitle: subtitle,
-      onTap: onChanged != null ? () => onChanged!(!value) : null,
+      onTap: onChanged != null
+          ? () {
+              HapticFeedback.mediumImpact();
+              onChanged!(!value);
+            }
+          : null,
       trailing: Switch.adaptive(
         value: value,
-        onChanged: onChanged,
+        onChanged: onChanged != null
+            ? (newValue) {
+                HapticFeedback.mediumImpact();
+                onChanged!(newValue);
+              }
+            : null,
         activeTrackColor: theme.colorScheme.primary,
         activeThumbColor: theme.colorScheme.onPrimary,
       ),

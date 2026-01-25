@@ -14,6 +14,22 @@ class LoadingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Theme-aware colors
+    final overlayColor = isDark
+        ? Colors.black.withValues(alpha: 0.6)
+        : Colors.black.withValues(alpha: 0.4);
+    final containerColor = isDark
+        ? theme.colorScheme.surface.withValues(alpha: 0.95)
+        : Colors.white.withValues(alpha: 0.95);
+    final borderColor = isDark
+        ? theme.colorScheme.outline.withValues(alpha: 0.2)
+        : Colors.grey.withValues(alpha: 0.2);
+    final progressColor = theme.colorScheme.primary;
+    final textColor = theme.colorScheme.onSurface;
+
     return Stack(
       children: [
         child,
@@ -25,7 +41,7 @@ class LoadingOverlay extends StatelessWidget {
                 opacity: isLoading ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: Container(
-                  color: Colors.black.withValues(alpha: 0.4),
+                  color: overlayColor,
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -33,28 +49,45 @@ class LoadingOverlay extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
+                            color: containerColor,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.2),
+                              color: borderColor,
                               width: 1,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          child: const CircularProgressIndicator(
+                          child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+                              progressColor,
                             ),
                             strokeWidth: 3,
                           ),
                         ),
                         if (message != null) ...[
                           const SizedBox(height: 16),
-                          Text(
-                            message!,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: containerColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              message!,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: textColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
                         ],
                       ],

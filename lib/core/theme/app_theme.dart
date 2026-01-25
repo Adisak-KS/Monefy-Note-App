@@ -1,10 +1,13 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_color.dart';
 
 class AppTheme {
   AppTheme._();
+
+  // Use bundled Prompt font (download from fonts.google.com/specimen/Prompt)
+  // Falls back to system font if not available
+  static const String _fontFamily = 'Prompt';
 
   static ThemeData light([AppColor? appColor]) {
     final color = appColor ?? AppColor.presets.first;
@@ -18,7 +21,7 @@ class AppTheme {
         tertiaryContainer: color.secondary.withValues(alpha: 0.1),
       ),
       useMaterial3: true,
-      fontFamily: GoogleFonts.prompt().fontFamily,
+      fontFamily: _fontFamily,
     );
   }
 
@@ -34,7 +37,7 @@ class AppTheme {
         tertiaryContainer: color.secondary.withValues(alpha: 0.2),
       ),
       useMaterial3: true,
-      fontFamily: GoogleFonts.prompt().fontFamily,
+      fontFamily: _fontFamily,
     );
   }
 }
