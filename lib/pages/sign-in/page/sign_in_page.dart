@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monefy_note_app/core/cubit/auth/auth_cubit.dart';
+import 'package:monefy_note_app/core/cubit/auth/auth_state.dart';
+import 'package:monefy_note_app/core/repositories/auth_repository.dart';
 import 'package:monefy_note_app/core/services/preferences_service.dart';
 import 'package:monefy_note_app/core/widgets/exit_confirmation_dialog.dart';
 import 'package:monefy_note_app/core/widgets/loading_overlay.dart';
 import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
+import 'package:monefy_note_app/injection.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/animated_gradient_background.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/remember_me_checkbox.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/sign_in_button.dart';
@@ -77,24 +82,12 @@ class _SignInPageState extends State<SignInPage>
   Future<void> _handleSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
     HapticFeedback.mediumImpact();
 
-    // TODO: Implement actual sign in API call
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        _showSuccess = true;
-      });
-
-      await Future.delayed(const Duration(milliseconds: 800));
-
-      if (mounted) {
-        await _navigateAfterSignIn();
-      }
-    }
+    context.read<AuthCubit>().signIn(
+          emailOrUsername: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
   }
 
   Future<void> _handleGoogleSignIn() async {
@@ -158,7 +151,32 @@ class _SignInPageState extends State<SignInPage>
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final isKeyboardOpen = bottomInset > 0;
 
-    return BackButtonListener(
+    return BlocProvider(
+      create: (_) => AuthCubit(getIt<AuthRepository>()),
+      child: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          state.when(
+            initial: () {},
+            loading: () => setState(() => _isLoading = true),
+            authenticated: (user) {
+              setState(() {
+                _isLoading = false;
+                _showSuccess = true;
+              });
+              Future.delayed(const Duration(milliseconds: 800), () {
+                if (mounted) _navigateAfterSignIn();
+              });
+            },
+            unauthenticated: () => setState(() => _isLoading = false),
+            error: (message) {
+              setState(() => _isLoading = false);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message)),
+              );
+            },
+          );
+        },
+        child: BackButtonListener(
       onBackButtonPressed: () async {
         await _onWillPop();
         return true;
@@ -312,6 +330,8 @@ class _SignInPageState extends State<SignInPage>
           ),
         ),
         ),
+      ),
+      ),
       ),
     );
   }

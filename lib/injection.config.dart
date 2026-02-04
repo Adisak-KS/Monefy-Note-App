@@ -13,8 +13,12 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import 'core/bloc/drawer_stats_cubit.dart' as _i410;
+import 'core/datasources/remote/auth_remote_datasource.dart' as _i516;
+import 'core/di/auth_module.dart' as _i1060;
 import 'core/di/repository_module.dart' as _i29;
 import 'core/di/service_module.dart' as _i429;
+import 'core/network/dio_client.dart' as _i45;
+import 'core/repositories/auth_repository.dart' as _i531;
 import 'core/repositories/budget_repository.dart' as _i432;
 import 'core/repositories/category_repository.dart' as _i94;
 import 'core/repositories/custom_wallet_type_repository.dart' as _i453;
@@ -23,6 +27,7 @@ import 'core/repositories/wallet_repository.dart' as _i678;
 import 'core/services/export_service.dart' as _i580;
 import 'core/services/export_service_impl.dart' as _i876;
 import 'core/services/preferences_service.dart' as _i811;
+import 'core/services/token_service.dart' as _i261;
 import 'pages/budgets/bloc/budget_cubit.dart' as _i458;
 import 'pages/categories/bloc/category_cubit.dart' as _i723;
 import 'pages/export/bloc/export_cubit.dart' as _i656;
@@ -42,9 +47,16 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final authModule = _$AuthModule();
     final repositoryModule = _$RepositoryModule();
     final serviceModule = _$ServiceModule();
     gh.lazySingleton<_i410.DrawerStatsCubit>(() => _i410.DrawerStatsCubit());
+    gh.lazySingleton<_i261.TokenService>(() => authModule.tokenService);
+    gh.lazySingleton<_i45.DioClient>(() => authModule.dioClient);
+    gh.lazySingleton<_i516.AuthRemoteDatasource>(
+      () => authModule.authRemoteDatasource,
+    );
+    gh.lazySingleton<_i531.AuthRepository>(() => authModule.authRepository);
     gh.lazySingleton<_i678.WalletRepository>(
       () => repositoryModule.walletRepository,
     );
@@ -113,6 +125,8 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$AuthModule extends _i1060.AuthModule {}
 
 class _$RepositoryModule extends _i29.RepositoryModule {}
 

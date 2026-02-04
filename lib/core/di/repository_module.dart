@@ -12,18 +12,19 @@ import '../repositories/local/local_budget_repository.dart';
 import '../repositories/mock/mock_custom_wallet_type_repository.dart';
 
 /// Singleton instance of SharedPreferences - must be initialized before DI
-late SharedPreferences _sharedPreferences;
+/// Accessible from other modules (e.g. AuthModule)
+late SharedPreferences sharedPreferencesInstance;
 
 /// Initialize SharedPreferences and local repositories
 /// Call this before configureDependencies()
 Future<void> initializeRepositories() async {
-  _sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferencesInstance = await SharedPreferences.getInstance();
 
   // Initialize local repositories with default data if needed
-  final transactionRepo = LocalTransactionRepository(_sharedPreferences);
-  final walletRepo = LocalWalletRepository(_sharedPreferences);
-  final categoryRepo = LocalCategoryRepository(_sharedPreferences);
-  final budgetRepo = LocalBudgetRepository(_sharedPreferences);
+  final transactionRepo = LocalTransactionRepository(sharedPreferencesInstance);
+  final walletRepo = LocalWalletRepository(sharedPreferencesInstance);
+  final categoryRepo = LocalCategoryRepository(sharedPreferencesInstance);
+  final budgetRepo = LocalBudgetRepository(sharedPreferencesInstance);
 
   await categoryRepo.initialize();
   await walletRepo.initialize();
@@ -34,16 +35,16 @@ Future<void> initializeRepositories() async {
 @module
 abstract class RepositoryModule {
   @lazySingleton
-  WalletRepository get walletRepository => LocalWalletRepository(_sharedPreferences);
+  WalletRepository get walletRepository => LocalWalletRepository(sharedPreferencesInstance);
 
   @lazySingleton
-  TransactionRepository get transactionRepository => LocalTransactionRepository(_sharedPreferences);
+  TransactionRepository get transactionRepository => LocalTransactionRepository(sharedPreferencesInstance);
 
   @lazySingleton
-  CategoryRepository get categoryRepository => LocalCategoryRepository(_sharedPreferences);
+  CategoryRepository get categoryRepository => LocalCategoryRepository(sharedPreferencesInstance);
 
   @lazySingleton
-  BudgetRepository get budgetRepository => LocalBudgetRepository(_sharedPreferences);
+  BudgetRepository get budgetRepository => LocalBudgetRepository(sharedPreferencesInstance);
 
   @lazySingleton
   CustomWalletTypeRepository get customWalletTypeRepository =>
