@@ -5,10 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../bloc/drawer_stats_cubit.dart';
 import '../bloc/drawer_stats_state.dart';
+import '../cubit/auth/auth_cubit.dart';
+import '../repositories/auth_repository.dart';
 import '../theme/app_color.dart';
 import '../theme/color_cubit.dart';
 import '../theme/theme_cubit.dart';
 import 'cached_avatar.dart';
+import '../../injection.dart';
 import '../../pages/settings/widgets/color_selector_dialog.dart';
 import '../../pages/settings/widgets/theme_selector_dialog.dart';
 
@@ -904,7 +907,7 @@ class _ProfileDrawerState extends State<ProfileDrawer>
           onTap: () {
             HapticFeedback.mediumImpact();
             Navigator.pop(context);
-            // Handle logout
+            _handleLogout(context);
           },
           borderRadius: BorderRadius.circular(14),
           child: Container(
@@ -938,6 +941,14 @@ class _ProfileDrawerState extends State<ProfileDrawer>
         ),
       ),
     );
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final authCubit = AuthCubit(getIt<AuthRepository>());
+    await authCubit.signOut();
+    if (context.mounted) {
+      context.go('/sign-in');
+    }
   }
 
   void _navigateTo(BuildContext context, String route) {

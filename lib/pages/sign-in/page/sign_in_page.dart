@@ -90,13 +90,16 @@ class _SignInPageState extends State<SignInPage>
         );
   }
 
-  Future<void> _handleGoogleSignIn() async {
+  void _handleGoogleSignIn() {
     HapticFeedback.lightImpact();
-    // TODO: Implement Google sign in API call
-    await Future.delayed(const Duration(seconds: 1));
-    if (mounted) {
-      await _navigateAfterSignIn();
-    }
+    // Google Sign In requires Firebase/Google SDK setup
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('common.coming_soon'.tr()),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   Future<void> _navigateAfterSignIn() async {
@@ -251,7 +254,7 @@ class _SignInPageState extends State<SignInPage>
                                     ),
                                     SignInForgotPassword(
                                       onTap: () {
-                                        // TODO: Navigate to forgot password
+                                        context.go('/forgot-password');
                                       },
                                     ),
                                   ],

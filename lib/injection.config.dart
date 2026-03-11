@@ -14,6 +14,12 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import 'core/bloc/drawer_stats_cubit.dart' as _i410;
 import 'core/datasources/remote/auth_remote_datasource.dart' as _i516;
+import 'core/datasources/remote/budget_remote_datasource.dart' as _i176;
+import 'core/datasources/remote/category_remote_datasource.dart' as _i995;
+import 'core/datasources/remote/transaction_remote_datasource.dart' as _i643;
+import 'core/datasources/remote/transfer_remote_datasource.dart' as _i357;
+import 'core/datasources/remote/wallet_remote_datasource.dart' as _i413;
+import 'core/datasources/remote/wallet_type_remote_datasource.dart' as _i828;
 import 'core/di/auth_module.dart' as _i1060;
 import 'core/di/repository_module.dart' as _i29;
 import 'core/di/service_module.dart' as _i429;
@@ -48,8 +54,8 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final authModule = _$AuthModule();
-    final repositoryModule = _$RepositoryModule();
     final serviceModule = _$ServiceModule();
+    final repositoryModule = _$RepositoryModule();
     gh.lazySingleton<_i410.DrawerStatsCubit>(() => _i410.DrawerStatsCubit());
     gh.lazySingleton<_i261.TokenService>(() => authModule.tokenService);
     gh.lazySingleton<_i45.DioClient>(() => authModule.dioClient);
@@ -57,23 +63,71 @@ extension GetItInjectableX on _i174.GetIt {
       () => authModule.authRemoteDatasource,
     );
     gh.lazySingleton<_i531.AuthRepository>(() => authModule.authRepository);
-    gh.lazySingleton<_i678.WalletRepository>(
-      () => repositoryModule.walletRepository,
-    );
-    gh.lazySingleton<_i140.TransactionRepository>(
-      () => repositoryModule.transactionRepository,
-    );
-    gh.lazySingleton<_i94.CategoryRepository>(
-      () => repositoryModule.categoryRepository,
-    );
-    gh.lazySingleton<_i432.BudgetRepository>(
-      () => repositoryModule.budgetRepository,
-    );
-    gh.lazySingleton<_i453.CustomWalletTypeRepository>(
-      () => repositoryModule.customWalletTypeRepository,
-    );
     gh.lazySingleton<_i811.PreferencesService>(
       () => serviceModule.preferencesService,
+    );
+    gh.lazySingleton<_i580.ExportService>(() => _i876.ExportServiceImpl());
+    gh.factory<_i78.SettingsCubit>(
+      () => _i78.SettingsCubit(gh<_i811.PreferencesService>()),
+    );
+    gh.lazySingleton<_i413.WalletRemoteDatasource>(
+      () => repositoryModule.walletRemoteDatasource(gh<_i45.DioClient>()),
+    );
+    gh.lazySingleton<_i643.TransactionRemoteDatasource>(
+      () => repositoryModule.transactionRemoteDatasource(gh<_i45.DioClient>()),
+    );
+    gh.lazySingleton<_i995.CategoryRemoteDatasource>(
+      () => repositoryModule.categoryRemoteDatasource(gh<_i45.DioClient>()),
+    );
+    gh.lazySingleton<_i176.BudgetRemoteDatasource>(
+      () => repositoryModule.budgetRemoteDatasource(gh<_i45.DioClient>()),
+    );
+    gh.lazySingleton<_i357.TransferRemoteDatasource>(
+      () => repositoryModule.transferRemoteDatasource(gh<_i45.DioClient>()),
+    );
+    gh.lazySingleton<_i828.WalletTypeRemoteDatasource>(
+      () => repositoryModule.walletTypeRemoteDatasource(gh<_i45.DioClient>()),
+    );
+    gh.lazySingleton<_i94.CategoryRepository>(
+      () => repositoryModule.categoryRepository(
+        gh<_i995.CategoryRemoteDatasource>(),
+      ),
+    );
+    gh.lazySingleton<_i453.CustomWalletTypeRepository>(
+      () => repositoryModule.customWalletTypeRepository(
+        gh<_i828.WalletTypeRemoteDatasource>(),
+      ),
+    );
+    gh.factory<_i749.CustomWalletTypeCubit>(
+      () => _i749.CustomWalletTypeCubit(gh<_i453.CustomWalletTypeRepository>()),
+    );
+    gh.lazySingleton<_i678.WalletRepository>(
+      () =>
+          repositoryModule.walletRepository(gh<_i413.WalletRemoteDatasource>()),
+    );
+    gh.lazySingleton<_i432.BudgetRepository>(
+      () =>
+          repositoryModule.budgetRepository(gh<_i176.BudgetRemoteDatasource>()),
+    );
+    gh.factory<_i984.WalletCubit>(
+      () => _i984.WalletCubit(
+        gh<_i678.WalletRepository>(),
+        gh<_i357.TransferRemoteDatasource>(),
+      ),
+    );
+    gh.lazySingleton<_i140.TransactionRepository>(
+      () => repositoryModule.transactionRepository(
+        gh<_i643.TransactionRemoteDatasource>(),
+      ),
+    );
+    gh.factory<_i458.BudgetCubit>(
+      () => _i458.BudgetCubit(
+        gh<_i432.BudgetRepository>(),
+        gh<_i94.CategoryRepository>(),
+      ),
+    );
+    gh.factory<_i723.CategoryCubit>(
+      () => _i723.CategoryCubit(gh<_i94.CategoryRepository>()),
     );
     gh.factory<_i339.StatisticsCubit>(
       () => _i339.StatisticsCubit(
@@ -81,16 +135,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i94.CategoryRepository>(),
         gh<_i678.WalletRepository>(),
       ),
-    );
-    gh.lazySingleton<_i580.ExportService>(() => _i876.ExportServiceImpl());
-    gh.factory<_i749.CustomWalletTypeCubit>(
-      () => _i749.CustomWalletTypeCubit(gh<_i453.CustomWalletTypeRepository>()),
-    );
-    gh.factory<_i984.WalletCubit>(
-      () => _i984.WalletCubit(gh<_i678.WalletRepository>()),
-    );
-    gh.factory<_i78.SettingsCubit>(
-      () => _i78.SettingsCubit(gh<_i811.PreferencesService>()),
     );
     gh.factory<_i656.ExportCubit>(
       () => _i656.ExportCubit(
@@ -113,21 +157,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i94.CategoryRepository>(),
       ),
     );
-    gh.factory<_i458.BudgetCubit>(
-      () => _i458.BudgetCubit(
-        gh<_i432.BudgetRepository>(),
-        gh<_i94.CategoryRepository>(),
-      ),
-    );
-    gh.factory<_i723.CategoryCubit>(
-      () => _i723.CategoryCubit(gh<_i94.CategoryRepository>()),
-    );
     return this;
   }
 }
 
 class _$AuthModule extends _i1060.AuthModule {}
 
-class _$RepositoryModule extends _i29.RepositoryModule {}
-
 class _$ServiceModule extends _i429.ServiceModule {}
+
+class _$RepositoryModule extends _i29.RepositoryModule {}

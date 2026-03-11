@@ -11,7 +11,6 @@ import 'package:monefy_note_app/core/repositories/category_repository.dart';
 import 'package:monefy_note_app/core/repositories/transaction_repository.dart';
 import 'package:monefy_note_app/core/repositories/wallet_repository.dart';
 import 'package:monefy_note_app/pages/home/bloc/home_state.dart';
-import 'package:uuid/uuid.dart';
 
 @injectable
 class HomeCubit extends Cubit<HomeState> {
@@ -19,7 +18,6 @@ class HomeCubit extends Cubit<HomeState> {
   final CategoryRepository _categoryRepository;
   final WalletRepository _walletRepository;
   final DrawerStatsCubit _drawerStatsCubit;
-  static const _uuid = Uuid();
   static const _pageSize = 20;
 
   Transaction? _recentlyDeletedTransaction;
@@ -155,8 +153,11 @@ class HomeCubit extends Cubit<HomeState> {
     DateTime? date,
     String? description,
   }) async {
+    final currentState = state;
+    if (currentState is! HomeLoaded) return;
+
     final transaction = Transaction(
-      id: _uuid.v4(),
+      id: '',
       type: type,
       amount: amount,
       date: date ?? DateTime.now(),
@@ -165,8 +166,26 @@ class HomeCubit extends Cubit<HomeState> {
       description: description,
     );
 
-    await _transactionRepository.add(transaction);
-    await loadData();
+    // Optimistic: add to list immediately
+    final optimisticList = [transaction, ...currentState.todayTransactions];
+    final newIncome = currentState.totalIncome +
+        (type == TransactionType.income ? amount : 0);
+    final newExpense = currentState.totalExpense +
+        (type == TransactionType.expense ? amount : 0);
+
+    emit(currentState.copyWith(
+      todayTransactions: optimisticList,
+      totalIncome: newIncome,
+      totalExpense: newExpense,
+      totalCount: currentState.totalCount + 1,
+    ));
+
+    try {
+      await _transactionRepository.add(transaction);
+      await loadData();
+    } catch (e) {
+      emit(currentState);
+    }
   }
 
   Future<void> updateTransaction({
@@ -178,6 +197,9 @@ class HomeCubit extends Cubit<HomeState> {
     DateTime? date,
     String? description,
   }) async {
+    final currentState = state;
+    if (currentState is! HomeLoaded) return;
+
     final transaction = Transaction(
       id: id,
       type: type,
@@ -188,28 +210,82 @@ class HomeCubit extends Cubit<HomeState> {
       description: description,
     );
 
-    await _transactionRepository.update(transaction);
-    await loadData();
+    // Optimistic: replace in list immediately
+    final oldTransaction = currentState.todayTransactions.firstWhere(
+      (t) => t.id == id,
+      orElse: () => transaction,
+    );
+    final optimisticList = currentState.todayTransactions
+        .map((t) => t.id == id ? transaction : t)
+        .toList();
+
+    double incomeAdjust = 0;
+    double expenseAdjust = 0;
+    if (oldTransaction.type == TransactionType.income) {
+      incomeAdjust -= oldTransaction.amount;
+    } else {
+      expenseAdjust -= oldTransaction.amount;
+    }
+    if (type == TransactionType.income) {
+      incomeAdjust += amount;
+    } else {
+      expenseAdjust += amount;
+    }
+
+    emit(currentState.copyWith(
+      todayTransactions: optimisticList,
+      totalIncome: currentState.totalIncome + incomeAdjust,
+      totalExpense: currentState.totalExpense + expenseAdjust,
+    ));
+
+    try {
+      await _transactionRepository.update(transaction);
+      await loadData();
+    } catch (e) {
+      emit(currentState);
+    }
   }
 
   Future<void> deleteTransaction(String id) async {
-    // Store transaction before deleting for undo
-    _recentlyDeletedTransaction = await _transactionRepository.getById(id);
+    final currentState = state;
+    if (currentState is! HomeLoaded) return;
 
-    await _transactionRepository.delete(id);
+    // Store for undo from local state (no network call needed)
+    final deletedTx = currentState.todayTransactions
+        .where((t) => t.id == id)
+        .toList();
+    _recentlyDeletedTransaction = deletedTx.isNotEmpty ? deletedTx.first : null;
 
-    if (state is HomeLoaded && _recentlyDeletedTransaction != null) {
-      final currentState = state as HomeLoaded;
-      emit(currentState.copyWith(
-        todayTransactions: currentState.todayTransactions
-            .where((t) => t.id != id)
-            .toList(),
-        recentlyDeletedTransaction: _recentlyDeletedTransaction,
-      ));
+    // Optimistic: remove from list immediately
+    final optimisticList = currentState.todayTransactions
+        .where((t) => t.id != id)
+        .toList();
 
-      _startUndoTimer();
-    } else {
-      await loadData();
+    double incomeAdjust = 0;
+    double expenseAdjust = 0;
+    if (_recentlyDeletedTransaction != null) {
+      if (_recentlyDeletedTransaction!.type == TransactionType.income) {
+        incomeAdjust = _recentlyDeletedTransaction!.amount;
+      } else {
+        expenseAdjust = _recentlyDeletedTransaction!.amount;
+      }
+    }
+
+    emit(currentState.copyWith(
+      todayTransactions: optimisticList,
+      totalIncome: currentState.totalIncome - incomeAdjust,
+      totalExpense: currentState.totalExpense - expenseAdjust,
+      totalCount: currentState.totalCount - 1,
+      recentlyDeletedTransaction: _recentlyDeletedTransaction,
+    ));
+
+    _startUndoTimer();
+
+    try {
+      await _transactionRepository.delete(id);
+    } catch (e) {
+      _recentlyDeletedTransaction = null;
+      emit(currentState);
     }
   }
 

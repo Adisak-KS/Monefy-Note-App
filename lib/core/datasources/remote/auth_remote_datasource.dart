@@ -19,6 +19,8 @@ abstract class AuthRemoteDatasource {
   Future<AuthTokens> refreshToken(String refreshToken);
   Future<void> signOut(String? refreshToken);
   Future<User> getCurrentUser();
+  Future<void> forgotPassword(String email);
+  Future<void> resetPassword({required String token, required String newPassword});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
@@ -99,5 +101,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   Future<User> getCurrentUser() async {
     final response = await _dioClient.get(ApiEndpoint.me);
     return User.fromJson(response.data['data']);
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    await _dioClient.post(
+      ApiEndpoint.forgotPassword,
+      data: {'email': email},
+    );
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    await _dioClient.post(
+      ApiEndpoint.resetPassword,
+      data: {'token': token, 'password': newPassword},
+    );
   }
 }

@@ -35,4 +35,8 @@ class ApiEndpoint {
   // Transfer endpoints
   static const String transfers = '/transfers';
   static String transfer(String id) => '/transfers/$id';
+
+  // Custom Wallet Type endpoints
+  static const String walletTypes = '/wallet-types';
+  static String walletType(String id) => '/wallet-types/$id';
 }

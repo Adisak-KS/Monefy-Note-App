@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:uuid/uuid.dart';
 import '../../../core/models/category.dart';
 import '../../../core/models/transaction_type.dart';
 import '../../../core/repositories/category_repository.dart';
@@ -9,7 +8,6 @@ import 'category_state.dart';
 @injectable
 class CategoryCubit extends Cubit<CategoryState> {
   final CategoryRepository _categoryRepository;
-  static const _uuid = Uuid();
 
   CategoryCubit(this._categoryRepository) : super(const CategoryInitial());
 
@@ -48,43 +46,84 @@ class CategoryCubit extends Cubit<CategoryState> {
     String? icon,
     String? color,
   }) async {
-    if (state is! CategoryLoaded) return;
+    final currentState = state;
+    if (currentState is! CategoryLoaded) return;
+
+    final newCategory = Category(
+      id: '',
+      name: name,
+      type: type,
+      icon: icon,
+      color: color,
+    );
+
+    // Optimistic: add to the appropriate list immediately
+    final optimisticExpense = type == TransactionType.expense
+        ? [...currentState.expenseCategories, newCategory]
+        : currentState.expenseCategories;
+    final optimisticIncome = type == TransactionType.income
+        ? [...currentState.incomeCategories, newCategory]
+        : currentState.incomeCategories;
+
+    emit(currentState.copyWith(
+      expenseCategories: optimisticExpense,
+      incomeCategories: optimisticIncome,
+    ));
 
     try {
-      final newCategory = Category(
-        id: _uuid.v4(),
-        name: name,
-        type: type,
-        icon: icon,
-        color: color,
-      );
-
       await _categoryRepository.add(newCategory);
       await loadCategories();
     } catch (error) {
-      emit(CategoryError(error.toString()));
+      emit(currentState);
     }
   }
 
   Future<void> updateCategory(Category category) async {
-    if (state is! CategoryLoaded) return;
+    final currentState = state;
+    if (currentState is! CategoryLoaded) return;
+
+    // Optimistic: replace in lists immediately
+    final optimisticExpense = currentState.expenseCategories
+        .map((c) => c.id == category.id ? category : c)
+        .toList();
+    final optimisticIncome = currentState.incomeCategories
+        .map((c) => c.id == category.id ? category : c)
+        .toList();
+
+    emit(currentState.copyWith(
+      expenseCategories: optimisticExpense,
+      incomeCategories: optimisticIncome,
+    ));
 
     try {
       await _categoryRepository.update(category);
       await loadCategories();
     } catch (error) {
-      emit(CategoryError(error.toString()));
+      emit(currentState);
     }
   }
 
   Future<void> deleteCategory(String id) async {
-    if (state is! CategoryLoaded) return;
+    final currentState = state;
+    if (currentState is! CategoryLoaded) return;
+
+    // Optimistic: remove from lists immediately
+    final optimisticExpense = currentState.expenseCategories
+        .where((c) => c.id != id)
+        .toList();
+    final optimisticIncome = currentState.incomeCategories
+        .where((c) => c.id != id)
+        .toList();
+
+    emit(currentState.copyWith(
+      expenseCategories: optimisticExpense,
+      incomeCategories: optimisticIncome,
+    ));
 
     try {
       await _categoryRepository.delete(id);
-      await loadCategories();
     } catch (error) {
-      emit(CategoryError(error.toString()));
+      emit(currentState);
     }
   }
 }

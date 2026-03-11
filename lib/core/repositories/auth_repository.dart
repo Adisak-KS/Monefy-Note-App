@@ -72,6 +72,17 @@ class AuthRepository {
     return user;
   }
 
+  Future<void> forgotPassword(String email) async {
+    await _remoteDataSource.forgotPassword(email);
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    await _remoteDataSource.resetPassword(token: token, newPassword: newPassword);
+  }
+
   Future<void> _saveAuthState(User user, dynamic tokens) async {
     await _tokenService.saveToken(
       accessToken: tokens.accessToken,

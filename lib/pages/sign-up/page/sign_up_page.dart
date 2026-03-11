@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monefy_note_app/core/services/preferences_service.dart';
+import 'package:monefy_note_app/core/cubit/auth/auth_cubit.dart';
+import 'package:monefy_note_app/core/cubit/auth/auth_state.dart';
+import 'package:monefy_note_app/core/repositories/auth_repository.dart';
 import 'package:monefy_note_app/core/widgets/loading_overlay.dart';
 import 'package:monefy_note_app/core/widgets/network_status_banner.dart';
+import 'package:monefy_note_app/injection.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/animated_gradient_background.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/sign_in_form.dart';
 import 'package:monefy_note_app/pages/sign-in/widgets/social_login_button.dart';
@@ -81,44 +85,28 @@ class _SignUpPageState extends State<SignUpPage>
   Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
     HapticFeedback.mediumImpact();
 
-    // TODO: Implement actual sign up API call
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        _showSuccess = true;
-      });
-
-      await Future.delayed(const Duration(milliseconds: 800));
-
-      if (mounted) {
-        // After sign up, always go to security setup (new user)
-        context.go('/security-setup');
-      }
-    }
+    context.read<AuthCubit>().signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          name: _nameController.text.trim(),
+          username: _usernameController.text.trim().isNotEmpty
+              ? _usernameController.text.trim()
+              : null,
+        );
   }
 
-  Future<void> _handleGoogleSignUp() async {
+  void _handleGoogleSignUp() {
     HapticFeedback.lightImpact();
-    // TODO: Implement Google sign up API call
-    await Future.delayed(const Duration(seconds: 1));
-    if (mounted) {
-      // Check if security is already configured
-      final prefsService = PreferencesService();
-      final securityConfigured = await prefsService.isSecurityConfigured();
-
-      if (mounted) {
-        if (securityConfigured) {
-          context.go('/security-verify');
-        } else {
-          context.go('/security-setup');
-        }
-      }
-    }
+    // Google Sign Up requires Firebase/Google SDK setup
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('common.coming_soon'.tr()),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   void _handleBack() {
@@ -147,7 +135,35 @@ class _SignUpPageState extends State<SignUpPage>
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final isKeyboardOpen = bottomInset > 0;
 
-    return BackButtonListener(
+    return BlocProvider(
+      create: (_) => AuthCubit(getIt<AuthRepository>()),
+      child: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          state.when(
+            initial: () {},
+            loading: () => setState(() => _isLoading = true),
+            authenticated: (user) {
+              setState(() {
+                _isLoading = false;
+                _showSuccess = true;
+              });
+              Future.delayed(const Duration(milliseconds: 800), () {
+                if (mounted) {
+                  // After sign up, always go to security setup (new user)
+                  context.go('/security-setup');
+                }
+              });
+            },
+            unauthenticated: () => setState(() => _isLoading = false),
+            error: (message) {
+              setState(() => _isLoading = false);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message)),
+              );
+            },
+          );
+        },
+        child: BackButtonListener(
       onBackButtonPressed: () async {
         _handleBack();
         return true;
@@ -294,6 +310,8 @@ class _SignUpPageState extends State<SignUpPage>
             ),
           ),
         ),
+      ),
+      ),
       ),
     );
   }

@@ -80,6 +80,39 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> forgotPassword(String email) async {
+    emit(const AuthState.loading());
+
+    try {
+      await _authRepository.forgotPassword(email);
+      emit(const AuthState.initial());
+    } on ValidationException catch (error) {
+      emit(AuthState.error(error.message));
+    } on NetworkException catch (error) {
+      emit(AuthState.error(error.message));
+    } catch (error) {
+      emit(const AuthState.error('An unexpected error occurred'));
+    }
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    emit(const AuthState.loading());
+
+    try {
+      await _authRepository.resetPassword(token: token, newPassword: newPassword);
+      emit(const AuthState.unauthenticated());
+    } on ValidationException catch (error) {
+      emit(AuthState.error(error.message));
+    } on NetworkException catch (error) {
+      emit(AuthState.error(error.message));
+    } catch (error) {
+      emit(const AuthState.error('An unexpected error occurred'));
+    }
+  }
+
   Future<void> signOut() async {
     emit(const AuthState.loading());
 

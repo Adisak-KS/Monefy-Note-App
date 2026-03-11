@@ -23,35 +23,52 @@ class CustomWalletTypeCubit extends Cubit<CustomWalletTypeState> {
   }
 
   Future<void> addType(CustomWalletType type) async {
-    if (state is! CustomWalletTypeLoaded) return;
+    final currentState = state;
+    if (currentState is! CustomWalletTypeLoaded) return;
+
+    // Optimistic: add to list immediately
+    emit(CustomWalletTypeLoaded(types: [...currentState.types, type]));
 
     try {
       await _repository.add(type);
       await _refreshTypes();
     } catch (e) {
-      emit(CustomWalletTypeError(e.toString()));
+      emit(currentState);
     }
   }
 
   Future<void> updateType(CustomWalletType type) async {
-    if (state is! CustomWalletTypeLoaded) return;
+    final currentState = state;
+    if (currentState is! CustomWalletTypeLoaded) return;
+
+    // Optimistic: replace in list immediately
+    final optimisticTypes = currentState.types
+        .map((t) => t.id == type.id ? type : t)
+        .toList();
+    emit(CustomWalletTypeLoaded(types: optimisticTypes));
 
     try {
       await _repository.update(type);
       await _refreshTypes();
     } catch (e) {
-      emit(CustomWalletTypeError(e.toString()));
+      emit(currentState);
     }
   }
 
   Future<void> deleteType(String id) async {
-    if (state is! CustomWalletTypeLoaded) return;
+    final currentState = state;
+    if (currentState is! CustomWalletTypeLoaded) return;
+
+    // Optimistic: remove from list immediately
+    final optimisticTypes = currentState.types
+        .where((t) => t.id != id)
+        .toList();
+    emit(CustomWalletTypeLoaded(types: optimisticTypes));
 
     try {
       await _repository.delete(id);
-      await _refreshTypes();
     } catch (e) {
-      emit(CustomWalletTypeError(e.toString()));
+      emit(currentState);
     }
   }
 

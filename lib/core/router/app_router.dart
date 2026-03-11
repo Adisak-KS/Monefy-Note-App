@@ -14,6 +14,8 @@ import 'package:monefy_note_app/pages/categories/page/categories_page.dart';
 import 'package:monefy_note_app/pages/budgets/page/budgets_page.dart';
 import 'package:monefy_note_app/pages/settings/page/settings_page.dart';
 import 'package:monefy_note_app/pages/export/page/export_page.dart';
+import 'package:monefy_note_app/pages/forgot-password/page/forgot_password_page.dart';
+import 'package:monefy_note_app/pages/reset-password/page/reset_password_page.dart';
 import 'page_transitions.dart';
 
 final appRoutes = GoRouter(
@@ -54,6 +56,24 @@ final appRoutes = GoRouter(
       pageBuilder: (context, state) => AppPageTransitions.slideUp(
         key: state.pageKey,
         child: const SignUpPage(),
+      ),
+    ),
+
+    GoRoute(
+      path: '/forgot-password',
+      name: 'forgot-password',
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const ForgotPasswordPage(),
+      ),
+    ),
+
+    GoRoute(
+      path: '/reset-password',
+      name: 'reset-password',
+      pageBuilder: (context, state) => AppPageTransitions.slideFromRight(
+        key: state.pageKey,
+        child: const ResetPasswordPage(),
       ),
     ),
 

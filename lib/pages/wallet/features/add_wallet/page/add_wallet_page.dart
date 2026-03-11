@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../../core/models/currency.dart';
 import '../../../../../core/models/wallet.dart';
 import '../../../../../core/models/wallet_type.dart';
@@ -1359,7 +1358,7 @@ class _AddWalletPageState extends State<AddWalletPage>
     final balance = double.tryParse(_balanceController.text) ?? 0;
 
     final wallet = Wallet(
-      id: widget.wallet?.id ?? const Uuid().v4(),
+      id: widget.wallet?.id ?? '',
       name: name,
       type: _selectedType,
       balance: balance,

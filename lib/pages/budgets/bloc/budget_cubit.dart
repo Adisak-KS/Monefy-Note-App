@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:uuid/uuid.dart';
 import '../../../core/models/budget.dart';
 import '../../../core/repositories/budget_repository.dart';
 import '../../../core/repositories/category_repository.dart';
@@ -10,7 +9,6 @@ import 'budget_state.dart';
 class BudgetCubit extends Cubit<BudgetState> {
   final BudgetRepository _budgetRepository;
   final CategoryRepository _categoryRepository;
-  static const _uuid = Uuid();
 
   BudgetCubit(this._budgetRepository, this._categoryRepository)
       : super(const BudgetInitial());
@@ -90,33 +88,53 @@ class BudgetCubit extends Cubit<BudgetState> {
     required double amount,
     String? note,
   }) async {
-    if (state is! BudgetLoaded) return;
-    final currentState = state as BudgetLoaded;
+    final currentState = state;
+    if (currentState is! BudgetLoaded) return;
+
+    final newBudget = Budget(
+      id: '',
+      categoryId: categoryId,
+      amount: amount,
+      spent: 0,
+      month: currentState.selectedMonth,
+      year: currentState.selectedYear,
+      note: note,
+    );
+
+    // Optimistic: add budget to list immediately
+    final optimisticBudgets = [...currentState.budgets, newBudget];
+    emit(currentState.copyWith(
+      budgets: optimisticBudgets,
+      totalBudget: currentState.totalBudget + amount,
+    ));
 
     try {
-      final newBudget = Budget(
-        id: _uuid.v4(),
-        categoryId: categoryId,
-        amount: amount,
-        spent: 0,
-        month: currentState.selectedMonth,
-        year: currentState.selectedYear,
-        note: note,
-      );
-
       await _budgetRepository.add(newBudget);
       await loadBudgets(
         month: currentState.selectedMonth,
         year: currentState.selectedYear,
       );
     } catch (error) {
-      emit(BudgetError(error.toString()));
+      emit(currentState);
     }
   }
 
   Future<void> updateBudget(Budget budget) async {
-    if (state is! BudgetLoaded) return;
-    final currentState = state as BudgetLoaded;
+    final currentState = state;
+    if (currentState is! BudgetLoaded) return;
+
+    // Optimistic: replace budget in list immediately
+    final optimisticBudgets = currentState.budgets
+        .map((b) => b.id == budget.id ? budget : b)
+        .toList();
+    final newTotalBudget = optimisticBudgets.fold<double>(0, (sum, b) => sum + b.amount);
+    final newTotalSpent = optimisticBudgets.fold<double>(0, (sum, b) => sum + b.spent);
+
+    emit(currentState.copyWith(
+      budgets: optimisticBudgets,
+      totalBudget: newTotalBudget,
+      totalSpent: newTotalSpent,
+    ));
 
     try {
       await _budgetRepository.update(budget);
@@ -125,22 +143,31 @@ class BudgetCubit extends Cubit<BudgetState> {
         year: currentState.selectedYear,
       );
     } catch (error) {
-      emit(BudgetError(error.toString()));
+      emit(currentState);
     }
   }
 
   Future<void> deleteBudget(String id) async {
-    if (state is! BudgetLoaded) return;
-    final currentState = state as BudgetLoaded;
+    final currentState = state;
+    if (currentState is! BudgetLoaded) return;
+
+    // Optimistic: remove from list immediately
+    final optimisticBudgets = currentState.budgets
+        .where((b) => b.id != id)
+        .toList();
+    final newTotalBudget = optimisticBudgets.fold<double>(0, (sum, b) => sum + b.amount);
+    final newTotalSpent = optimisticBudgets.fold<double>(0, (sum, b) => sum + b.spent);
+
+    emit(currentState.copyWith(
+      budgets: optimisticBudgets,
+      totalBudget: newTotalBudget,
+      totalSpent: newTotalSpent,
+    ));
 
     try {
       await _budgetRepository.delete(id);
-      await loadBudgets(
-        month: currentState.selectedMonth,
-        year: currentState.selectedYear,
-      );
     } catch (error) {
-      emit(BudgetError(error.toString()));
+      emit(currentState);
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../../core/models/custom_wallet_type.dart';
 import '../../../../../core/widgets/color_picker_dialog.dart';
 import '../../../../../core/widgets/icon_picker_sheet.dart';
@@ -721,7 +720,7 @@ class _AddWalletTypePageState extends State<AddWalletTypePage>
     }
 
     final customType = CustomWalletType(
-      id: widget.walletType?.id ?? const Uuid().v4(),
+      id: widget.walletType?.id ?? '',
       name: name,
       iconName: _selectedIcon.codePoint.toString(),
       colorHex: _colorToHex(_selectedColor),
